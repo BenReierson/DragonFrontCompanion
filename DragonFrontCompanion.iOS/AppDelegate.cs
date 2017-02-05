@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HockeyApp.iOS;
 using Foundation;
 using UIKit;
 using DragonFrontCompanion;
@@ -32,19 +31,12 @@ namespace DragonFrontCompanion.iOS
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
 
             global::Xamarin.Forms.Forms.Init();
-
-            var feedbackButton = new Xamarin.Forms.Button
-            { Text = "Send some feedback" };
-            feedbackButton.Clicked += (object sender, EventArgs e) => {
-                var feedbackManager = BITHockeyManager.SharedHockeyManager.FeedbackManager;
-                feedbackManager.ShowFeedbackComposeView();
-            };
-
+            
             FFImageLoading.Forms.Touch.CachedImageRenderer.Init();
             SlideOverKit.iOS.SlideOverKit.Init();
 
             App.VersionName = version.ToString();
-			_app = new App(feedbackButton);
+			_app = new App();
             LoadApplication(_app);
 
             global::Xamarin.Forms.MessagingCenter.Subscribe<Deck>(this, App.MESSAGES.SHARE_DECK, ShareDeck, null);
