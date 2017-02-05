@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage
+    x:Class="DragonFrontCompanion.Views.CardPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Contols"
+    xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    Animation="{StaticResource OpenCloseAnimation}"
+    CloseWhenBackgroundIsClicked="True">
+    <pages:PopupPage.Resources>
+        <ResourceDictionary>
+            <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:RaceDisplayConverter x:Key="RaceDisplayConverter" />
+            <helpers:TraitsTextConverter x:Key="TraitsString" />
+            <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
+            <helpers:BooleanToYesNoConverter x:Key="YesOrNo" />
+            <helpers:RarityImageConverter x:Key="RarityImage" />
+            <animations:MoveAnimation
+                x:Key="NextAnimation"
+                DurationIn="100"
+                DurationOut="75"
+                EasingIn="SinOut"
+                EasingOut="SinIn"
+                PositionIn="Right"
+                PositionOut="Left" />
+            <animations:MoveAnimation
+                x:Key="PreviousAnimation"
+                DurationIn="100"
+                DurationOut="75"
+                EasingIn="SinOut"
+                EasingOut="SinIn"
+                PositionIn="Left"
+                PositionOut="Right" />
+            <animations:ScaleAnimation
+                x:Key="OpenCloseAnimation"
+                DurationIn="200"
+                DurationOut="200"
+                EasingIn="SinOut"
+                EasingOut="SinIn"
+                HasBackgroundAnimation="True"
+                PositionIn="Center"
+                PositionOut="Center"
+                ScaleIn="0.8"
+                ScaleOut="0.8" />
+        </ResourceDictionary>
+    </pages:PopupPage.Resources>
+
+    <ScrollView HorizontalOptions="Center" VerticalOptions="Center">
+        <Frame
+            x:Name="FrameContainer"
+            Margin="20"
+            Padding="0"
+            BackgroundColor="#123338"
+            HasShadow="True"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
+            <StackLayout>
+                <Grid x:Name="CardImageGrid">
+
+                    <ffImage:CachedImage
+                        x:Name="CardImage"
+                        Aspect="AspectFill"
+                        DownsampleHeight="400"
+                        HeightRequest="400"
+                        Source="{Binding ., Converter={StaticResource CardImages}, ConverterParameter='Large'}"
+                        VerticalOptions="Start">
+                        <ffImage:CachedImage>
+                            <TapGestureRecognizer Tapped="CloseButton_Clicked" />
+                        </ffImage:CachedImage>
+                    </ffImage:CachedImage>
+
+                    <StackLayout Spacing="2" VerticalOptions="Start">
+                        <Label
+                            BackgroundColor="#80000000"
+                            FontSize="Large"
+                            HorizontalOptions="Fill"
+                            LineBreakMode="WordWrap"
+                            Text="{Binding Name}"
+                            TextColor="#E1CA35"
+                            XAlign="Center" />
+                        <Grid ColumnSpacing="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Column="0"
+                                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                                       iOS=Small,
+                                                                       WinPhone=Default,
+                                                                       ViewType={x:Type Label}}"
+                                HorizontalOptions="Center"
+                                Text="{Binding Faction}"
+                                TextColor="White"
+                                XAlign="Center" />
+                            <Label
+                                Grid.Column="1"
+                                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                                       iOS=Small,
+                                                                       WinPhone=Default,
+                                                                       ViewType={x:Type Label}}"
+                                HorizontalOptions="Center"
+                                IsVisible="{Binding Race, Converter={StaticResource VisibleWithValue}}"
+                                Text="{Binding Race}"
+                                TextColor="White"
+                                XAlign="Center" />
+                            <Label
+                                Grid.Column="2"
+                                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                                       iOS=Small,
+                                                                       WinPhone=Default,
+                                                                       ViewType={x:Type Label}}"
+                                HorizontalOptions="Center"
+                                Text="{Binding Type}"
+                                TextColor="White"
+                                XAlign="Center" />
+                        </Grid>
+                    </StackLayout>
+
+                    <Grid
+                        x:Name="StatsGrid"
+                        BackgroundColor="#80000000"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="End">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Cost  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Cost" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding Cost}"
+                            TextColor="#15CEEA"
+                            XAlign="End" />
+
+                        <!--  Rarity  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Rarity" />
+                        <StackLayout
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            HorizontalOptions="End"
+                            Orientation="Horizontal"
+                            Spacing="0">
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="3"
+                                Margin="-10,0,0,0"
+                                FontAttributes="None"
+                                FontSize="Micro"
+                                HorizontalOptions="End"
+                                Style="{StaticResource CardStatLabelStyle}"
+                                Text="{Binding Rarity}"
+                                VerticalOptions="Center"
+                                YAlign="Center" />
+
+                            <Image
+                                Margin="2,0,2,0"
+                                HeightRequest="20"
+                                HorizontalOptions="End"
+                                Source="{Binding Rarity, Converter={StaticResource RarityImage}}"
+                                VerticalOptions="Center"
+                                WidthRequest="20" />
+                        </StackLayout>
+
+                        <!--  Power  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            IsVisible="{Binding Power, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Power" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding Power, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding Power}"
+                            TextColor="Yellow"
+                            XAlign="End" />
+
+                        <!--  Health  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            IsVisible="{Binding Health, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Health" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding Type, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding Health}"
+                            TextColor="Red"
+                            XAlign="End" />
+
+                        <!--  Mana Fragments  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            IsVisible="{Binding ManaFragments, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Fragments" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding ManaFragments, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding ManaFragments}"
+                            TextColor="#15CEEA"
+                            XAlign="End" />
+
+                        <!--  Giant  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            IsVisible="{Binding Type, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Giant?" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding Type, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding IsGiant, Converter={StaticResource YesOrNo}}"
+                            XAlign="End" />
+                    </Grid>
+
+                    <Button
+                        x:Name="CloseButton"
+                        Margin="2"
+                        BackgroundColor="Red"
+                        Clicked="CloseButton_Clicked"
+                        FontAttributes="Bold"
+                        HeightRequest="20"
+                        HorizontalOptions="End"
+                        Opacity=".8"
+                        Text="X"
+                        TextColor="White"
+                        VerticalOptions="Start"
+                        WidthRequest="20">
+                        <Button.IsVisible>
+                            <OnPlatform
+                                x:TypeArguments="x:Boolean"
+                                Android="False"
+                                WinPhone="False"
+                                iOS="True" />
+                        </Button.IsVisible>
+                    </Button>
+
+                    <Button
+                        x:Name="NextCardButton"
+                        Margin="0,0,-5,0"
+                        BackgroundColor="Transparent"
+                        Clicked="NextCardButton_Clicked"
+                        HeightRequest="150"
+                        HorizontalOptions="End"
+                        Image="IconNext.png"
+                        VerticalOptions="Center">
+                        <Button.Triggers>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="True">
+                                <Setter Property="IsVisible" Value="True" />
+                            </Trigger>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                                <Setter Property="IsVisible" Value="False" />
+                            </Trigger>
+                        </Button.Triggers>
+                    </Button>
+                    <Button
+                        x:Name="PreviousCardButton"
+                        Margin="-5,0,0,0"
+                        BackgroundColor="Transparent"
+                        Clicked="PreviousCardButton_Clicked"
+                        HeightRequest="150"
+                        HorizontalOptions="Start"
+                        Image="IconPrevious.png"
+                        VerticalOptions="Center">
+                        <Button.Triggers>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="True">
+                                <Setter Property="IsVisible" Value="True" />
+                            </Trigger>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                                <Setter Property="IsVisible" Value="False" />
+                            </Trigger>
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+
+                <Label
+                    Margin="10,0,10,0"
+                    FontSize="{helpers:NamedSizeOnPlatform Android=Medium,
+                                                           iOS=Default,
+                                                           WinPhone=Medium,
+                                                           ViewType={x:Type Label}}"
+                    Text="{Binding Text}"
+                    TextColor="White" />
+
+                <Button
+                    Margin="6,0,6,0"
+                    AutomationId="TraitsButton"
+                    BackgroundColor="#48000000"
+                    Clicked="OnTraitsTapped"
+                    FontSize="{helpers:NamedSizeOnPlatform Android=Small,
+                                                           iOS=Micro,
+                                                           WinPhone=Small,
+                                                           ViewType={x:Type Label}}"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding Traits, Converter={StaticResource VisibleWithValue}}"
+                    Text="{Binding Traits, Converter={StaticResource TraitsString}}"
+                    TextColor="#D0D6D7" />
+                <Label
+                    Margin="10,0,10,10"
+                    FontAttributes="Italic"
+                    FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                           iOS=Small,
+                                                           WinPhone=Default,
+                                                           ViewType={x:Type Label}}"
+                    Text="{Binding FlavorText}"
+                    TextColor="#D0D6D7" />
+
+
+            </StackLayout>
+        </Frame>
+    </ScrollView>
+</pages:PopupPage>

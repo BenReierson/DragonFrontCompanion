@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<t:SlideMenuView
+    x:Class="DragonFrontCompanion.Contols.FactionPicker"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:DragonFrontDb.Enums;assembly=DragonFrontDb"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
+    xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit">
+    <t:SlideMenuView.Resources>
+        <ResourceDictionary>
+            <helpers:SelectedColorConverter x:Key="SelectedColor" />
+        </ResourceDictionary>
+    </t:SlideMenuView.Resources>
+    <ScrollView BackgroundColor="#BF000000">
+        <Grid
+            x:Name="FactionGrid"
+            Padding="20"
+            ColumnSpacing="10"
+            RowSpacing="10"
+            VerticalOptions="Start">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="125" />
+                <RowDefinition Height="125" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="3"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                Text="CHOOSE A FACTION"
+                TextColor="White"
+                XAlign="Center"
+                YAlign="Center" />
+
+            <Grid
+                Grid.Row="1"
+                Grid.Column="0"
+                BackgroundColor="White">
+                <BoxView Margin="1" BackgroundColor="#123338" />
+                <ffImage:CachedImage Margin="2,15,2,0" Source="IconEclipse.png" />
+                <Label
+                    Margin="0,4,0,0"
+                    HorizontalOptions="Center"
+                    Text="ECLIPSE"
+                    TextColor="White"
+                    VerticalOptions="Start"
+                    XAlign="Center" />
+                <Button
+                    Margin="-4"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ChooseFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.ECLIPSE}" />
+            </Grid>
+            <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                BackgroundColor="White">
+                <BoxView Margin="1" BackgroundColor="#123338" />
+                <ffImage:CachedImage Margin="2,15,2,0" Source="IconScales.png" />
+                <Label
+                    Margin="0,4,0,0"
+                    HorizontalOptions="Center"
+                    Text="SCALES"
+                    TextColor="White"
+                    VerticalOptions="Start"
+                    XAlign="Center" />
+                <Button
+                    Margin="-4"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ChooseFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.SCALES}" />
+            </Grid>
+            <Grid
+                Grid.Row="1"
+                Grid.Column="2"
+                BackgroundColor="White">
+                <BoxView Margin="1" BackgroundColor="#123338" />
+                <ffImage:CachedImage Margin="2,15,2,0" Source="IconStrife.png" />
+                <Label
+                    Margin="0,4,0,0"
+                    HorizontalOptions="Center"
+                    Text="STRIFE"
+                    TextColor="White"
+                    VerticalOptions="Start"
+                    XAlign="Center" />
+                <Button
+                    Margin="-4"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ChooseFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.STRIFE}" />
+            </Grid>
+            <Grid
+                Grid.Row="2"
+                Grid.Column="0"
+                BackgroundColor="White">
+                <BoxView Margin="1" BackgroundColor="#123338" />
+                <ffImage:CachedImage Margin="2,15,2,0" Source="IconThorns.png" />
+                <Label
+                    Margin="0,4,0,0"
+                    HorizontalOptions="Center"
+                    Text="THORNS"
+                    TextColor="White"
+                    VerticalOptions="Start"
+                    XAlign="Center" />
+                <Button
+                    Margin="-4"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ChooseFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.THORNS}" />
+            </Grid>
+            <Grid
+                Grid.Row="2"
+                Grid.Column="1"
+                BackgroundColor="White">
+                <BoxView Margin="1" BackgroundColor="#123338" />
+                <ffImage:CachedImage Margin="2,15,2,0" Source="IconSilence.png" />
+                <Label
+                    Margin="0,4,0,0"
+                    HorizontalOptions="Center"
+                    Text="SILENCE"
+                    TextColor="White"
+                    VerticalOptions="Start"
+                    XAlign="Center" />
+                <Button
+                    Margin="-4"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ChooseFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.SILENCE}" />
+            </Grid>
+            <Grid
+                Grid.Row="2"
+                Grid.Column="2"
+                BackgroundColor="White">
+                <BoxView Margin="1" BackgroundColor="#123338" />
+                <ffImage:CachedImage Margin="2,15,2,0" Source="IconEssence.png" />
+                <Label
+                    Margin="0,4,0,0"
+                    HorizontalOptions="Center"
+                    Text="ESSENCE"
+                    TextColor="White"
+                    VerticalOptions="Start"
+                    XAlign="Center" />
+                <Button
+                    Margin="-4"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ChooseFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.ESSENCE}" />
+            </Grid>
+        </Grid>
+    </ScrollView>
+</t:SlideMenuView>

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage
+    x:Class="DragonFrontCompanion.Views.TraitsPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    CloseWhenBackgroundIsClicked="True">
+    <pages:PopupPage.Animation>
+        <animations:MoveAnimation
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            PositionIn="Bottom"
+            PositionOut="Bottom" />
+    </pages:PopupPage.Animation>
+
+    <Grid x:Name="MainLayout" Margin="30,30,30,0">
+        <Button
+            BackgroundColor="Transparent"
+            Clicked="CloseButton_Clicked"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill" />
+
+        <ListView
+            x:Name="TraitsList"
+            BackgroundColor="Transparent"
+            HasUnevenRows="True"
+            HeightRequest="200"
+            ItemsSource="{Binding .}"
+            SeparatorVisibility="None"
+            VerticalOptions="End">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout
+                            Margin="8"
+                            BackgroundColor="#123338"
+                            Spacing="1">
+                            <Label
+                                Margin="4,4,4,0"
+                                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                                       iOS=Small,
+                                                                       WinPhone=Default,
+                                                                       ViewType={x:Type Label}}"
+                                Text="{Binding Trait}"
+                                TextColor="#E1CA35" />
+                            <Label
+                                Margin="4,0,4,4"
+                                BackgroundColor="#123338"
+                                FontSize="{helpers:NamedSizeOnPlatform Android=Small,
+                                                                       iOS=Small,
+                                                                       WinPhone=Micro,
+                                                                       ViewType={x:Type Label}}"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding Description}"
+                                TextColor="White" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+
+</pages:PopupPage>

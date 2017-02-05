@@ -1,0 +1,508 @@
+{
+  "AppVersion": "1.0.0",
+  "ID": "b5ba1d7e-4f10-434f-b47c-a3dff093e62a",
+  "LastModified": "2016-11-29T22:31:05.544399+11:00",
+  "DeckFaction": "THORNS",
+  "Type": "NORMAL_DECK",
+  "Name": "Season 2 Control",
+  "Description": null,
+  "Cards": [
+    {
+      "Card": {
+        "Name": "Pangaea Tree",
+        "CardSet": "CORE",
+        "Text": "END OF TURN: HEAL ally units and your Stronghold for 1.",
+        "Type": "CHAMPION",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 15,
+        "FlavorText": null,
+        "Health": "9",
+        "ID": "ThC002",
+        "Traits": [
+          "END_OF_TURN",
+          "HEAL"
+        ],
+        "Power": "3",
+        "Rarity": "CHAMPION",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": true,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Hollow Harvesters",
+        "CardSet": "CORE",
+        "Text": "START OF TURN: Gain 1 Mana if an enemy unit is in this lane.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 1,
+        "FlavorText": null,
+        "Health": "1",
+        "ID": "ThU008",
+        "Traits": [
+          "START_OF_TURN"
+        ],
+        "Power": "0",
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 1,
+        "IsGiant": false,
+        "Race": 5
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Scaled Martyr",
+        "CardSet": "CORE",
+        "Text": "N/A",
+        "Type": "UNIT",
+        "Faction": "UNALIGNED",
+        "Collectible": false,
+        "Cost": 1,
+        "FlavorText": null,
+        "Health": "1",
+        "ID": "SiU003",
+        "Traits": [],
+        "Power": null,
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 3,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Sap Gas",
+        "CardSet": "CORE",
+        "Text": "Change an enemy unit's base Power to 1 until the end of the turn.",
+        "Type": "SPELL",
+        "Faction": "UNALIGNED",
+        "Collectible": false,
+        "Cost": 1,
+        "FlavorText": null,
+        "Health": null,
+        "ID": "SiS004",
+        "Traits": [],
+        "Power": null,
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Stronghold Apostle",
+        "CardSet": "CORE",
+        "Text": "Whenever your Stronghold takes damage, this unit takes it instead as long as it is in your spawn row.",
+        "Type": "UNIT",
+        "Faction": "UNALIGNED",
+        "Collectible": false,
+        "Cost": 1,
+        "FlavorText": null,
+        "Health": "2",
+        "ID": "SiU002",
+        "Traits": [],
+        "Power": "1",
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 1,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Fury",
+        "CardSet": "CORE",
+        "Text": "Grant a unit +2/+1 until the end of the turn.",
+        "Type": "SPELL",
+        "Faction": "UNALIGNED",
+        "Collectible": false,
+        "Cost": 1,
+        "FlavorText": null,
+        "Health": null,
+        "ID": "StS001",
+        "Traits": [],
+        "Power": null,
+        "Rarity": "COMMON",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Mana Fount",
+        "CardSet": "CORE",
+        "Text": "START OF TURN: Gain 1 Mana.",
+        "Type": "FORT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 2,
+        "FlavorText": null,
+        "Health": null,
+        "ID": "ThF003",
+        "Traits": [
+          "START_OF_TURN"
+        ],
+        "Power": null,
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Repurpose",
+        "CardSet": "CORE",
+        "Text": "Destroy an ally unit and DRAW 3.",
+        "Type": "SPELL",
+        "Faction": "UNALIGNED",
+        "Collectible": false,
+        "Cost": 2,
+        "FlavorText": null,
+        "Health": null,
+        "ID": "StS007",
+        "Traits": [
+          "DRAW"
+        ],
+        "Power": null,
+        "Rarity": "COMMON",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Bio-drenched Wolf Pack",
+        "CardSet": "CORE",
+        "Text": "RUSH. SPRINT.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 3,
+        "FlavorText": null,
+        "Health": "1",
+        "ID": "ThU013",
+        "Traits": [
+          "SPRINT",
+          "RUSH"
+        ],
+        "Power": "3",
+        "Rarity": "COMMON",
+        "Version": 0,
+        "ManaFragments": 2,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Druid Arachnis Riders",
+        "CardSet": "CORE",
+        "Text": "DEATH: Grant +1/+1 to all Druids in your hand. RESPAWN a random Druid from your hand at no cost.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 3,
+        "FlavorText": null,
+        "Health": "2",
+        "ID": "ThU007",
+        "Traits": [
+          "RESPAWN",
+          "DEATH_"
+        ],
+        "Power": "2",
+        "Rarity": "COMMON",
+        "Version": 0,
+        "ManaFragments": 1,
+        "IsGiant": false,
+        "Race": 1
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Druid Hunter-Killer",
+        "CardSet": "CORE",
+        "Text": "RANGE. STUN enemies damaged by this unit.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 3,
+        "FlavorText": null,
+        "Health": "2",
+        "ID": "ThU014",
+        "Traits": [
+          "RANGE",
+          "STUN"
+        ],
+        "Power": "1",
+        "Rarity": "COMMON",
+        "Version": 0,
+        "ManaFragments": 2,
+        "IsGiant": false,
+        "Race": 1
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Howling Gale",
+        "CardSet": "CORE",
+        "Text": "Deal 3 damage randomly split between all enemy units.",
+        "Type": "SPELL",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 3,
+        "FlavorText": null,
+        "Health": null,
+        "ID": "ThS010",
+        "Traits": [],
+        "Power": null,
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Death Syphon",
+        "CardSet": "CORE",
+        "Text": "Destroy a non-Champion unit. Deal damage to your Stronghold equal to the unit's remaining health.",
+        "Type": "SPELL",
+        "Faction": "UNALIGNED",
+        "Collectible": false,
+        "Cost": 3,
+        "FlavorText": null,
+        "Health": null,
+        "ID": "ScS017",
+        "Traits": [],
+        "Power": null,
+        "Rarity": "RARE",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Druid Landwarden",
+        "CardSet": "CORE",
+        "Text": "SPAWN: Destroy all enemy forts in this lane.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 4,
+        "FlavorText": null,
+        "Health": "4",
+        "ID": "ThU019",
+        "Traits": [
+          "_SPAWN"
+        ],
+        "Power": "3",
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 2,
+        "IsGiant": false,
+        "Race": 1
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Earth Child",
+        "CardSet": "CORE",
+        "Text": "DEATH: RESPAWN a 4/4 Earth Mother which deals 2 damage to all enemy units in Ally Territory on spawn.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 5,
+        "FlavorText": null,
+        "Health": "2",
+        "ID": "ThU021",
+        "Traits": [
+          "RESPAWN",
+          "DEATH_"
+        ],
+        "Power": "1",
+        "Rarity": "RARE",
+        "Version": 0,
+        "ManaFragments": 3,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 2
+    },
+    {
+      "Card": {
+        "Name": "Mold Leviathan",
+        "CardSet": "CORE",
+        "Text": "While in Ally Territory this unit has REGEN 2.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 6,
+        "FlavorText": null,
+        "Health": "5",
+        "ID": "ThU026",
+        "Traits": [
+          "REGEN"
+        ],
+        "Power": "4",
+        "Rarity": "RARE",
+        "Version": 0,
+        "ManaFragments": 3,
+        "IsGiant": true,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Possessed Tornado",
+        "CardSet": "CORE",
+        "Text": "Enemy units in target row take 2 damage and are STUNNED.",
+        "Type": "SPELL",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 6,
+        "FlavorText": null,
+        "Health": null,
+        "ID": "ThS018",
+        "Traits": [
+          "STUN"
+        ],
+        "Power": null,
+        "Rarity": "EPIC",
+        "Version": 0,
+        "ManaFragments": 0,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Rainforest Defender",
+        "CardSet": "CORE",
+        "Text": "REGEN 1. RUSH. Immune to damage on the turn this unit is deployed.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 6,
+        "FlavorText": null,
+        "Health": "4",
+        "ID": "ThU025",
+        "Traits": [
+          "RUSH",
+          "REGEN"
+        ],
+        "Power": "4",
+        "Rarity": "EPIC",
+        "Version": 0,
+        "ManaFragments": 3,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Grizzly Mac",
+        "CardSet": "CORE",
+        "Text": "Whenever this unit moves, DRAW 1.",
+        "Type": "UNIT",
+        "Faction": "UNALIGNED",
+        "Collectible": false,
+        "Cost": 6,
+        "FlavorText": null,
+        "Health": "5",
+        "ID": "ThU024",
+        "Traits": [
+          "DRAW"
+        ],
+        "Power": "5",
+        "Rarity": "BASIC",
+        "Version": 0,
+        "ManaFragments": 3,
+        "IsGiant": false,
+        "Race": 0
+      },
+      "Count": 1
+    },
+    {
+      "Card": {
+        "Name": "Heart of the Forest",
+        "CardSet": "CORE",
+        "Text": "SURVIVOR: Gain +1/+1 and 1 Mana.",
+        "Type": "UNIT",
+        "Faction": "THORNS",
+        "Collectible": false,
+        "Cost": 7,
+        "FlavorText": null,
+        "Health": "4",
+        "ID": "ThU028",
+        "Traits": [
+          "SURVIVOR"
+        ],
+        "Power": "4",
+        "Rarity": "EPIC",
+        "Version": 0,
+        "ManaFragments": 3,
+        "IsGiant": true,
+        "Race": 0
+      },
+      "Count": 2
+    }
+  ],
+  "Champion": {
+    "Name": "Pangaea Tree",
+    "CardSet": "CORE",
+    "Text": "END OF TURN: HEAL ally units and your Stronghold for 1.",
+    "Type": "CHAMPION",
+    "Faction": "THORNS",
+    "Collectible": false,
+    "Cost": 15,
+    "FlavorText": null,
+    "Health": "9",
+    "ID": "ThC002",
+    "Traits": [
+      "END_OF_TURN",
+      "HEAL"
+    ],
+    "Power": "3",
+    "Rarity": "CHAMPION",
+    "Version": 0,
+    "ManaFragments": 0,
+    "IsGiant": true,
+    "Race": 0
+  },
+  "Count": 30
+}

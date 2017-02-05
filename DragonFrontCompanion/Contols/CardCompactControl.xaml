@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="DragonFrontCompanion.Contols.CardCompactControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <helpers:RarityColorConverter x:Key="RarityColor" />
+            <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:RaceDisplayConverter x:Key="RaceDisplayConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Grid Margin="0,1,0,1" BackgroundColor="{Binding Rarity, Converter={StaticResource RarityColor}}">
+            <ffImage:CachedImage
+                Margin="20,0,0,0"
+                Aspect="AspectFill"
+                Source="{Binding ., Converter={StaticResource Key=CardImages}}" />
+            <BoxView BackgroundColor="Black" Opacity=".5" />
+            <StackLayout
+                Margin="0,0,20,0"
+                Orientation="Horizontal"
+                Spacing="10"
+                VerticalOptions="CenterAndExpand">
+                <Label
+                    FontAttributes="Bold"
+					VerticalTextAlignment="Center"
+                    FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                           iOS=Small,
+                                                           WinPhone=Default,
+                                                           ViewType={x:Type Label}}"
+                    XAlign="Center"
+                    Text="{Binding Cost}"
+                    TextColor="White"
+                    VerticalOptions="Fill"
+                    WidthRequest="20" />
+                <Label
+                    FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                           iOS=Small,
+                                                           WinPhone=Default,
+                                                           ViewType={x:Type Label}}"
+                    LineBreakMode="TailTruncation"
+                    Text="{Binding Name}"
+                    TextColor="White"
+                    VerticalTextAlignment="Center" />
+            </StackLayout>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

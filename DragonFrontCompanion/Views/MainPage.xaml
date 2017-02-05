@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DragonFrontCompanion.Views.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="{Binding Title}"
+    BindingContext="{Binding Main, Source={StaticResource Locator}}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            x:Name="SettingsButton"
+            Command="{Binding NavigateToSettingsCommand}"
+            Icon="Settings.png"
+            Text="Settings" />
+    </ContentPage.ToolbarItems>
+    <Grid x:Name="MainLayout" BackgroundColor="#123338">
+        <Grid
+            x:Name="PageButtonLayout"
+            Margin="20"
+            VerticalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Button
+                Grid.Row="0"
+                Margin="0,0,0,-15"
+                BackgroundColor="Transparent"
+                Command="{Binding NavigateToCardsCommand}"
+                FontSize="Medium"
+                HorizontalOptions="Center"
+                Text="Card Browser"
+                TextColor="#E1CA35"
+                VerticalOptions="Start" />
+            <Grid Grid.Row="1" HorizontalOptions="Center">
+                <Image HorizontalOptions="Center" Source="IconCards.png" />
+                <Button
+                    AutomationId="CardsPage"
+                    BackgroundColor="Transparent"
+                    Command="{Binding NavigateToCardsCommand}" />
+            </Grid>
+
+            <Button
+                Grid.Row="3"
+                Margin="0,0,0,-20"
+                BackgroundColor="Transparent"
+                Command="{Binding NavigateToDecksCommand}"
+                FontSize="Medium"
+                HorizontalOptions="Center"
+                Text="Deck Builder"
+                TextColor="#E1CA35"
+                VerticalOptions="Start" />
+            <Grid Grid.Row="4" HorizontalOptions="Center">
+                <Image HorizontalOptions="Center" Source="IconDeck.png" />
+                <Button
+                    AutomationId="DecksPage"
+                    BackgroundColor="Transparent"
+                    Command="{Binding NavigateToDecksCommand}" />
+            </Grid>
+
+
+            <Button
+                x:Name="AboutButton"
+                Grid.Row="5"
+                AutomationId="AboutPage"
+                BackgroundColor="Transparent"
+                Command="{Binding NavigateToAboutCommand}"
+                HeightRequest="60"
+                Text="About"
+                TextColor="#E1CA35"
+                WidthRequest="120" />
+        </Grid>
+
+        <Label
+            x:Name="VersionLabel"
+            FontSize="Small"
+            HorizontalOptions="Center"
+            Text="{Binding VersionDisplay}"
+            TextColor="Gray"
+            VerticalOptions="End"
+            XAlign="Center" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DragonFrontCompanion.Views.DeckPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Contols"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+    x:Name="DeckView"
+    Title=""
+    BindingContext="{Binding Deck, Source={StaticResource Locator}}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:CanUndoIconConverter x:Key="UndoIcon" />
+            <helpers:CardCountConverter x:Key="CardCount" />
+            <views:CardPopup
+                x:Key="SelectedCardPopup"
+                Card="{Binding SelectedCard}"
+                NextCommand="{Binding NextCardCommand}"
+                PreviousCommand="{Binding PreviousCardCommand}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <controls:BindableToolbarItem
+            x:Name="UndoButton"
+            Command="{Binding UndoCommand}"
+            Icon="IconUndo.png"
+            IsVisible="{Binding CurrentDeck.CanUndo}"
+            Text="Undo" />
+        <ToolbarItem
+            x:Name="DeckEditButton"
+            Command="{Binding ToggleEditDeckDetailsCommand}"
+            Text="{Binding EditText}" />
+        <ToolbarItem
+            Command="{Binding EditDeckCardsCommand}"
+            Icon="IconEdit.png"
+            Text="Edit Deck" />
+        <ToolbarItem
+            x:Name="ShareButton"
+            Command="{Binding ShareDeckCommand}"
+            Icon="IconShare.png"
+            Text="Share" />
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+        <StackLayout BackgroundColor="#123338" Orientation="Vertical">
+            <controls:DeckControl
+                x:Name="DeckHeader"
+                BindingContext="{Binding CurrentDeck}"
+                ChampionTapped="DeckHeader_ChampionTapped"
+                ContextMenuEnabled="False"
+                EditMode="{Binding Vm.EditMode, Source={x:Reference Name=DeckView}}"
+                EditModeToggleRequest="DeckHeader_EditModeToggleRequest"
+                HeightRequest="185" />
+            <Grid x:Name="CardLists">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <ListView
+                    x:Name="FactionList"
+                    BackgroundColor="#123338"
+                    CachingStrategy="RecycleElement"
+                    ItemTapped="ListView_ItemTapped"
+                    ItemsSource="{Binding CurrentDeck.DistinctFaction}"
+                    RowHeight="25"
+                    SeparatorVisibility="None">
+                    <ListView.Header>
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Medium"
+                            LineBreakMode="NoWrap"
+                            Text="Faction Cards"
+                            TextColor="White"
+                            XAlign="Center" />
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <controls:CardCompactControl BindingContext="{Binding Card}" />
+                                    <Label
+                                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                                               iOS=Small,
+                                                                               WinPhone=Default,
+                                                                               ViewType={x:Type Label}}"
+                                        HorizontalOptions="End"
+                                        Text="{Binding Count, Converter={StaticResource CardCount}}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView
+                    x:Name="UnalignedList"
+                    Grid.Column="1"
+                    BackgroundColor="#123338"
+                    CachingStrategy="RecycleElement"
+                    ItemTapped="ListView_ItemTapped"
+                    ItemsSource="{Binding CurrentDeck.DistinctUnaligned}"
+                    RowHeight="25"
+                    SeparatorVisibility="None">
+                    <ListView.Header>
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Medium"
+                            LineBreakMode="NoWrap"
+                            Text="Unaligned Cards"
+                            TextColor="White"
+                            XAlign="Center" />
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <controls:CardCompactControl BindingContext="{Binding Card}" />
+                                    <Label
+                                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                                               iOS=Small,
+                                                                               WinPhone=Default,
+                                                                               ViewType={x:Type Label}}"
+                                        HorizontalOptions="End"
+                                        Text="{Binding Count, Converter={StaticResource CardCount}}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

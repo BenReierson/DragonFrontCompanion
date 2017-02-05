@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DragonFrontCompanion.Views.SettingsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:DragonFrontCompanion"
+    Title="Settings"
+    BindingContext="{Binding Settings, Source={StaticResource Locator}}">
+    <Grid
+        x:Name="MainLayout"
+        Margin="15"
+        RowSpacing="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Random Decks  -->
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Text="Include random deck in decks list" />
+        <Switch
+            Grid.Row="0"
+            Grid.Column="1"
+            IsToggled="{Binding EnableRandomDeck}" />
+
+        <!--  Deck Overload  -->
+        <StackLayout
+            Grid.Row="1"
+            Grid.Column="0"
+            Orientation="Vertical"
+            Spacing="0">
+            <Label Text="Allow overloading decks with more than 30 cards" />
+            <Label
+                FontSize="Micro"
+                Opacity=".8"
+                Text="Warning: Very large decks may cause instability." />
+        </StackLayout>
+        <Switch
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            IsToggled="{Binding AllowDeckOverload}"
+            VerticalOptions="Center" />
+
+    </Grid>
+</ContentPage>

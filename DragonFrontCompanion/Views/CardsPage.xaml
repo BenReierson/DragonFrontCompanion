@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<t:MenuContainerPage
+    x:Class="DragonFrontCompanion.Views.CardsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Contols"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
+    xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+    x:Name="CardsPage"
+    Title="{Binding CardsTitle}"
+    BindingContext="{Binding Cards, Source={StaticResource Locator}}">
+
+    <t:MenuContainerPage.Resources>
+        <ResourceDictionary>
+            <helpers:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
+            <views:CardPopup
+                x:Key="SelectedCardPopup"
+                Card="{Binding SelectedCard}"
+                NextCommand="{Binding NextCardCommand}"
+                PreviousCommand="{Binding PreviousCardCommand}" />
+        </ResourceDictionary>
+    </t:MenuContainerPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            x:Name="ResetFiltersButton"
+            Clicked="ResetFilters_Clicked"
+            Command="{Binding ResetFiltersCommand}"
+            Icon="{Binding ResetFilterIcon}" />
+        <controls:BindableToolbarItem
+            x:Name="DeckFilterButton"
+            Command="{Binding DeckFilterCommand}"
+            Icon="{Binding ChooserFilterText}"
+            InsertIndex="1"
+            IsVisible="{Binding IsChooser}" />
+        <ToolbarItem
+            x:Name="FiltersButton"
+            AutomationId="FilterButton"
+            Clicked="FiltersButton_Clicked"
+            Icon="IconFilter.png"
+            Text="Filters" />
+    </ContentPage.ToolbarItems>
+    <StackLayout BackgroundColor="#123338" Spacing="0">
+        <StackLayout
+            BackgroundColor="#E1CA35"
+            HorizontalOptions="FillAndExpand"
+            Orientation="Horizontal">
+            <Image
+                Margin="5,0,0,0"
+                HeightRequest="20"
+                HorizontalOptions="Start"
+                Source="Search.png"
+                VerticalOptions="Center"
+                WidthRequest="20" />
+            <Entry
+                x:Name="SearchBox"
+                BackgroundColor="#E1CA35"
+                HorizontalOptions="FillAndExpand"
+                Placeholder="search"
+                PlaceholderColor="White"
+                Text="{Binding SearchText, Mode=TwoWay}"
+                TextColor="#123338" />
+        </StackLayout>
+        <Label
+            x:Name="DeckStatusLabel"
+            BackgroundColor="Black"
+            FontSize="{helpers:NamedSizeOnPlatform Android=Small,
+                                                   iOS=Micro,
+                                                   WinPhone=Default,
+                                                   ViewType={x:Type Label}}"
+            IsVisible="{Binding IsChooser}"
+            LineBreakMode="NoWrap"
+            Text="{Binding DeckStatus}"
+            TextColor="White"
+            XAlign="Center" />
+        <Label
+            x:Name="MessageLabel"
+            BackgroundColor="Black"
+            FontSize="Small"
+            IsVisible="{Binding IsChooser}"
+            LineBreakMode="NoWrap"
+            Text="{Binding Message}"
+            TextColor="Gray"
+            XAlign="Center" />
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+        <ListView
+            x:Name="CardsList"
+            BackgroundColor="#123338"
+            CachingStrategy="RecycleElement"
+            ItemTapped="CardsList_ItemTapped"
+            ItemsSource="{Binding FilteredCards}"
+            RowHeight="100"
+            SeparatorColor="Black">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem
+                                Clicked="FindSimilar_Clicked"
+                                CommandParameter="{Binding .}"
+                                Text="Find Similar" />
+                        </ViewCell.ContextActions>
+                        <Grid>
+                            <controls:CardControl />
+                            <controls:CardCount
+                                Margin="30"
+                                Card="{Binding .}"
+                                CardGroups="{Binding Vm.CurrentDeck.DistinctView, Source={x:Reference Name=CardsPage}}"
+                                HeightRequest="40"
+                                HorizontalOptions="Start"
+                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CardsPage}}"
+                                VerticalOptions="Center"
+                                WidthRequest="40" />
+                            <StackLayout
+                                x:Name="EditCardButtons"
+                                Margin="105,0,0,0"
+                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CardsPage}}"
+                                Orientation="Horizontal"
+                                VerticalOptions="End">
+                                <Button
+                                    BackgroundColor="#E1CA35"
+                                    BorderColor="#123338"
+                                    Command="{Binding Vm.RemoveCardCommand, Source={x:Reference Name=CardsPage}}"
+                                    CommandParameter="{Binding .}"
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    HeightRequest="40"
+                                    Text="-"
+                                    TextColor="Red"
+                                    WidthRequest="40">
+                                    <Button.BorderWidth>
+                                        <OnPlatform
+                                            x:TypeArguments="x:Double"
+                                            Android="0"
+                                            WinPhone="0"
+                                            iOS="4" />
+                                    </Button.BorderWidth>
+                                    <Button.Triggers>
+                                        <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </Trigger>
+                                        <Trigger TargetType="Button" Property="IsEnabled" Value="True">
+                                            <Setter Property="BackgroundColor" Value="#E1CA35" />
+                                        </Trigger>
+                                    </Button.Triggers>
+                                </Button>
+                                <Button
+                                    Margin="-6,0,0,0"
+                                    BackgroundColor="#E1CA35"
+                                    BorderColor="#123338"
+                                    Command="{Binding Vm.AddOneToDeckCommand, Source={x:Reference Name=CardsPage}}"
+                                    CommandParameter="{Binding .}"
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    HeightRequest="40"
+                                    Text="+"
+                                    TextColor="Green"
+                                    WidthRequest="40">
+                                    <Button.BorderWidth>
+                                        <OnPlatform
+                                            x:TypeArguments="x:Double"
+                                            Android="0"
+                                            WinPhone="0"
+                                            iOS="4" />
+                                    </Button.BorderWidth>
+                                    <Button.Triggers>
+                                        <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </Trigger>
+                                        <Trigger TargetType="Button" Property="IsEnabled" Value="True">
+                                            <Setter Property="BackgroundColor" Value="#E1CA35" />
+                                        </Trigger>
+                                    </Button.Triggers>
+                                </Button>
+                            </StackLayout>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</t:MenuContainerPage>

@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<t:SlideMenuView
+    x:Class="DragonFrontCompanion.Contols.CardTypeFilter"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:DragonFrontDb.Enums;assembly=DragonFrontDb"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit">
+    <t:SlideMenuView.Resources>
+        <ResourceDictionary>
+            <helpers:RarityColorConverter x:Key="RarityColor" />
+            <helpers:SelectedColorConverter x:Key="SelectedColor" />
+            <helpers:SelectedBorderColorConverter x:Key="SelectedBorderColor" />
+            <helpers:RarityImageConverter x:Key="RarityImage" />
+        </ResourceDictionary>
+    </t:SlideMenuView.Resources>
+    <ScrollView BackgroundColor="#BF000000">
+        <StackLayout
+            x:Name="MainContent"
+            Margin="10,10,10,20"
+            Orientation="Vertical"
+            Spacing="0">
+            <Grid x:Name="FactionGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Grid.ColumnSpan="4"
+                    FontSize="Large"
+                    HorizontalOptions="Center"
+                    Text="{Binding FactionFilterText}"
+                    TextColor="White"
+                    XAlign="Center"
+                    YAlign="Center" />
+
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    AutomationId="FilterAll"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.INVALID}}"
+                    BorderWidth="2"
+                    Command="{Binding ResetFactionFiltersCommand}"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.INVALID}}"
+                    ImageWidthRequest="60"
+                    Orientation="ImageOnBottom"
+                    Source="IconAll.png"
+                    Text="ALL"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.INVALID}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    AutomationId="FilterUnaligned"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.UNALIGNED}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.UNALIGNED}"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.UNALIGNED}}"
+                    ImageWidthRequest="60"
+                    Orientation="ImageOnBottom"
+                    Source="IconUnaligned.png"
+                    Text="UNALIGNED"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.UNALIGNED}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    AutomationId="FilterEclipse"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.ECLIPSE}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.ECLIPSE}"
+                    DisabledImageTintColor="Gray"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.ECLIPSE}}"
+                    ImageWidthRequest="60"
+                    IsEnabled="{Binding CanFilterByEclipse}"
+                    Orientation="ImageOnBottom"
+                    Source="IconEclipse.png"
+                    Text="ECLIPSE"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.ECLIPSE}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    AutomationId="FilterScales"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.SCALES}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.SCALES}"
+                    DisabledImageTintColor="Gray"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.SCALES}}"
+                    ImageWidthRequest="60"
+                    IsEnabled="{Binding CanFilterByScales}"
+                    Orientation="ImageOnBottom"
+                    Source="IconScales.png"
+                    Text="SCALES"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.SCALES}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    AutomationId="FilterStrife"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.STRIFE}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.STRIFE}"
+                    DisabledImageTintColor="Gray"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.STRIFE}}"
+                    ImageWidthRequest="60"
+                    IsEnabled="{Binding CanFilterByStrife}"
+                    Orientation="ImageOnBottom"
+                    Source="IconStrife.png"
+                    Text="STRIFE"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.STRIFE}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    AutomationId="FilterThorns"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.THORNS}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.THORNS}"
+                    DisabledImageTintColor="Gray"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.THORNS}}"
+                    ImageWidthRequest="60"
+                    IsEnabled="{Binding CanFilterByThorns}"
+                    Orientation="ImageOnBottom"
+                    Source="IconThorns.png"
+                    Text="THORNS"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.THORNS}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    AutomationId="FilterSilence"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.SILENCE}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.SILENCE}"
+                    DisabledImageTintColor="Gray"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.SILENCE}}"
+                    ImageWidthRequest="60"
+                    IsEnabled="{Binding CanFilterBySilence}"
+                    Orientation="ImageOnBottom"
+                    Source="IconSilence.png"
+                    Text="SILENCE"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.SILENCE}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    AutomationId="FilterEssence"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.ESSENCE}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.ESSENCE}"
+                    DisabledImageTintColor="Gray"
+                    FontSize="Micro"
+                    ImageHeightRequest="60"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.ESSENCE}}"
+                    ImageWidthRequest="60"
+                    IsEnabled="{Binding CanFilterByEssence}"
+                    Orientation="ImageOnBottom"
+                    Source="IconEssence.png"
+                    Text="ESSENCE"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.ESSENCE}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="80" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+            </Grid>
+
+            <Grid x:Name="TypeGrid" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Grid.ColumnSpan="5"
+                    FontSize="Large"
+                    HorizontalOptions="Center"
+                    Text="{Binding TypeFilterText}"
+                    TextColor="White" />
+
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    AutomationId="FilterTypeAll"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding TypeFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:CardType.INVALID}}"
+                    BorderWidth="2"
+                    Command="{Binding ResetTypeFilterCommand}"
+                    FontSize="Micro"
+                    ImageHeightRequest="50"
+                    ImageTintColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.INVALID}}"
+                    ImageWidthRequest="50"
+                    Orientation="ImageOnBottom"
+                    Source="IconAll.png"
+                    Text="ALL"
+                    TextColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.INVALID}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="60" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    AutomationId="FilterChampion"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding TypeFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:CardType.CHAMPION}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterCardTypeCommand}"
+                    CommandParameter="{x:Static c:CardType.CHAMPION}"
+                    FontSize="Micro"
+                    ImageHeightRequest="50"
+                    ImageTintColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.CHAMPION}}"
+                    ImageWidthRequest="50"
+                    Orientation="ImageOnBottom"
+                    Source="IconChamp.png"
+                    Text="CHAMP"
+                    TextColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.CHAMPION}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="60" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+
+
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="4"
+                    AutomationId="FilterUnit"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding TypeFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:CardType.UNIT}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterCardTypeCommand}"
+                    CommandParameter="{x:Static c:CardType.UNIT}"
+                    FontSize="Micro"
+                    ImageHeightRequest="50"
+                    ImageTintColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.UNIT}}"
+                    ImageWidthRequest="50"
+                    Orientation="ImageOnBottom"
+                    Source="IconUnit.png"
+                    Text="UNIT"
+                    TextColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.UNIT}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="60" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    AutomationId="FilterFort"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding TypeFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:CardType.FORT}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterCardTypeCommand}"
+                    CommandParameter="{x:Static c:CardType.FORT}"
+                    FontSize="Micro"
+                    ImageHeightRequest="50"
+                    ImageTintColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.FORT}}"
+                    ImageWidthRequest="50"
+                    Orientation="ImageOnBottom"
+                    Source="IconFort.png"
+                    Text="FORT"
+                    TextColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.FORT}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="60" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+
+                <controls:ImageButton
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    AutomationId="FilterSpell"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding TypeFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:CardType.SPELL}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterCardTypeCommand}"
+                    CommandParameter="{x:Static c:CardType.SPELL}"
+                    FontSize="Micro"
+                    ImageHeightRequest="50"
+                    ImageTintColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.SPELL}}"
+                    ImageWidthRequest="50"
+                    Orientation="ImageOnBottom"
+                    Source="IconSpell.png"
+                    Text="SPELL"
+                    TextColor="{Binding TypeFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:CardType.SPELL}}">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="100"
+                            WinPhone="100"
+                            iOS="60" />
+                    </controls:ImageButton.HeightRequest>
+                </controls:ImageButton>
+            </Grid>
+            <Grid x:Name="CostGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackLayout HeightRequest="75" Orientation="Horizontal">
+                    <Label
+                        FontSize="Medium"
+                        Text="Cost  "
+                        TextColor="White"
+                        VerticalOptions="Center">
+                        <Label.IsVisible>
+                            <OnPlatform
+                                x:TypeArguments="x:Boolean"
+                                Android="true"
+                                WinPhone="true"
+                                iOS="false" />
+                        </Label.IsVisible>
+                    </Label>
+                    <Grid Margin="20,0,0,0">
+                        <Image
+                            HorizontalOptions="Center"
+                            Source="IconMana.png"
+                            VerticalOptions="Center" />
+                        <Label
+                            Margin="2,0,0,2"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            Text="{Binding CostFilterText}"
+                            TextColor="White"
+                            VerticalOptions="Center"
+                            XAlign="Center"
+                            YAlign="Center" />
+                    </Grid>
+                </StackLayout>
+                <Slider
+                    x:Name="CostSlider"
+                    Grid.Column="1"
+                    Margin="0,0,10,0"
+                    Maximum="8"
+                    Minimum="0"
+                    VerticalOptions="Center"
+                    Value="{Binding CostFilter, Mode=TwoWay}" />
+            </Grid>
+            <Grid x:Name="RarityGrid" Margin="0,-10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="Medium"
+                    LineBreakMode="NoWrap"
+                    Text="Rarity"
+                    TextColor="White"
+                    VerticalOptions="Center">
+                    <Label.IsVisible>
+                        <OnPlatform
+                            x:TypeArguments="x:Boolean"
+                            Android="true"
+                            WinPhone="true"
+                            iOS="false" />
+                    </Label.IsVisible>
+                </Label>
+                <controls:ImageButton
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    AutomationId="FilterRarityAll"
+                    BackgroundColor="{Binding RarityFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Rarity.INVALID}}"
+                    Command="{Binding FilterByRarityCommand}"
+                    CommandParameter="{x:Static c:Rarity.INVALID}"
+                    Image="IconRarityAll.png">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="32"
+                            WinPhone="42"
+                            iOS="32" />
+                    </controls:ImageButton.HeightRequest>
+                    <controls:ImageButton.WidthRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="32"
+                            WinPhone="50"
+                            iOS="32" />
+                    </controls:ImageButton.WidthRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Column="2"
+                    AutomationId="FilterRarityBasic"
+                    BackgroundColor="{Binding RarityFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Rarity.BASIC}}"
+                    Command="{Binding FilterByRarityCommand}"
+                    CommandParameter="{x:Static c:Rarity.BASIC}"
+                    Image="IconRarityBasic.png">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.HeightRequest>
+                    <controls:ImageButton.WidthRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.WidthRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Column="3"
+                    AutomationId="FilterRarityCommon"
+                    BackgroundColor="{Binding RarityFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Rarity.COMMON}}"
+                    Command="{Binding FilterByRarityCommand}"
+                    CommandParameter="{x:Static c:Rarity.COMMON}"
+                    Image="IconRarityCommon.png">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.HeightRequest>
+                    <controls:ImageButton.WidthRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.WidthRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Column="4"
+                    AutomationId="FilterRarityRare"
+                    BackgroundColor="{Binding RarityFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Rarity.RARE}}"
+                    Command="{Binding FilterByRarityCommand}"
+                    CommandParameter="{x:Static c:Rarity.RARE}"
+                    Image="IconRarityRare.png">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.HeightRequest>
+                    <controls:ImageButton.WidthRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.WidthRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Column="5"
+                    AutomationId="FilterRarityEpic"
+                    BackgroundColor="{Binding RarityFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Rarity.EPIC}}"
+                    Command="{Binding FilterByRarityCommand}"
+                    CommandParameter="{x:Static c:Rarity.EPIC}"
+                    Image="IconRarityEpic.png">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.HeightRequest>
+                    <controls:ImageButton.WidthRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.WidthRequest>
+                </controls:ImageButton>
+                <controls:ImageButton
+                    Grid.Column="6"
+                    AutomationId="FilterRarityChampion"
+                    BackgroundColor="{Binding RarityFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Rarity.CHAMPION}}"
+                    Command="{Binding FilterByRarityCommand}"
+                    CommandParameter="{x:Static c:Rarity.CHAMPION}"
+                    Image="IconRarityChampion.png">
+                    <controls:ImageButton.HeightRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.HeightRequest>
+                    <controls:ImageButton.WidthRequest>
+                        <OnPlatform
+                            x:TypeArguments="x:Double"
+                            Android="35"
+                            WinPhone="42"
+                            iOS="35" />
+                    </controls:ImageButton.WidthRequest>
+                </controls:ImageButton>
+            </Grid>
+            <Label
+                FontSize="Medium"
+                Text="{Binding TraitFilterDisplay}"
+                TextColor="White"
+                VerticalOptions="Start" />
+        </StackLayout>
+    </ScrollView>
+</t:SlideMenuView>

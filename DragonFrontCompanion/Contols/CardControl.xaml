@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="DragonFrontCompanion.Contols.CardControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:ffTransforms="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:RaceDisplayConverter x:Key="RaceDisplayConverter" />
+            <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
+            <helpers:RarityImageConverter x:Key="RarityImage" />
+            <helpers:ManaFragmentImageConverter x:Key="ManaFragmentImage" />
+            <helpers:HealthIconConverter x:Key="HealthIcon" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Grid x:Name="CardGrid" BackgroundColor="#123338">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" MinimumHeightRequest="100">
+            <ffImage:CachedImage
+                x:Name="CardImage"
+                Margin="2"
+                Source="{Binding ., Converter={StaticResource Key=CardImages}}">
+                <ffImage:CachedImage.Transformations>
+                    <ffTransforms:RoundedTransformation
+                        BorderHexColor="#80000000"
+                        BorderSize="10"
+                        Radius="60" />
+                </ffImage:CachedImage.Transformations>
+            </ffImage:CachedImage>
+
+            <StackLayout
+                Margin="0,0,0,2"
+                HorizontalOptions="Center"
+                Orientation="Vertical"
+                VerticalOptions="End">
+                <Label
+                    x:Name="RaceLabel"
+                    Margin="2,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="8"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding Race, Converter={StaticResource Key=RaceDisplayConverter}}"
+                    TextColor="White"
+                    VerticalTextAlignment="Center" />
+                <Grid
+                    x:Name="GiantIndicator"
+                    Padding="2"
+                    BackgroundColor="#B3FFFFFF"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding IsGiant}"
+                    WidthRequest="22">
+                    <BoxView
+                        BackgroundColor="#B3000000"
+                        HeightRequest="8"
+                        HorizontalOptions="Start"
+                        WidthRequest="10" />
+                    <BoxView
+                        BackgroundColor="#B3000000"
+                        HeightRequest="8"
+                        HorizontalOptions="End"
+                        WidthRequest="10" />
+                </Grid>
+            </StackLayout>
+
+            <Grid
+                Margin="-2,0,0,0"
+                HorizontalOptions="Start"
+                VerticalOptions="End">
+                <ffImage:CachedImage
+                    HeightRequest="37"
+                    IsVisible="{Binding Power, Converter={StaticResource VisibleWithValue}}"
+                    Source="IconAttack.png"
+                    WidthRequest="35" />
+                <Label
+                    Margin="0,0,0,2"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="{Binding Power}"
+                    TextColor="White"
+                    VerticalTextAlignment="Center" />
+            </Grid>
+
+            <Grid HorizontalOptions="End" VerticalOptions="End">
+                <ffImage:CachedImage
+                    Margin="0,0,0,-2"
+                    HeightRequest="37"
+                    IsVisible="{Binding Health, Converter={StaticResource VisibleWithValue}}"
+                    Source="{Binding ., Converter={StaticResource HealthIcon}}"
+                    WidthRequest="32" />
+                <Label
+                    Margin="2,0,0,4"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="{Binding Health}"
+                    TextColor="White"
+                    VerticalTextAlignment="Center" />
+            </Grid>
+
+            <Grid
+                Margin="-2,0,0,0"
+                HorizontalOptions="Start"
+                VerticalOptions="Start">
+                <ffImage:CachedImage
+                    HeightRequest="33"
+                    Source="IconMana.png"
+                    WidthRequest="33" />
+                <Label
+                    Margin="2,0,0,2"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="{Binding Cost}"
+                    TextColor="White"
+                    VerticalTextAlignment="Center" />
+            </Grid>
+
+
+            <ffImage:CachedImage
+                Margin="2"
+                HeightRequest="29"
+                HorizontalOptions="End"
+                Source="{Binding Rarity, Converter={StaticResource RarityImage}}"
+                VerticalOptions="Start"
+                WidthRequest="22" />
+
+        </Grid>
+
+        <StackLayout
+            Grid.Column="1"
+            HorizontalOptions="FillAndExpand"
+            Orientation="Vertical"
+            Spacing="0">
+            <Label
+                x:Name="FactionLabel"
+                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                       iOS=Small,
+                                                       WinPhone=Micro,
+                                                       ViewType={x:Type Label}}"
+                Text="{Binding Faction}"
+                TextColor="#D0D6D7" />
+            <Label
+                x:Name="TypeLabel"
+                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                       iOS=Small,
+                                                       WinPhone=Micro,
+                                                       ViewType={x:Type Label}}"
+                Text="{Binding Type}"
+                TextColor="#D0D6D7" />
+            <ffImage:CachedImage
+                x:Name="ManaFragments"
+                Margin="0,2,0,0"
+                Aspect="AspectFill"
+                HeightRequest="16"
+                HorizontalOptions="StartAndExpand"
+                Source="{Binding ManaFragments, Converter={StaticResource ManaFragmentImage}}"
+                WidthRequest="100" />
+        </StackLayout>
+
+        <StackLayout
+            Grid.Column="2"
+            Orientation="Vertical"
+            Spacing="5">
+            <Label
+                FontAttributes="Bold"
+                FontSize="{helpers:NamedSizeOnPlatform Android=Medium,
+                                                       iOS=Default,
+                                                       WinPhone=Medium,
+                                                       ViewType={x:Type Label}}"
+                LineBreakMode="TailTruncation"
+                Text="{Binding Name}"
+                TextColor="#E1CA35" />
+            <Label
+                FontSize="{helpers:NamedSizeOnPlatform Android=Small,
+                                                       iOS=Micro,
+                                                       WinPhone=Micro,
+                                                       ViewType={x:Type Label}}"
+                Text="{Binding Text}"
+                TextColor="White" />
+        </StackLayout>
+    </Grid>
+</ContentView>

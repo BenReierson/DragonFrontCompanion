@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<t:MenuContainerPage
+    x:Class="DragonFrontCompanion.Views.DecksPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Contols"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
+    Title="{Binding Title}"
+    BindingContext="{Binding Decks, Source={StaticResource Locator}}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
+            <helpers:CanUndoIconConverter x:Key="UndoIcon" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <controls:BindableToolbarItem
+            x:Name="UndoButton"
+            Command="{Binding UndoCommand}"
+            Icon="IconUndo.png"
+            IsVisible="{Binding CanUndo}"
+            Text="Undo" />
+        <ToolbarItem
+            Clicked="NewDeckClicked"
+            Icon="IconNew.png"
+            Text="New Deck" />
+    </ContentPage.ToolbarItems>
+
+    <Grid BackgroundColor="#123338">
+        <ListView
+            x:Name="DecksList"
+            BackgroundColor="Black"
+            IsPullToRefreshEnabled="True"
+            IsRefreshing="{Binding IsBusy}"
+            ItemsSource="{Binding Decks}"
+            RefreshCommand="{Binding RefreshDecksCommand}"
+            RowHeight="185"
+            SeparatorVisibility="None">
+            <ListView.Behaviors>
+                <helpers:EventToCommandBehavior
+                    Command="{Binding OpenDeckCommand}"
+                    EventArgsConverter="{StaticResource ItemTappedConverter}"
+                    EventName="ItemTapped" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem
+                                Clicked="DeleteDeck_Clicked"
+                                CommandParameter="{Binding .}"
+                                IsDestructive="True"
+                                Text="Delete" />
+                        </ViewCell.ContextActions>
+                        <controls:DeckControl
+                            ChampionTapped="Champion_Tapped"
+                            ContextMenuTapped="Deck_ContextMenu"
+                            EditModeToggleRequest="Deck_Edit" />
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding ShowBusy}"
+            VerticalOptions="Center" />
+    </Grid>
+</t:MenuContainerPage>

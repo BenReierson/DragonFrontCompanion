@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="DragonFrontCompanion.Contols.DeckControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Contols"
+    xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:ffTransforms="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:InverseBooleanConverter x:Key="InverseBoolean" />
+            <helpers:FactionToImageConverter x:Key="FactionImage" />
+            <helpers:RelativeTimeConverter x:Key="RelativeTime" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Grid
+        x:Name="DeckGrid"
+        Margin="4,2,4,2"
+        BackgroundColor="#123338"
+        HeightRequest="185">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Image
+            Grid.Column="1"
+            Margin="10"
+            Aspect="AspectFill"
+            HorizontalOptions="End"
+            Opacity=".2"
+            Source="{Binding DeckFaction, Converter={StaticResource FactionImage}}"
+            VerticalOptions="Center" />
+
+        <StackLayout
+            Grid.Column="0"
+            Margin="5,0,5,5"
+            Orientation="Vertical"
+            Spacing="-2"
+            VerticalOptions="Start">
+
+            <!--  Standard image used on windows platform due to bug preventing image display  -->
+            <Image
+                x:Name="ChampImageWin"
+                HeightRequest="100"
+                Source="{Binding Champion, Converter={StaticResource Key=CardImages}}"
+                WidthRequest="100">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Champion_Tapped" />
+                </Image.GestureRecognizers>
+                <Image.IsVisible>
+                    <OnPlatform
+                        x:TypeArguments="x:Boolean"
+                        Android="False"
+                        WinPhone="True"
+                        iOS="False" />
+                </Image.IsVisible>
+            </Image>
+            <ffImage:CachedImage
+                x:Name="ChampCachedImage"
+                DownsampleToViewSize="True"
+                HeightRequest="100"
+                Source="{Binding Champion, Converter={StaticResource Key=CardImages}, ConverterParameter='Large'}"
+                WidthRequest="100">
+                <ffImage:CachedImage.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Champion_Tapped" />
+                </ffImage:CachedImage.GestureRecognizers>
+                <ffImage:CachedImage.Transformations>
+                    <ffTransforms:RoundedTransformation
+                        BorderHexColor="#80000000"
+                        BorderSize="10"
+                        Radius="60" />
+                </ffImage:CachedImage.Transformations>
+                <ffImage:CachedImage.IsVisible>
+                    <OnPlatform
+                        x:TypeArguments="x:Boolean"
+                        Android="True"
+                        WinPhone="False"
+                        iOS="True" />
+                </ffImage:CachedImage.IsVisible>
+            </ffImage:CachedImage>
+
+            <Label Text="{Binding DeckFaction}" TextColor="White" />
+            <Label
+                FontSize="{helpers:NamedSizeOnPlatform Android=Small,
+                                                       iOS=Micro,
+                                                       WinPhone=Micro,
+                                                       ViewType={x:Type Label}}"
+                Text="{Binding Count, StringFormat='{0} / 30'}"
+                TextColor="White" />
+            <Label
+                FontSize="Small"
+                IsVisible="{Binding IsValid}"
+                Text="Ready"
+                TextColor="Green" />
+            <Label
+                FontSize="Small"
+                IsVisible="{Binding IsValid, Converter={StaticResource InverseBoolean}}"
+                Text="Not Ready"
+                TextColor="Red" />
+            <Label
+                x:Name="PriceLabel"
+                Margin="0,2,0,0"
+                BackgroundColor="#123338"
+                FontSize="10"
+                IsVisible="False"
+                Text="{Binding TotalScrapPrice, StringFormat='{0} SCRAP'}"
+                TextColor="#D0D6D7" />
+            <Label
+                x:Name="ModifiedLabel"
+                Margin="0,2,0,0"
+                BackgroundColor="#123338"
+                FontSize="10"
+                IsVisible="False"
+                Text="{Binding LastModified, Converter={StaticResource RelativeTime}, StringFormat='saved {0}'}"
+                TextColor="Gray" />
+
+            <Grid
+                x:Name="ContextMenu"
+                AutomationId="DeckContextMenu"
+                BackgroundColor="#123338"
+                HeightRequest="30"
+                HorizontalOptions="FillAndExpand">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnContextMenuTapped" />
+                </Grid.GestureRecognizers>
+                <ffImage:CachedImage
+                    HeightRequest="22"
+                    HorizontalOptions="Start"
+                    Source="IconMenu.png"
+                    VerticalOptions="End">
+                    <ffImage:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnContextMenuTapped" />
+                    </ffImage:CachedImage.GestureRecognizers>
+                </ffImage:CachedImage>
+            </Grid>
+        </StackLayout>
+        <Grid Grid.Column="1">
+            <Grid
+                x:Name="StatsGrid"
+                Margin="5"
+                VerticalOptions="End">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid
+                    x:Name="CostChart"
+                    Grid.Column="0"
+                    ColumnSpacing="5"
+                    MinimumHeightRequest="30"
+                    VerticalOptions="End">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        Grid.Row="0"
+                        Grid.ColumnSpan="8"
+                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                               iOS=Small,
+                                                               WinPhone=Default,
+                                                               ViewType={x:Type Label}}"
+                        HorizontalOptions="Center"
+                        Text="Cost Distribution"
+                        TextColor="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[0].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[1].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[2].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[3].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[4].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="5"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[5].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="6"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[6].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.Column="7"
+                        BackgroundColor="#15CEEA"
+                        HeightRequest="{Binding CostDistribution[7].Weight}"
+                        VerticalOptions="End"
+                        WidthRequest="10"
+                        Color="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="0"
+                        TextColor="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="1"
+                        TextColor="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Text="2"
+                        TextColor="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Text="3"
+                        TextColor="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="4"
+                        Text="4"
+                        TextColor="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="5"
+                        Text="5"
+                        TextColor="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="6"
+                        Text="6"
+                        TextColor="#15CEEA" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="7"
+                        Text="7+"
+                        TextColor="#15CEEA" />
+                </Grid>
+
+                <StackLayout
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    Orientation="Vertical"
+                    Spacing="0"
+                    VerticalOptions="End">
+                    <Label
+                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                               iOS=Small,
+                                                               WinPhone=Default,
+                                                               ViewType={x:Type Label}}"
+                        Text="{Binding UnitCount, StringFormat='{0} units'}"
+                        TextColor="White" />
+                    <Label
+                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                               iOS=Small,
+                                                               WinPhone=Default,
+                                                               ViewType={x:Type Label}}"
+                        Text="{Binding FortCount, StringFormat='{0} forts'}"
+                        TextColor="White" />
+                    <Label
+                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                               iOS=Small,
+                                                               WinPhone=Default,
+                                                               ViewType={x:Type Label}}"
+                        Text="{Binding SpellCount, StringFormat='{0} spells'}"
+                        TextColor="White" />
+                </StackLayout>
+            </Grid>
+            <StackLayout Orientation="Vertical">
+                <Grid>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="EditModeToggle" />
+                    </Grid.GestureRecognizers>
+                    <Label
+                        x:Name="NameLabel"
+                        FontAttributes="Bold"
+                        FontSize="{helpers:NamedSizeOnPlatform Android=Large,
+                                                               iOS=Large,
+                                                               WinPhone=Medium,
+                                                               ViewType={x:Type Editor}}"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Name}"
+                        TextColor="#E1CA35" />
+                    <controls:SelectOnFocusEntry
+                        x:Name="NameEntry"
+                        BackgroundColor="White"
+                        FontAttributes="Bold"
+                        FontSize="{helpers:NamedSizeOnPlatform Android=Large,
+                                                               iOS=Large,
+                                                               WinPhone=Default,
+                                                               ViewType={x:Type Editor}}"
+                        IsVisible="False"
+                        Text="{Binding Name, Mode=TwoWay}"
+                        TextColor="Black" />
+                </Grid>
+                <Grid>
+                    <ScrollView HeightRequest="80">
+                        <Label
+                            x:Name="DescriptionLabel"
+                            FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                                   iOS=Small,
+                                                                   WinPhone=Small,
+                                                                   ViewType={x:Type Label}}"
+                            Text="{Binding Description}"
+                            TextColor="White">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="EditModeToggle" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </ScrollView>
+                    <Editor
+                        x:Name="DescriptionEntry"
+                        BackgroundColor="White"
+                        FontSize="{helpers:NamedSizeOnPlatform Android=Small,
+                                                               iOS=Small,
+                                                               WinPhone=Small,
+                                                               ViewType={x:Type Editor}}"
+                        HeightRequest="120"
+                        IsVisible="False"
+                        Text="{Binding Description, Mode=TwoWay}"
+                        TextColor="Black" />
+                </Grid>
+            </StackLayout>
+
+        </Grid>
+
+
+
+    </Grid>
+</ContentView>
