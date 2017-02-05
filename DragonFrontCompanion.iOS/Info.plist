@@ -101,5 +101,9 @@
 	<string>Calendar is not currently used, this permission should not be accepted.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>DF Companion needs access to photos to store deck screenshots.</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>XSLaunchImageAssets</key>
+	<string>Assets.xcassets/LaunchImage.launchimage</string>
 </dict>
 </plist>
