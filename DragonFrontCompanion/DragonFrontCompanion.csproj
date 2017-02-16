@@ -47,30 +47,30 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\BindableToolbarItem.cs" />
-    <Compile Include="Contols\CardCompactControl.xaml.cs">
+    <Compile Include="Controls\BindableToolbarItem.cs" />
+    <Compile Include="Controls\CardCompactControl.xaml.cs">
       <DependentUpon>CardCompactControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\CardControl.xaml.cs">
+    <Compile Include="Controls\CardControl.xaml.cs">
       <DependentUpon>CardControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\CardCount.xaml.cs">
+    <Compile Include="Controls\CardCount.xaml.cs">
       <DependentUpon>CardCount.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\CardTypeFilter.xaml.cs">
+    <Compile Include="Controls\CardTypeFilter.xaml.cs">
       <DependentUpon>CardTypeFilter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\CardTypeFilterLegacy.xaml.cs">
+    <Compile Include="Controls\CardTypeFilterLegacy.xaml.cs">
       <DependentUpon>CardTypeFilterLegacy.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\DeckControl.xaml.cs">
+    <Compile Include="Controls\DeckControl.xaml.cs">
       <DependentUpon>DeckControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\FactionPicker.xaml.cs">
+    <Compile Include="Controls\FactionPicker.xaml.cs">
       <DependentUpon>FactionPicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contols\ImageButton.cs" />
-    <Compile Include="Contols\SelectOnFocusEntry.cs" />
+    <Compile Include="Controls\ImageButton.cs" />
+    <Compile Include="Controls\SelectOnFocusEntry.cs" />
     <Compile Include="Design\DesignDeckService.cs" />
     <Compile Include="Helpers\BindableBehavior.cs" />
     <Compile Include="Helpers\BooleanToYesNoConverter.cs" />
@@ -160,25 +160,25 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contols\CardControl.xaml">
+    <EmbeddedResource Include="Controls\CardControl.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contols\DeckControl.xaml">
+    <EmbeddedResource Include="Controls\DeckControl.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contols\CardTypeFilter.xaml">
+    <EmbeddedResource Include="Controls\CardTypeFilter.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contols\CardCompactControl.xaml">
+    <EmbeddedResource Include="Controls\CardCompactControl.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -196,13 +196,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contols\FactionPicker.xaml">
+    <EmbeddedResource Include="Controls\FactionPicker.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contols\CardTypeFilterLegacy.xaml">
+    <EmbeddedResource Include="Controls\CardTypeFilterLegacy.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -214,7 +214,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contols\CardCount.xaml">
+    <EmbeddedResource Include="Controls\CardCount.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -260,6 +260,18 @@
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\portable-net45+wp8+wpa81+netcore45+monoandroid1+xamarin.ios10\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Mobile, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.0.6.0\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Microsoft.Azure.Mobile.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Mobile.Analytics, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Analytics.0.6.0\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Microsoft.Azure.Mobile.Analytics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Mobile.Crashes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Crashes.0.6.0\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Microsoft.Azure.Mobile.Crashes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
@@ -333,7 +345,6 @@
       <Name>DragonFrontCompanion.Data</Name>
     </ProjectReference>
   </ItemGroup>
-
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

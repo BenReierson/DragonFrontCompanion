@@ -11,7 +11,7 @@ using Android.Views;
 using Android.Widget;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
-using DragonFrontCompanion.Contols;
+using DragonFrontCompanion.Controls;
 using DragonFrontCompanion.Droid.Controls;
 
 [assembly: ExportRenderer(typeof(SelectOnFocusEntry), typeof(SelectOnFocusEntryRenderer))]

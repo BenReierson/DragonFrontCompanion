@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using static DragonFrontCompanion.Deck;
 
-namespace DragonFrontCompanion.Contols
+namespace DragonFrontCompanion.Controls
 {
     public partial class CardCount : ContentView
     {

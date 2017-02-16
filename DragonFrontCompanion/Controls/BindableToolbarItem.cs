@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace DragonFrontCompanion.Contols
+namespace DragonFrontCompanion.Controls
 {
     public class BindableToolbarItem : ToolbarItem
     {

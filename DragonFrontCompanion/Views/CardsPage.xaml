@@ -3,7 +3,7 @@
     x:Class="DragonFrontCompanion.Views.CardsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:DragonFrontCompanion.Contols"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
     xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
     xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
     xmlns:views="clr-namespace:DragonFrontCompanion.Views"

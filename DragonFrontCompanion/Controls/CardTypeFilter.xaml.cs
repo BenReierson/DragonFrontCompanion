@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
-namespace DragonFrontCompanion.Contols
+namespace DragonFrontCompanion.Controls
 {
-    public partial class CardTypeFilterLegacy : SlideMenuView
+    public partial class CardTypeFilter : SlideMenuView
     {
-        public CardTypeFilterLegacy()
+        public CardTypeFilter()
         {
             InitializeComponent();
 
@@ -26,6 +26,11 @@ namespace DragonFrontCompanion.Contols
                 this.HeightRequest += 50;
             else if (Device.OS == TargetPlatform.iOS)
                 MainContent.Margin = new Thickness(10, 55, 10, 20);
+            else
+            {
+                this.HeightRequest += 100;
+                this.LeftMargin = 20;
+            }
         }
     }
 }
