@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
-    x:Class="DragonFrontCompanion.Contols.DeckControl"
+    x:Class="DragonFrontCompanion.Controls.DeckControl"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:DragonFrontCompanion.Contols"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
     xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:ffTransforms="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
     xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers">

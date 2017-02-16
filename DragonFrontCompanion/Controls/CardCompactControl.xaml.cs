@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
-namespace DragonFrontCompanion.Contols
+namespace DragonFrontCompanion.Controls
 {
     public partial class CardCompactControl : ContentView
     {

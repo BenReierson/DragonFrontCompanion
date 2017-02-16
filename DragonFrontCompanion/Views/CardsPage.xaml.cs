@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DragonFrontCompanion.Contols;
+using DragonFrontCompanion.Controls;
 using DragonFrontCompanion.ViewModel;
 using Xamarin.Forms;
 

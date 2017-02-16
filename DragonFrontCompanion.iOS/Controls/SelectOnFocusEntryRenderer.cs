@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Xamarin.Forms;
-using DragonFrontCompanion.Contols;
+using DragonFrontCompanion.Controls;
 using Xamarin.Forms.Platform.iOS;
 using UIKit;
 using DragonFrontCompanion.iOS.Controls;

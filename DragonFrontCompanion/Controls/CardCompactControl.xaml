@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
-    x:Class="DragonFrontCompanion.Contols.CardCompactControl"
+    x:Class="DragonFrontCompanion.Controls.CardCompactControl"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
@@ -26,16 +26,16 @@
                 VerticalOptions="CenterAndExpand">
                 <Label
                     FontAttributes="Bold"
-					VerticalTextAlignment="Center"
                     FontSize="{helpers:NamedSizeOnPlatform Android=Default,
                                                            iOS=Small,
                                                            WinPhone=Default,
                                                            ViewType={x:Type Label}}"
-                    XAlign="Center"
                     Text="{Binding Cost}"
                     TextColor="White"
                     VerticalOptions="Fill"
-                    WidthRequest="20" />
+                    VerticalTextAlignment="Center"
+                    WidthRequest="20"
+                    XAlign="Center" />
                 <Label
                     FontSize="{helpers:NamedSizeOnPlatform Android=Default,
                                                            iOS=Small,
