@@ -178,6 +178,7 @@ namespace DragonFrontCompanion.ViewModel
                 CanFilterByThorns = _deck.DeckFaction == Faction.THORNS;
                 CanFilterBySilence = _deck.DeckFaction == Faction.SILENCE;
                 CanFilterByEssence = _deck.DeckFaction == Faction.ESSENCE;
+                CanFilterByDelirium = _deck.DeckFaction == Faction.DELIRIUM;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
                 else ApplyFilters();
@@ -188,6 +189,7 @@ namespace DragonFrontCompanion.ViewModel
                 RaisePropertyChanged(nameof(CanFilterByThorns));
                 RaisePropertyChanged(nameof(CanFilterBySilence));
                 RaisePropertyChanged(nameof(CanFilterByEssence));
+                RaisePropertyChanged(nameof(CanFilterByDelirium));
 
             }
             else
@@ -201,6 +203,7 @@ namespace DragonFrontCompanion.ViewModel
                 CanFilterByThorns = true;
                 CanFilterBySilence = true;
                 CanFilterByEssence = true;
+                CanFilterByDelirium = true;
                 FilterByDeck = false;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
@@ -407,6 +410,12 @@ namespace DragonFrontCompanion.ViewModel
         {
             get { return _essenceFilter; }
             set { Set(ref _essenceFilter, value); }
+        }
+        private bool _essenceDelirium = true;
+        public bool CanFilterByDelirium
+        {
+            get { return _essenceDelirium; }
+            set { Set(ref _essenceDelirium, value); }
         }
 
         private Traits[] _traitFilter;

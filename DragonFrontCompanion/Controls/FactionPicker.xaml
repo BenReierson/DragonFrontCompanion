@@ -27,7 +27,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="125" />
+              <RowDefinition Height="125" />
+              <RowDefinition Height="125" />
                 <RowDefinition Height="125" />
             </Grid.RowDefinitions>
             <Label
@@ -135,16 +136,35 @@
                     Command="{Binding ChooseFactionCommand}"
                     CommandParameter="{x:Static c:Faction.SILENCE}" />
             </Grid>
-            <Grid
-                Grid.Row="2"
-                Grid.Column="2"
+          <Grid
+              Grid.Row="2"
+              Grid.Column="2"
+              BackgroundColor="White">
+            <BoxView Margin="1" BackgroundColor="#123338" />
+            <ffImage:CachedImage Margin="2,15,2,0" Source="IconEssence.png" />
+            <Label
+                Margin="0,4,0,0"
+                HorizontalOptions="Center"
+                Text="ESSENCE"
+                TextColor="White"
+                VerticalOptions="Start"
+                XAlign="Center" />
+            <Button
+                Margin="-4"
+                BackgroundColor="Transparent"
+                Command="{Binding ChooseFactionCommand}"
+                CommandParameter="{x:Static c:Faction.ESSENCE}" />
+          </Grid>
+              <Grid
+                Grid.Row="3"
+                Grid.Column="1"
                 BackgroundColor="White">
                 <BoxView Margin="1" BackgroundColor="#123338" />
-                <ffImage:CachedImage Margin="2,15,2,0" Source="IconEssence.png" />
+                <ffImage:CachedImage Margin="2,15,2,0" Source="IconDelirium.png" />
                 <Label
                     Margin="0,4,0,0"
                     HorizontalOptions="Center"
-                    Text="ESSENCE"
+                    Text="DELIRIUM"
                     TextColor="White"
                     VerticalOptions="Start"
                     XAlign="Center" />
@@ -152,8 +172,8 @@
                     Margin="-4"
                     BackgroundColor="Transparent"
                     Command="{Binding ChooseFactionCommand}"
-                    CommandParameter="{x:Static c:Faction.ESSENCE}" />
-            </Grid>
+                    CommandParameter="{x:Static c:Faction.DELIRIUM}" />
+                </Grid>
         </Grid>
     </ScrollView>
 </t:SlideMenuView>

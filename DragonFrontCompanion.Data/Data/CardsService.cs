@@ -47,7 +47,8 @@ namespace DragonFrontCompanion.Data
                     return await Task.Run(() => Cards.AllSilence);
                 case Faction.ESSENCE:
                     return await Task.Run(() => Cards.AllEssence);
-                case Faction.UNKNOWN3:
+                case Faction.DELIRIUM:
+                    return await Task.Run(() => Cards.AllDelirium);
                 default:
                     return new ReadOnlyCollection<Card>(new List<Card>());
             }
