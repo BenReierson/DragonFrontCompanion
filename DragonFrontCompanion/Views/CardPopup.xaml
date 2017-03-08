@@ -68,9 +68,9 @@
                         HeightRequest="400"
                         Source="{Binding ., Converter={StaticResource CardImages}, ConverterParameter='Large'}"
                         VerticalOptions="Start">
-                        <ffImage:CachedImage>
+                        <ffImage:CachedImage.GestureRecognizers>
                             <TapGestureRecognizer Tapped="CloseButton_Clicked" />
-                        </ffImage:CachedImage>
+                        </ffImage:CachedImage.GestureRecognizers>
                     </ffImage:CachedImage>
 
                     <StackLayout Spacing="2" VerticalOptions="Start">
