@@ -454,7 +454,23 @@ namespace DragonFrontCompanion.ViewModel
                 if (_searchText == value) return;
 
                 Set(ref _searchText, value);
-                ApplyFilters();
+                if (Device.OS == TargetPlatform.Windows)
+                {//Delay search filter to help with performance on windows
+                    if (!_suspendFilters)
+                    {
+                        _suspendFilters = true;
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(750);
+                            if (_suspendFilters)
+                            { 
+                                _suspendFilters = false;
+                                Device.BeginInvokeOnMainThread(() => ApplyFilters());
+                            }
+                        });
+                    }
+                }
+                else ApplyFilters();
             }
         }
         #endregion
