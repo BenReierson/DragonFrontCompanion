@@ -90,13 +90,17 @@ namespace DragonFrontCompanion.UWP.Controls
                 this._currentImage = await GetCurrentImage();
                 SetImageMargin(this._currentImage, sourceButton.Orientation);
 
-                var label = new TextBlock
+                TextBlock label = null;
+                if (sourceButton.Text != null)
                 {
-                    TextAlignment = GetTextAlignment(sourceButton.Orientation),
-                    FontSize = 16,
-                    VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center,
-                    Text = sourceButton.Text
-                };
+                    label = new TextBlock
+                    {
+                        TextAlignment = GetTextAlignment(sourceButton.Orientation),
+                        FontSize = 16,
+                        VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center,
+                        Text = sourceButton.Text
+                    };
+                }
 
                 if (sourceButton.Orientation == ImageOrientation.ImageToLeft)
                 {
@@ -112,11 +116,11 @@ namespace DragonFrontCompanion.UWP.Controls
                 {
                     this._currentImage.HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Left;
                     stackPanel.Children.Add(this._currentImage);
-                    stackPanel.Children.Add(label);
+                    if (label != null) stackPanel.Children.Add(label);
                 }
                 else
                 {
-                    stackPanel.Children.Add(label);
+                    if (label != null) stackPanel.Children.Add(label);
                     stackPanel.Children.Add(this._currentImage);
                 }
 
