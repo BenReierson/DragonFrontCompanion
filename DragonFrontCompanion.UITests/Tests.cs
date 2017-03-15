@@ -44,7 +44,7 @@ namespace DragonFrontCompanion.UITests
             app.Tap(x => x.Class("ActionMenuItemView").Index(1));
             app.Screenshot("Filters");
 
-            app.Tap(x => x.Text("UNALIGNED"));
+            app.Tap(x => x.Marked("FilterUnaligned"));
             app.Screenshot("Filtered by Unaligned");
 
             app.Tap(x => x.Class("ActionMenuItemView").Index(1));

@@ -27,6 +27,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label
                     Grid.Row="0"
@@ -117,6 +118,17 @@
                     CommandParameter="{x:Static c:Faction.ESSENCE}"
                     IsVisible="{Binding CanFilterByEssence}"
                     Text="ESSENCE"
+                    TextColor="Black" />
+                <Button
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    AutomationId="FilterDelirium"
+                    BackgroundColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.DELIRIUM}}"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.DELIRIUM}"
+                    IsVisible="{Binding CanFilterByDelirium}"
+                    Text="DELIRIUM"
                     TextColor="Black" />
             </Grid>
 
