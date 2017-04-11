@@ -135,7 +135,6 @@
   <ItemGroup>
     <Compile Include="Controls\ImageButtonRenderer.cs" />
     <Compile Include="Controls\SelectOnFocusEntryRenderer.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="app.config" />

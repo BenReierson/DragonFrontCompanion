@@ -89,7 +89,6 @@
     <Compile Include="Helpers\RarityImageConverter.cs" />
     <Compile Include="Helpers\RelativeTimeConverter.cs" />
     <Compile Include="Helpers\SelectedColorConverter.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\TraitsTextConverter.cs" />
     <Compile Include="Helpers\ValueToVisibilityConverter.cs" />
     <Compile Include="NavigationService.cs" />

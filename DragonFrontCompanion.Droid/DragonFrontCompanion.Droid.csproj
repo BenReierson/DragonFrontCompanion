@@ -268,7 +268,6 @@
   <ItemGroup>
     <Compile Include="Controls\ImageButtonRenderer.cs" />
     <Compile Include="Controls\SelectOnFocusEntryRenderer.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

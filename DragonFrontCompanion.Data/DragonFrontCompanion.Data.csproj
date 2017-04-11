@@ -45,7 +45,6 @@
     <Compile Include="Data\IDeckService.cs" />
     <Compile Include="Data\LocalDeckService.cs" />
     <Compile Include="Deck.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
