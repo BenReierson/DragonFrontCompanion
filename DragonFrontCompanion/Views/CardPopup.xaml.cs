@@ -78,7 +78,7 @@ namespace DragonFrontCompanion.Views
         {
             InitializeComponent();
 
-            if (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
+            if (App.RuntimePlatform == App.Device.Windows || App.RuntimePlatform == App.Device.WinPhone)
             {
                 FrameContainer.Margin = 0;
             }

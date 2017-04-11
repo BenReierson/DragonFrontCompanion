@@ -29,6 +29,7 @@ namespace DragonFrontCompanion.UWP
 
             var version = Package.Current.Id.Version;
             DragonFrontCompanion.App.VersionName = $"{version.Major}.{version.Minor}.{version.Build}";
+            DragonFrontCompanion.App.RuntimePlatform = Xamarin.Forms.Device.RuntimePlatform;
 
             LoadApplication(new DragonFrontCompanion.App());
         }

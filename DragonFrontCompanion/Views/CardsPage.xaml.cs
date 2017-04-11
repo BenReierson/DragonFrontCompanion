@@ -24,7 +24,7 @@ namespace DragonFrontCompanion.Views
         {
             InitializeComponent();
 
-            if (Device.OS == TargetPlatform.Android &&
+            if (App.RuntimePlatform == App.Device.Android &&
                 CrossDeviceInfo.Current.VersionNumber.Major < 5)
             {SlideMenu = new CardTypeFilterLegacy();}
             else SlideMenu = new CardTypeFilter();
@@ -34,7 +34,7 @@ namespace DragonFrontCompanion.Views
             this.SlideMenu.BindingContext = Vm;
 
             //Android uses toast messages instead of the label
-            MessageLabel.IsVisible = Device.OS != TargetPlatform.Android;
+            MessageLabel.IsVisible = App.RuntimePlatform != App.Device.Android;
         }
         
 
@@ -43,7 +43,7 @@ namespace DragonFrontCompanion.Views
             base.OnAppearing();
             ((CardPopup)Resources["SelectedCardPopup"]).BindingContext = Vm;
 
-            if (Device.OS == TargetPlatform.iOS)
+            if (App.RuntimePlatform == App.Device.iOS)
             {//bug in xamarin forms 2.3.3 preventing color from sticking the first time
                 MessageLabel.BackgroundColor = Color.White;
                 DeckStatusLabel.BackgroundColor = Color.White;

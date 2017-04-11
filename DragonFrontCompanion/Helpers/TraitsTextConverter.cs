@@ -23,7 +23,7 @@ namespace DragonFrontCompanion.Helpers
             }
 
             var result = traitsString.ToString().Replace('_', ' ').Trim().Trim(',');
-			if (Device.OS == TargetPlatform.iOS) result = "  " + result + "  ";
+			if (App.RuntimePlatform == App.Device.iOS) result = "  " + result + "  ";
 
 			return result;
         }

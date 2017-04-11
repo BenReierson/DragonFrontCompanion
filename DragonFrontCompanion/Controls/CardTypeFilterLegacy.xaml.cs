@@ -22,9 +22,9 @@ namespace DragonFrontCompanion.Controls
             this.BackgroundColor = Color.Transparent;
             this.BackgroundViewColor = Color.Transparent;
 
-            if (Device.OS == TargetPlatform.Android)
+            if (App.RuntimePlatform == App.Device.Android)
                 this.HeightRequest += 50;
-            else if (Device.OS == TargetPlatform.iOS)
+            else if (App.RuntimePlatform == App.Device.iOS)
                 MainContent.Margin = new Thickness(10, 55, 10, 20);
         }
     }

@@ -36,6 +36,7 @@ namespace DragonFrontCompanion.iOS
             SlideOverKit.iOS.SlideOverKit.Init();
 
             App.VersionName = version.ToString();
+            App.RuntimePlatform = Xamarin.Forms.Device.RuntimePlatform;
 			_app = new App();
             LoadApplication(_app);
 

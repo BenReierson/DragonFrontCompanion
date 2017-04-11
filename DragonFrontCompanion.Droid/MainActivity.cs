@@ -108,6 +108,7 @@ namespace DragonFrontCompanion.Droid
             dynMethod.Invoke(null, null);
 
             App.VersionName = version;
+            App.RuntimePlatform = Device.RuntimePlatform;
             LoadApplication(new App());
 
             if (Intent != null && !Intent.GetBooleanExtra("handled", false) && Intent != _handledIntent)
