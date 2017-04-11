@@ -114,7 +114,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DeckTests.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModelTests\MainViewModelTests.cs" />
     <Compile Include="ViewModelTests\SettingsViewModelTests.cs" />
