@@ -13,9 +13,6 @@ namespace DragonFrontCompanion.Views
         public AboutPage()
         {
             InitializeComponent();
-
-            var feedbackButton = ((App)App.Current).FeedbackButton;
-            if (feedbackButton != null) MainStack.Children.Add(feedbackButton);
         }
     }
 }

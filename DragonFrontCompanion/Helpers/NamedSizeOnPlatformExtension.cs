@@ -39,16 +39,16 @@ namespace DragonFrontCompanion.Helpers
         {
             string val = string.Empty;
 
-            switch (Device.OS)
+            switch (App.RuntimePlatform)
             {
-                case TargetPlatform.iOS:
+                case App.Device.iOS:
                     val = iOS;
                     break;
-                case TargetPlatform.Android:
+                case App.Device.Android:
                     val = Android;
                     break;
-                case TargetPlatform.WinPhone:
-                case TargetPlatform.Windows:
+                case App.Device.WinPhone:
+                case App.Device.Windows:
                     val = WinPhone;
                     break;
                 default:

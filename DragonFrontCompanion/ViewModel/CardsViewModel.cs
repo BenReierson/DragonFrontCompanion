@@ -119,7 +119,7 @@ namespace DragonFrontCompanion.ViewModel
             get { return _selectedCard; }
             set
             {
-                if ((Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
+                if ((App.RuntimePlatform == App.Device.Windows || App.RuntimePlatform == App.Device.WinPhone)
                     && _lastActionedCard != null  && value == _lastActionedCard)
                 {
                     _lastActionedCard = null;
@@ -327,7 +327,7 @@ namespace DragonFrontCompanion.ViewModel
             private set
             {
                 Set(ref _typeFilter, value);
-                if (Device.OS == TargetPlatform.iOS)
+                if (App.RuntimePlatform == App.Device.iOS)
                 {
                     TypeFilterText = _typeFilter == CardType.INVALID ? "Type" : "Type:" + _typeFilter.ToString();
                 }
@@ -356,7 +356,7 @@ namespace DragonFrontCompanion.ViewModel
             {
                 Set(ref _factionFilter, value);
 
-                if (Device.OS == TargetPlatform.iOS)
+                if (App.RuntimePlatform == App.Device.iOS)
                 {
                     FactionFilterText = _factionFilter == Faction.INVALID ? "Faction" : "Faction:" + _factionFilter.ToString();
                 }
@@ -454,7 +454,7 @@ namespace DragonFrontCompanion.ViewModel
                 if (_searchText == value) return;
 
                 Set(ref _searchText, value);
-                if (Device.OS == TargetPlatform.Windows)
+                if (App.RuntimePlatform == App.Device.Windows)
                 {//Delay search filter to help with performance on windows
                     if (!_suspendFilters)
                     {

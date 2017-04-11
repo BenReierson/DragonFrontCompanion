@@ -29,6 +29,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestInitialize]
         public void VMSetup()
         {
+
             mockNav = new Mock<INavigationService>();
             mockDialogService = new Mock<IDialogService>(MockBehavior.Loose);
             mockDeckService = new Mock<IDeckService>();

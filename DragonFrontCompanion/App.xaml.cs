@@ -21,6 +21,15 @@ namespace DragonFrontCompanion
     {
         public const string APP_NAME = "Dragon Front Companion";
 
+        public class Device
+        {
+            public const string Android = "Android";
+            public const string iOS = "iOS";
+            public const string Windows = "Windows";
+            public const string WinPhone = "WinPhone";
+            public const string Test = "Test";
+        }
+
         public class MESSAGES
         {
             public const string OPEN_DECK_FILE = "DeckFile";
@@ -42,15 +51,14 @@ namespace DragonFrontCompanion
 
         public static string VersionName = "NA";
 
-        public Button FeedbackButton { get; private set; }
+        public static string RuntimePlatform { get; set; } = Device.Test;
+
         
         private NavigationService _navService = null;
         private DialogService _dialog = null;
-        public App(Button feedbackButton = null)
+        public App()
         {
             InitializeComponent();
-
-            FeedbackButton = feedbackButton;
 
             if (SimpleIoc.Default.ContainsCreated<INavigationService>())
             {
