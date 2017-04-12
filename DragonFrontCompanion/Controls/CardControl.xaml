@@ -27,14 +27,13 @@
                 x:Name="CardImage"
                 Margin="2"
                 Source="{Binding ., Converter={StaticResource Key=CardImages}}">
-                <ffImage:CachedImage.Transformations>
+                <!--<ffImage:CachedImage.Transformations>
                     <ffTransforms:RoundedTransformation
                         BorderHexColor="#80000000"
                         BorderSize="10"
                         Radius="60" />
-                </ffImage:CachedImage.Transformations>
+                </ffImage:CachedImage.Transformations>-->
             </ffImage:CachedImage>
-
             <StackLayout
                 Margin="0,0,0,2"
                 HorizontalOptions="Center"
