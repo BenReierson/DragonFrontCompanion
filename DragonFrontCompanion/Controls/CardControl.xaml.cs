@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
+using FFImageLoading.Transformations;
 
 namespace DragonFrontCompanion.Controls
 {
@@ -21,6 +22,10 @@ namespace DragonFrontCompanion.Controls
             {
                 TypeLabel.FontSize = 12;
                 FactionLabel.FontSize = 12;
+            }
+            else
+            {//Rounded transformation is not working on UWP
+                CardImage.Transformations.Add(new RoundedTransformation(60, 0, 0, 10, "#80000000"));
             }
         }
     }
