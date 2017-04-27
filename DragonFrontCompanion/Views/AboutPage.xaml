@@ -6,36 +6,38 @@
     Title="About"
     BackgroundColor="White"
     BindingContext="{Binding About, Source={StaticResource Locator}}">
-    <StackLayout
-        x:Name="MainStack"
-        Margin="25"
-        HorizontalOptions="Center"
-        Spacing="10">
-        <Label
-            FontAttributes="Bold"
-            FontSize="Large"
+    <ScrollView>
+        <StackLayout
+            x:Name="MainStack"
+            Margin="15"
             HorizontalOptions="Center"
-            Text="{Binding AppName}"
-            TextColor="Black"
-            XAlign="Center" />
-        <Label
-            FontAttributes="Bold"
-            FontSize="Large"
-            HorizontalOptions="Center"
-            Text="{Binding Version}"
-            TextColor="Black"
-            XAlign="Center" />
-        <Label
-            HorizontalOptions="Center"
-            Text="{Binding License}"
-            TextColor="Black"
-            XAlign="Center" />
-        <Label
-            Margin="0,20,0,0"
-            FontSize="Small"
-            HorizontalOptions="Center"
-            Text="{Binding HvsText}"
-            TextColor="Black"
-            XAlign="Center" />
-    </StackLayout>
+            Spacing="10">
+            <Label
+                FontAttributes="Bold"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                Text="{Binding AppName}"
+                TextColor="Black"
+                XAlign="Center" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                Text="{Binding Version}"
+                TextColor="Black"
+                XAlign="Center" />
+            <Label
+                HorizontalOptions="Center"
+                Text="{Binding License}"
+                TextColor="Black"
+                XAlign="Center" />
+            <Label
+                Margin="0,20,0,0"
+                FontSize="Small"
+                HorizontalOptions="Center"
+                Text="{Binding HvsText}"
+                TextColor="Black"
+                XAlign="Center" />
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
