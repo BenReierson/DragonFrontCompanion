@@ -19,6 +19,7 @@ namespace DragonFrontCompanion.ViewModel
             Version = "v" + App.VersionName;
 
             License = "Copyright ©2016 " + AppName + " Team.\nAll Rights Reserved.";
+            HvsText = HvsText += $"\n\n{AppName} is not affiliated with, endorsed, sponsored, or specifically approved by High Voltage Software, Inc. {AppName} may use the trademarks and other intellectual property of High Voltage Software, Inc., which is permitted under specific material use policy agreed upon with High Voltage Software, Inc.For more information about High Voltage Software or any of the HVS trademarks or other intellectual property, please visit their website at www.high-voltage.com.";
         }
 
         #region Properties
@@ -46,7 +47,7 @@ namespace DragonFrontCompanion.ViewModel
         }
 
 
-        private string _hvs = "Dragon Front is a trademark or registered trademark of High Voltage Software, Inc. in the U.S. and/or other countries. Card images Copyright © 2015-2016, High Voltage Software, Inc. All Rights Reserved. All other trademarks listed are the property of their respective owners.";
+        private string _hvs = "©2016 High Voltage Software, Inc. High Voltage Software, the High Voltage Software logo, Dragon Frontand the Dragon Front logo are either registered trademarks or trademarks of High Voltage Software, Inc.";
         public string HvsText
         {
             get { return _hvs; }
