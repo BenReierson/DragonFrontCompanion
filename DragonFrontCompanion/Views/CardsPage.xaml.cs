@@ -20,6 +20,17 @@ namespace DragonFrontCompanion.Views
 
         public CardsPage() : this(deck: null) { }
 
+        public CardsPage(string searchText) : this(deck: null)
+        {
+            SearchForCards(searchText);
+        }
+
+        private async void SearchForCards(string searchText)
+        {
+            while (Vm.IsBusy) await Task.Delay(100);
+            Vm.SearchText = searchText;
+        }
+
         public CardsPage(Deck deck = null)
         {
             InitializeComponent();

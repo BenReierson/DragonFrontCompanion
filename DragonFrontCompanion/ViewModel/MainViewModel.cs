@@ -138,6 +138,26 @@ namespace DragonFrontCompanion.ViewModel
                     }));
             }
         }
+
+        private RelayCommand<string> _navigateToNewCards;
+
+        /// <summary>
+        /// Gets the NavigateToCardsCommand.
+        /// </summary>
+        public RelayCommand<string> NavigateToNewCardsCommand
+        {
+            get
+            {
+                return _navigateToNewCards
+                    ?? (_navigateToNewCards = new RelayCommand<string>(
+                    (searchText) =>
+                    {
+                        if (HasNavigated) return;
+                        HasNavigated = true;
+                        _navigationService.NavigateTo(ViewModelLocator.CardsPageKey, searchText);
+                    }));
+            }
+        }
         #endregion  
 
 

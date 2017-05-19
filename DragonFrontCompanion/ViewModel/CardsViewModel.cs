@@ -61,7 +61,11 @@ namespace DragonFrontCompanion.ViewModel
                       (RarityFilter == 0 || (int)c.Rarity == RarityFilter) &&
                       ((TraitFilter == null || TraitFilter.Count() == 0) || TraitFilter.Intersect(c.Traits).Any()) &&
                       (CurrentDeck == null || !FilterByDeck || CurrentDeck.Contains(c) || CurrentDeck.Champion == c) &&
-                      (string.IsNullOrEmpty(SearchText) || c.Text.ToLower().Contains(SearchText.ToLower()) || c.Name.ToLower().Contains(SearchText.ToLower()) || c.Race.ToString().ToLower().Contains(SearchText.ToLower()))
+                      (string.IsNullOrEmpty(SearchText) || 
+                       c.Text.ToLower().Contains(SearchText.ToLower()) || 
+                       c.Name.ToLower().Contains(SearchText.ToLower()) || 
+                       c.Race.ToString().ToLower().Contains(SearchText.ToLower()) ||
+                       SearchText.ToUpper().Contains(c.CardSet.ToString()))
                 orderby c.Type == CardType.CHAMPION descending, c.Faction descending, c.Cost, c.Name
                 select c;
 

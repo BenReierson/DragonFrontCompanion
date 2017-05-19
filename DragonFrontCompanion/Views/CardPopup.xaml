@@ -18,6 +18,7 @@
             <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
             <helpers:BooleanToYesNoConverter x:Key="YesOrNo" />
             <helpers:RarityImageConverter x:Key="RarityImage" />
+            <helpers:CardSetVisibilityConverter x:Key="CardSetVisibility" />
             <animations:MoveAnimation
                 x:Key="NextAnimation"
                 DurationIn="100"
@@ -236,6 +237,22 @@
                             Style="{StaticResource CardStatLabelStyle}"
                             Text="{Binding ManaFragments}"
                             TextColor="#15CEEA"
+                            XAlign="End" />
+
+                        <!--  Card Set  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Set" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.ColumnSpan="2"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding CardSet}"
                             XAlign="End" />
 
                         <!--  Giant  -->
