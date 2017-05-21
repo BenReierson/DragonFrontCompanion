@@ -18,6 +18,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DragonFrontCompanion.Data;
+using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
 
 namespace DragonFrontCompanion.UWP
 {
@@ -37,7 +39,7 @@ namespace DragonFrontCompanion.UWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            
+            MobileCenter.Start("6013a5e1-18f0-4e45-95b8-bb7ce1411d6c", typeof(Analytics));
         }
 
         /// <summary>
