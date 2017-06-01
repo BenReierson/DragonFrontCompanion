@@ -17,7 +17,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
     [TestClass]
     public class CardsViewModelTests
     {
-
+        Cards cardsDb;
         CardsViewModel cardsVM;
         Mock<INavigationService> mockNav;
         Mock<ICardsService> mockCardsService;
@@ -29,13 +29,13 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestInitialize]
         public void VMSetup()
         {
-
+            cardsDb = Cards.Instance();
             mockNav = new Mock<INavigationService>();
             mockDialogService = new Mock<IDialogService>(MockBehavior.Loose);
             mockDeckService = new Mock<IDeckService>();
 
             mockCardsService = new Mock<ICardsService>();
-            mockCardsService.Setup(c => c.GetAllCardsAsync()).Returns(async () => Cards.All);
+            mockCardsService.Setup(c => c.GetAllCardsAsync()).Returns(async () => cardsDb.All);
 
             cardsVM = new CardsViewModel(mockNav.Object, mockCardsService.Object, mockDialogService.Object, mockDeckService.Object);
         }
@@ -45,7 +45,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         {
             mockCardsService.Verify(c => c.GetAllCardsAsync());
             Assert.IsFalse(cardsVM.IsBusy);
-            Assert.AreEqual(Cards.All.Count, cardsVM.AllCards.Count);
+            Assert.AreEqual(cardsDb.All.Count, cardsVM.AllCards.Count);
             Assert.IsTrue(cardsVM.CardsTitle.Contains("Cards"));
             Assert.IsFalse(cardsVM.IsChooser);
         }
@@ -55,7 +55,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         {
             cardsVM.CurrentDeck = null;
             Assert.IsFalse(cardsVM.IsChooser);
-            Assert.AreEqual(Cards.All.Count, cardsVM.AllCards.Count);
+            Assert.AreEqual(cardsDb.All.Count, cardsVM.AllCards.Count);
 
             VerifyNonChooserFilterDefaults();
         }
@@ -68,7 +68,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
 
             Assert.IsTrue(cardsVM.IsChooser);
-            Assert.AreEqual(Cards.AllEclipse.Count + Cards.AllUnaligned.Count, cardsVM.AllCards.Count);
+            Assert.AreEqual(cardsDb.All.Count(c => c.Faction == Faction.ECLIPSE || c.Faction == Faction.UNALIGNED), cardsVM.AllCards.Count);
 
             //Check all filters status
             Assert.IsTrue(cardsVM.CanFilterByEclipse);
@@ -87,7 +87,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             Assert.AreEqual(null, cardsVM.TraitFilter);
             Assert.AreEqual(Faction.INVALID, cardsVM.FactionFilter);
 
-            Assert.AreEqual(Cards.AllEclipse.Count + Cards.AllUnaligned.Count, cardsVM.FilteredCards.Count, "All faction cards should be included by default.");
+            Assert.AreEqual(cardsDb.All.Count(c => c.Faction == Faction.ECLIPSE || c.Faction == Faction.UNALIGNED), cardsVM.FilteredCards.Count, "All faction cards should be included by default.");
 
         }
 
@@ -286,9 +286,9 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         public async Task TestFilterByDeck()
         {
             var deck = new Deck(Faction.SCALES);
-            deck.Champion = Cards.AllScales.First(c => c.Type == CardType.CHAMPION);
-            deck.Add(Cards.AllScales[10]);
-            deck.Add(Cards.AllUnaligned[0]);
+            deck.Champion = cardsDb.All.Where(c => c.Faction == Faction.SCALES).First(c => c.Type == CardType.CHAMPION);
+            deck.Add(cardsDb.All.Where(c => c.Faction == Faction.SCALES).ToList()[10]);
+            deck.Add(cardsDb.All.First(c => c.Faction == Faction.UNALIGNED));
 
             cardsVM.CurrentDeck = deck;
             await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
@@ -322,10 +322,10 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             cardsVM.CurrentDeck = deck;
             await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
 
-            var factionCardToAdd = Cards.AllStrife.First(c => c.Type != CardType.CHAMPION);
-            var unalignedCardToAdd = Cards.AllUnaligned.First();
-            var invalidFactionCard = Cards.AllEclipse.First(c => c.Type != CardType.CHAMPION);
-            var champToAdd = Cards.AllStrife.First(c => c.Type == CardType.CHAMPION);
+            var factionCardToAdd = cardsDb.All.Where(c => c.Faction == Faction.STRIFE).First(c => c.Type != CardType.CHAMPION);
+            var unalignedCardToAdd = cardsDb.All.Where(c => c.Faction == Faction.UNALIGNED).First();
+            var invalidFactionCard = cardsDb.All.Where(c => c.Faction == Faction.ECLIPSE).First(c => c.Type != CardType.CHAMPION);
+            var champToAdd = cardsDb.All.Where(c => c.Faction == Faction.STRIFE).First(c => c.Type == CardType.CHAMPION);
 
             //Add faction card
             Assert.IsTrue(cardsVM.AddOneToDeckCommand.CanExecute(factionCardToAdd));
@@ -352,10 +352,10 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         {
             var deck = new Deck(Faction.STRIFE);
             
-            var factionCardToRemove = Cards.AllStrife.First(c => c.Type != CardType.CHAMPION);
-            var unalignedCardToRemove = Cards.AllUnaligned.First();
-            var invalidFactionCard = Cards.AllEclipse.First(c => c.Type != CardType.CHAMPION);
-            var champToRemove = Cards.AllStrife.First(c => c.Type == CardType.CHAMPION);
+            var factionCardToRemove = cardsDb.All.Where(c=>c.Faction == Faction.STRIFE).First(c => c.Type != CardType.CHAMPION);
+            var unalignedCardToRemove = cardsDb.All.Where(c => c.Faction == Faction.UNALIGNED).First(c => c.Type != CardType.CHAMPION);
+            var invalidFactionCard = cardsDb.All.Where(c => c.Faction == Faction.ECLIPSE).First(c => c.Type != CardType.CHAMPION);
+            var champToRemove = cardsDb.All.Where(c => c.Faction == Faction.STRIFE).First(c => c.Type == CardType.CHAMPION);
 
             deck.Add(factionCardToRemove);
             deck.Add(unalignedCardToRemove);
@@ -408,7 +408,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             cardsVM.CurrentDeck = null;
             await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
 
-            var cards = new List<Card>(Cards.All.Take(3));
+            var cards = new List<Card>(cardsDb.All.Take(3));
 
             cardsVM.FilteredCards = cards;
             cardsVM.SelectedCard = cards[1];
@@ -451,7 +451,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             Assert.AreEqual(null, cardsVM.TraitFilter);
             Assert.AreEqual(Faction.INVALID, cardsVM.FactionFilter);
 
-            Assert.AreEqual(Cards.All.Count, cardsVM.FilteredCards.Count, "All cards should be shown by default.");
+            Assert.AreEqual(cardsDb.All.Count, cardsVM.FilteredCards.Count, "All cards should be shown by default.");
 
         }
         
