@@ -21,11 +21,11 @@ namespace DragonFrontCompanion.Data
 
         private ICardsService _cardsService;
         private Deck _randomDeck;
-        private Task _initlializing;
+        private Task _initializing;
         public LocalDeckService(ICardsService cardsService)
         {
             _cardsService = cardsService;
-            _initlializing = InitializeAsync();
+            _initializing = InitializeAsync();
         }
 
         private async Task InitializeAsync()
@@ -67,7 +67,7 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> GetSavedDeckAsync(Guid ID)
         {
-            if (!_initlializing.IsCompleted) await _initlializing;
+            if (!_initializing.IsCompleted) await _initializing;
 
             var folder = await GetDecksFolderAsync();
             var deckFiles = await folder?.GetFilesAsync();
@@ -89,8 +89,8 @@ namespace DragonFrontCompanion.Data
 
         public async Task<List<Deck>> GetSavedDecksAsync()
         {
-            if (!_initlializing.IsCompleted)
-                await _initlializing;
+            if (!_initializing.IsCompleted)
+                await _initializing;
 
             var folder = await GetDecksFolderAsync();
             var deckFiles = await folder?.GetFilesAsync();
@@ -155,7 +155,7 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> OpenDeckDataAsync(string deckData, bool sourceExternal = true)
         {
-            if (!_initlializing.IsCompleted) await _initlializing;
+            if (!_initializing.IsCompleted) await _initializing;
 
             if (deckData != null)
             {
@@ -172,7 +172,7 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> OpenDeckFileAsync(string filePath, bool sourceExternal = true)
         {
-            if (!_initlializing.IsCompleted) await _initlializing;
+            if (!_initializing.IsCompleted) await _initializing;
 
             filePath = filePath.Replace(@"file://", "");
             var deckFile = await FileSystem.Current.GetFileFromPathAsync(filePath);
@@ -210,7 +210,7 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> SaveDeckAsync(Deck deckToSave)
         {
-            if (!_initlializing.IsCompleted) await _initlializing;
+            if (!_initializing.IsCompleted) await _initializing;
 
             var existingDeck = await GetSavedDeckAsync(deckToSave.ID);
             var oldJson = await Task.Run(() => JsonConvert.SerializeObject(existingDeck, Formatting.Indented));
