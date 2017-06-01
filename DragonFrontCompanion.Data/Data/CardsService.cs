@@ -11,47 +11,42 @@ namespace DragonFrontCompanion.Data
 {
     public class CardsService : ICardsService
     {
-        
+        private Cards _cachedCards;
+
+        public Cards CachedCards
+        {
+            get{ return _cachedCards;}
+            set
+            {
+                if (_cachedCards == value) return;
+
+                _cachedCards = value;
+                Deck.CardDictionary = _cachedCards.CardDictionary;
+            }
+        }
+
+        private async Task<Cards> GetCachedCards()
+        {
+            return CachedCards ?? await Task.Run(()=>CachedCards = Cards.Instance()).ConfigureAwait(false);
+        }
+
         public CardsService() {
             System.Diagnostics.Debug.WriteLine("Card Service");
         }
 
         public async Task<ReadOnlyDictionary<string, Card>> GetCardsDictionaryAsync()
         {
-            return await Task.Run(()=> Cards.CardDictionary);
+            return (await GetCachedCards()).CardDictionary;
         }
 
         public async Task<ReadOnlyCollection<Card>> GetAllCardsAsync()
         {
-            await Task.Delay(100);
-            return await Task.Run(() => Cards.All);
+            return (await GetCachedCards()).All;
         }
 
-        public async Task<ReadOnlyCollection<Card>> GetAllFactionCardsAsync(Faction cardFaction)
+        public async Task<ReadOnlyDictionary<Traits, string>> GetCardTraitsAsync()
         {
-            switch (cardFaction)
-            {
-                case Faction.INVALID:
-                    throw new ArgumentException("Invalid CardClass");
-                case Faction.UNALIGNED:
-                    return await Task.Run(() => Cards.AllUnaligned);
-                case Faction.ECLIPSE:
-                    return await Task.Run(() => Cards.AllEclipse);
-                case Faction.SCALES:
-                    return await Task.Run(() => Cards.AllScales);
-                case Faction.STRIFE:
-                    return await Task.Run(() => Cards.AllStrife);
-                case Faction.THORNS:
-                    return await Task.Run(() => Cards.AllThorns);
-                case Faction.SILENCE:
-                    return await Task.Run(() => Cards.AllSilence);
-                case Faction.ESSENCE:
-                    return await Task.Run(() => Cards.AllEssence);
-                case Faction.DELIRIUM:
-                    return await Task.Run(() => Cards.AllDelirium);
-                default:
-                    return new ReadOnlyCollection<Card>(new List<Card>());
-            }
+            return (await GetCachedCards()).TraitsDictionary;
         }
     }
 }

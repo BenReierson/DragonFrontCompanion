@@ -43,6 +43,8 @@ namespace DragonFrontCompanion.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<ICardsService, CardsService>();
+
             if (ViewModelBase.IsInDesignModeStatic)
             {
 				SimpleIoc.Default.Register<INavigationService, NavigationService>();
@@ -55,8 +57,6 @@ namespace DragonFrontCompanion.ViewModel
                 // Create run time view services and models
                 SimpleIoc.Default.Register<IDeckService, LocalDeckService>();
             }
-
-            SimpleIoc.Default.Register<ICardsService, CardsService>();
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<DecksViewModel>();
