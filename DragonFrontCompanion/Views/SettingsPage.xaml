@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!--  Random Decks  -->
@@ -50,9 +51,19 @@
             IsToggled="{Binding AllowDeckOverload}"
             VerticalOptions="Center" />
 
+        <!--  Auto Update  -->
+        <Label
+            Grid.Row="3"
+            Grid.Column="0"
+            Text="Auto update card data" />
+        <Switch
+            Grid.Row="3"
+            Grid.Column="1"
+            IsToggled="{Binding EnableAutoUpdate}" />
+
         <!--  Card Data  -->
         <StackLayout
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="0"
             Orientation="Vertical"
             Spacing="0">
@@ -62,21 +73,18 @@
                 Opacity=".8"
                 Text="{Binding UpdateAvailableText}" />
         </StackLayout>
-        <Label
-            Grid.Row="3"
-            Grid.Column="0"
-            Text="{Binding ActiveCardDataVersion}" />
         <StackLayout
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="1"
             Orientation="Horizontal">
             <Button
                 Command="{Binding UpdateCardDataCommand}"
                 IsVisible="{Binding CardDataUpdateAvailable}"
                 Text="Update" />
-            <Button Command="{Binding ResetCardDataCommand}" 
+            <Button
+                Command="{Binding ResetCardDataCommand}"
                 IsVisible="{Binding ResetAvailable}"
-                    Text="Reset" />
+                Text="Reset" />
         </StackLayout>
     </Grid>
 </ContentPage>

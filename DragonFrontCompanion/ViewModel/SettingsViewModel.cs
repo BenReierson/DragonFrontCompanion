@@ -1,5 +1,6 @@
 ﻿using DragonFrontCompanion.Data;
 using DragonFrontDb;
+using DragonFrontDb.Enums;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
@@ -17,6 +18,7 @@ namespace DragonFrontCompanion.ViewModel
 
         private INavigationService _navigationService;
         private ICardsService _cardsService;
+        private Info _latestInfo;
 
         public SettingsViewModel(INavigationService navigationService, ICardsService cardsService)
         {
@@ -31,10 +33,11 @@ namespace DragonFrontCompanion.ViewModel
 
         private async Task CheckForUpdate()
         {
-            var info = await _cardsService.CheckForUpdatesAsync();
+            _latestInfo = await _cardsService.CheckForUpdatesAsync();
             var activeVersion = Settings.ActiveCardDataVersion == null ? Info.Current.CardDataVersion : Version.Parse(Settings.ActiveCardDataVersion);
-            CardDataUpdateAvailable = info.CardDataVersion > activeVersion;
-            UpdateAvailableText = CardDataUpdateAvailable ? $"Newer card data v{info.CardDataVersion.ToString()} available" : "";
+            CardDataUpdateAvailable = _latestInfo.CardDataVersion > activeVersion;
+            UpdateAvailableText = CardDataUpdateAvailable ? $"Newer card data v{_latestInfo.CardDataVersion.ToString()} available" : "";
+            if (CardDataUpdateAvailable && _latestInfo.CardDataStatus == DragonFrontDb.Enums.DataStatus.PREVIEW) UpdateAvailableText += " - PREVIEW";
             ResetAvailable = activeVersion != Info.Current.CardDataVersion;
         }
 
@@ -83,7 +86,17 @@ namespace DragonFrontCompanion.ViewModel
             set { _updateText = value; RaisePropertyChanged(); }
         }
 
-
+        public bool EnableAutoUpdate
+        {
+            get { return Settings.EnableAutoUpdate; }
+            set
+            {
+                Settings.EnableAutoUpdate = value;
+                RaisePropertyChanged();
+                if (value && CardDataUpdateAvailable && _latestInfo?.CardDataStatus == DataStatus.RELEASE)
+                { _cardsService.UpdateCardDataAsync(); }
+            }
+        }
 
         #endregion
 
@@ -100,6 +113,7 @@ namespace DragonFrontCompanion.ViewModel
                     ?? (_resetCardData = new RelayCommand(
                     async () =>
                     {
+                        ResetAvailable = false;
                         await _cardsService.ResetCardDataAsync();
                         await CheckForUpdate();
                         RaisePropertyChanged(nameof(ActiveCardDataVersion));
@@ -120,6 +134,7 @@ namespace DragonFrontCompanion.ViewModel
                     ?? (_updateCardData = new RelayCommand(
                     async () =>
                     {
+                        CardDataUpdateAvailable = false;
                         await _cardsService.UpdateCardDataAsync();
                         await CheckForUpdate();
                         RaisePropertyChanged(nameof(ActiveCardDataVersion));

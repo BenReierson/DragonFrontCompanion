@@ -1,9 +1,12 @@
 
+using DragonFrontCompanion.Data;
 using DragonFrontDb;
+using DragonFrontDb.Enums;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System.Collections.ObjectModel;
+using Xamarin.Forms;
 
 namespace DragonFrontCompanion.ViewModel
 {
@@ -22,12 +25,44 @@ namespace DragonFrontCompanion.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private INavigationService _navigationService;
-        public MainViewModel(INavigationService navigationService)
+        private IDialogService _dialogService;
+        private ICardsService _cardsService;
+        private bool _cardDataReset;
+        public MainViewModel(INavigationService navigationService, ICardsService cardsService, IDialogService dialogService)
         {
             _navigationService = navigationService;
+            _dialogService = dialogService;
+            _cardsService = cardsService;
 
             VersionDisplay = "v" + App.VersionName;
             Title = App.APP_NAME;
+
+            cardsService.DataUpdateAvailable += CardsService_DataUpdateAvailable;
+            cardsService.DataUpdated += CardsService_DataUpdated;
+            if (Settings.EnableAutoUpdate) cardsService.CheckForUpdatesAsync();
+        }
+
+        private void CardsService_DataUpdated(object sender, Cards e)
+        {
+            _cardDataReset = Settings.ActiveCardDataVersion == null;
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                MessagingCenter.Send<string>("Loaded Card Data v" + (Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion.ToString()), App.MESSAGES.SHOW_TOAST);
+            });
+        }
+
+        private void CardsService_DataUpdateAvailable(object sender, Info e)
+        {
+            if (_cardDataReset || 
+                !Settings.EnableAutoUpdate || 
+                e.CardDataStatus != DataStatus.RELEASE) return;
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                MessagingCenter.Send<string>("Updating Card Data", App.MESSAGES.SHOW_TOAST);
+            });
+            _cardsService.UpdateCardDataAsync();
         }
 
         #region Properties

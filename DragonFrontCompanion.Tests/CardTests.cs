@@ -33,8 +33,8 @@ namespace DragonFrontCompanion.Tests
 
             _cardsService.DataUpdated += (o, e) => 
                 DataUpdatedFired = true;
-
-            var latestInfo = await _cardsService.CheckForUpdates();
+            
+            var latestInfo = await _cardsService.CheckForUpdatesAsync();
 
             Assert.IsTrue(latestInfo.CardDataVersion > Info.Current.CardDataVersion);
             Assert.AreEqual(new Version(2,0,1,0), latestInfo.CardDataVersion);
@@ -51,8 +51,8 @@ namespace DragonFrontCompanion.Tests
             Cards updatedCards = null;
             _cardsService.DataUpdated += (o, e) => updatedCards = e;
 
-            var latestInfo = await _cardsService.CheckForUpdates();
-            await _cardsService.UpdateCardData();
+            var latestInfo = await _cardsService.CheckForUpdatesAsync();
+            await _cardsService.UpdateCardDataAsync();
 
             Assert.IsTrue(latestInfo.CardDataVersion > Info.Current.CardDataVersion);
             Assert.AreEqual(new Version(2, 0, 1, 0), latestInfo.CardDataVersion);

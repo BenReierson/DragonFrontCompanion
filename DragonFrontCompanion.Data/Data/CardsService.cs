@@ -28,8 +28,9 @@ namespace DragonFrontCompanion.Data
         public async Task<Info> CheckForUpdatesAsync()
         {
             var latestInfo = await GetLatestCardInfo().ConfigureAwait(false);
-            if (latestInfo.CardDataVersion > Info.Current.CardDataVersion &&
-                latestInfo.CardDataCompatibleVersion <= Info.Current.CardDataVersion)
+            var currentVersion = Settings.ActiveCardDataVersion != null ? Version.Parse(Settings.ActiveCardDataVersion) : Info.Current.CardDataVersion;
+            if (latestInfo.CardDataVersion > currentVersion &&
+                latestInfo.CardDataCompatibleVersion <= currentVersion)
             {//remote card data is newer and compatible
                 DataUpdateAvailable?.Invoke(this, latestInfo);
                 return latestInfo;
