@@ -23,6 +23,7 @@ namespace DragonFrontCompanion
 
         private const string AllowDeckOverloadSettingsKey = "deck_overload";
         private const string EnableRandomDeckSettingsKey = "random_decks";
+        private const string CardDataVersionSettingsKey = "card_data_version";
 
         public const bool DEFAULT_AllowDeckOverload = false;
         public const bool DEFAULT_EnableRandomDeck = true;
@@ -50,6 +51,19 @@ namespace DragonFrontCompanion
             set
             {
                 AppSettings.AddOrUpdateValue<bool>(EnableRandomDeckSettingsKey, value);
+            }
+        }
+
+        public static string ActiveCardDataVersion
+        {
+            get
+            {
+                var setting = AppSettings.GetValueOrDefault<string>(CardDataVersionSettingsKey, null);
+                return string.IsNullOrEmpty(setting) ? null : setting;
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<string>(CardDataVersionSettingsKey, value);
             }
         }
     }

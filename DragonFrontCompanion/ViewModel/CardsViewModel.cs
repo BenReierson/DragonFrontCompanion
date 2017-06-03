@@ -37,15 +37,21 @@ namespace DragonFrontCompanion.ViewModel
             _dialog = dialog;
             _deckService = deckService;
 
-            Initialize();
+            InitializeAsync();
         }
 
-        private async void Initialize()
+        public async Task InitializeAsync()
         {
+            if (_cardsTask != null && !_cardsTask.IsCompleted) return;
+
             IsBusy = true;
             _cardsTask = _cardsService.GetAllCardsAsync();
-            _unfilteredCards = await _cardsTask;
-            AllCards = _unfilteredCards.ToList();
+            var freshCards = await _cardsTask;
+            if (_unfilteredCards != freshCards)
+            {
+                _unfilteredCards = freshCards;
+                AllCards = _unfilteredCards.ToList();
+            }
             IsBusy = false;
         }
 

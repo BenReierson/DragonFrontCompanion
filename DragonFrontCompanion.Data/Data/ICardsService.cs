@@ -13,8 +13,9 @@ namespace DragonFrontCompanion.Data
 
         Task<ReadOnlyDictionary<Traits, string>> GetCardTraitsAsync();
 
-        Task<Info> CheckForUpdates();
-        Task<Cards> UpdateCardData();
+        Task<Info> CheckForUpdatesAsync();
+        Task<Cards> UpdateCardDataAsync();
+        Task ResetCardDataAsync();
 
         event EventHandler<Info> DataUpdateAvailable;
         event EventHandler<Cards> DataUpdated;
