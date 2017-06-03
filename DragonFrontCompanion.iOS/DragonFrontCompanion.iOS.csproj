@@ -146,8 +146,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="DragonFrontDb, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DragonFrontDb.2.0.0\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
+    <Reference Include="DragonFrontDb, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DragonFrontDb.2.0.0.2\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ExifLib">
