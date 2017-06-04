@@ -24,6 +24,8 @@ namespace DragonFrontCompanion.ViewModel
         {
             _navigationService = navigationService;
             _cardsService = cardsService;
+
+            _cardsService.DataUpdated += (o, e) => CheckForUpdate(false);
         }
 
         public async Task Initialize()
@@ -31,14 +33,15 @@ namespace DragonFrontCompanion.ViewModel
             await CheckForUpdate();
         }
 
-        private async Task CheckForUpdate()
+        private async Task CheckForUpdate(bool invalidateCache = true)
         {
-            _latestInfo = await _cardsService.CheckForUpdatesAsync();
-            var activeVersion = Settings.ActiveCardDataVersion == null ? Info.Current.CardDataVersion : Version.Parse(Settings.ActiveCardDataVersion);
+            if (_latestInfo == null || invalidateCache) _latestInfo = await _cardsService.CheckForUpdatesAsync();
+            var activeVersion = Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion;
             CardDataUpdateAvailable = _latestInfo.CardDataVersion > activeVersion;
             UpdateAvailableText = CardDataUpdateAvailable ? $"Newer card data v{_latestInfo.CardDataVersion.ToString()} available" : "";
             if (CardDataUpdateAvailable && _latestInfo.CardDataStatus == DragonFrontDb.Enums.DataStatus.PREVIEW) UpdateAvailableText += " - PREVIEW";
             ResetAvailable = activeVersion != Info.Current.CardDataVersion;
+            RaisePropertyChanged(nameof(ActiveCardDataVersion));
         }
 
         #region Properties
@@ -59,10 +62,9 @@ namespace DragonFrontCompanion.ViewModel
         {
             get
             {
-                var version = Settings.ActiveCardDataVersion != null ? Settings.ActiveCardDataVersion : Info.Current.CardDataVersion.ToString();
+                var version = Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion;
                 return "Card Data v" + version;
             }
-            set { Settings.ActiveCardDataVersion = value;  RaisePropertyChanged(); }
         }
 
         private bool _updateAvailable;
@@ -94,7 +96,9 @@ namespace DragonFrontCompanion.ViewModel
                 Settings.EnableAutoUpdate = value;
                 RaisePropertyChanged();
                 if (value && CardDataUpdateAvailable && _latestInfo?.CardDataStatus == DataStatus.RELEASE)
-                { _cardsService.UpdateCardDataAsync(); }
+                {
+                    UpdateCardDataCommand.Execute(null);
+                }
             }
         }
 
@@ -116,7 +120,6 @@ namespace DragonFrontCompanion.ViewModel
                         ResetAvailable = false;
                         await _cardsService.ResetCardDataAsync();
                         await CheckForUpdate();
-                        RaisePropertyChanged(nameof(ActiveCardDataVersion));
                     }));
             }
         }
@@ -135,9 +138,9 @@ namespace DragonFrontCompanion.ViewModel
                     async () =>
                     {
                         CardDataUpdateAvailable = false;
+                        MessagingCenter.Send<string>("Updating Card Data", App.MESSAGES.SHOW_TOAST);
                         await _cardsService.UpdateCardDataAsync();
-                        await CheckForUpdate();
-                        RaisePropertyChanged(nameof(ActiveCardDataVersion));
+                        await CheckForUpdate(false);
                     }));
             }
         }

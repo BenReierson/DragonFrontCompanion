@@ -37,6 +37,12 @@ namespace DragonFrontCompanion.ViewModel
             _dialog = dialog;
             _deckService = deckService;
 
+            _cardsService.DataUpdated += async (o, e) =>
+            {
+                await InitializeAsync();
+                ApplyFilters();
+            };
+
             InitializeAsync();
         }
 
@@ -118,9 +124,7 @@ namespace DragonFrontCompanion.ViewModel
         public List<Card> AllCards
         {
             get { return _allCards; }
-            set {
-                Set(ref _allCards, value);
-            }
+            set {Set(ref _allCards, value);}
         }
 
         private Card _selectedCard = null;

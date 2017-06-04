@@ -5,6 +5,7 @@ using DragonFrontDb.Enums;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
+using System;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
@@ -39,30 +40,53 @@ namespace DragonFrontCompanion.ViewModel
 
             cardsService.DataUpdateAvailable += CardsService_DataUpdateAvailable;
             cardsService.DataUpdated += CardsService_DataUpdated;
-            if (Settings.EnableAutoUpdate) cardsService.CheckForUpdatesAsync();
+            cardsService.CheckForUpdatesAsync();
         }
 
         private void CardsService_DataUpdated(object sender, Cards e)
         {
-            _cardDataReset = Settings.ActiveCardDataVersion == null;
+            _cardDataReset = Settings.ActiveCardDataVersion == Info.Current.CardDataVersion;
 
             Device.BeginInvokeOnMainThread(() =>
             {
-                MessagingCenter.Send<string>("Loaded Card Data v" + (Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion.ToString()), App.MESSAGES.SHOW_TOAST);
+                MessagingCenter.Send<string>("Loaded Card Data v" + (Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion), App.MESSAGES.SHOW_TOAST);
             });
         }
 
         private void CardsService_DataUpdateAvailable(object sender, Info e)
         {
-            if (_cardDataReset || 
-                !Settings.EnableAutoUpdate || 
-                e.CardDataStatus != DataStatus.RELEASE) return;
-
-            Device.BeginInvokeOnMainThread(() =>
+            if (_cardDataReset || e.CardDataStatus == DataStatus.UNKNOWN) return;
+            else if (!Settings.EnableAutoUpdate && e.CardDataStatus == DataStatus.RELEASE)
             {
-                MessagingCenter.Send<string>("Updating Card Data", App.MESSAGES.SHOW_TOAST);
-            });
-            _cardsService.UpdateCardDataAsync();
+                if (e.CardDataVersion > Settings.HighestNotifiedCardDataVersion)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        MessagingCenter.Send<string>("New Card Data available in settings.", App.MESSAGES.SHOW_TOAST);
+                        Settings.HighestNotifiedCardDataVersion = e.CardDataVersion;
+                    });
+                }
+            }
+            else if (e.CardDataStatus == DataStatus.PREVIEW)
+            {
+                if (e.CardDataVersion > Settings.HighestNotifiedCardDataVersion)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        MessagingCenter.Send<string>("New Preview Card Data available in settings.", App.MESSAGES.SHOW_TOAST);
+                        Settings.HighestNotifiedCardDataVersion = e.CardDataVersion;
+                    });
+                }
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    MessagingCenter.Send<string>("Updating Card Data", App.MESSAGES.SHOW_TOAST);
+                });
+                Settings.HighestNotifiedCardDataVersion = e.CardDataVersion;
+                _cardsService.UpdateCardDataAsync();
+            }
         }
 
         #region Properties
