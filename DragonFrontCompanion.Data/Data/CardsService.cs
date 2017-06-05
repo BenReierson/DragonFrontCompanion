@@ -84,6 +84,7 @@ namespace DragonFrontCompanion.Data
                 //await Task.Delay(5000);
                 using (var client = new HttpClient())
                 {
+                    client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
                     var latestCardInfo = await GetLatestCardInfo();
                     var latestCardJson = await client.GetStringAsync(CardDataUpdateUrl);
                     CachedCards = Cards.Instance(latestCardJson);
@@ -113,6 +114,7 @@ namespace DragonFrontCompanion.Data
         {
             using (var client = new HttpClient())
             {
+                client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
                 var infoJson = await client.GetStringAsync(CardDataInfoUrl);
                 var latestInfo = JsonConvert.DeserializeObject<Info>(infoJson);
                 return latestInfo;

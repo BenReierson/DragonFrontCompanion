@@ -76,7 +76,8 @@
         <StackLayout
             Grid.Row="4"
             Grid.Column="1"
-            Orientation="Horizontal">
+            Orientation="Vertical"
+            Spacing="0">
             <Button
                 Command="{Binding UpdateCardDataCommand}"
                 IsVisible="{Binding CardDataUpdateAvailable}"
