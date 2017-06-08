@@ -113,8 +113,7 @@ namespace DragonFrontCompanion.UWP
 
                 global::Xamarin.Forms.MessagingCenter.Subscribe<Deck>(this, DragonFrontCompanion.App.MESSAGES.SHARE_DECK, ShareDeck, null);
                 global::Xamarin.Forms.MessagingCenter.Subscribe<Deck>(this, DragonFrontCompanion.App.MESSAGES.EXPORT_DECK, ExportDeck, null);
-                global::Xamarin.Forms.MessagingCenter.Subscribe<string>(this, DragonFrontCompanion.App.MESSAGES.SHOW_TOAST, (message) =>
-                                                                        {  });
+                global::Xamarin.Forms.MessagingCenter.Subscribe<string>(this, DragonFrontCompanion.App.MESSAGES.SHOW_TOAST, (message)=>ShowToast(message));
 
                 Windows.ApplicationModel.DataTransfer.DataTransferManager.GetForCurrentView().DataRequested += App_DataRequested;
 
@@ -198,9 +197,19 @@ namespace DragonFrontCompanion.UWP
                         {
                             new AdaptiveText()
                             {
+                                Text = "Dragon Front Companion",
+                                HintMaxLines = 2
+                            },
+                            new AdaptiveText()
+                            {
                                 Text = message,
                                 HintMaxLines = 2
                             }
+                        },
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = @"Assets\FileLogo.png",
+                            HintCrop = ToastGenericAppLogoCrop.Default
                         }
                     }
                 }
