@@ -34,6 +34,9 @@ namespace DragonFrontCompanion.UWP
         private bool _launched = false;
         private Deck _deckToShare;
 
+        public ToastNotification Toast { get; private set; }
+        public ToastNotifier Toaster { get; private set; } = ToastNotificationManager.CreateToastNotifier();
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -195,11 +198,11 @@ namespace DragonFrontCompanion.UWP
                     {
                         Children =
                         {
-                            new AdaptiveText()
-                            {
-                                Text = "Dragon Front Companion",
-                                HintMaxLines = 2
-                            },
+                            //new AdaptiveText()
+                            //{
+                            //    Text = "Dragon Front Companion",
+                            //    HintMaxLines = 1
+                            //},
                             new AdaptiveText()
                             {
                                 Text = message,
@@ -215,8 +218,9 @@ namespace DragonFrontCompanion.UWP
                 }
             };
 
-            var toast = new ToastNotification(content.GetXml());
-            ToastNotificationManager.CreateToastNotifier().Show(toast);
+            if (Toast != null) Toaster.Hide(Toast);
+            Toast = new ToastNotification(content.GetXml()) { ExpirationTime = DateTime.Now + TimeSpan.FromSeconds(5) };
+            Toaster.Show(Toast);
         }
 
         /// <summary>
