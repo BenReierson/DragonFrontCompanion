@@ -16,8 +16,8 @@ namespace DragonFrontCompanion.Data
     {
         private const string CardsFolderName = "Data";
 
-        public string CardDataInfoUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/v2_dataVersionTesting/Info.json";
-        public string CardDataUpdateUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/v2_dataVersionTesting/AllCards.json";
+        public string CardDataInfoUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/master/Info.json";
+        public string CardDataUpdateUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/master/AllCards.json";
         public string TraitsDataUpdateUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/master/CardTraits.json";
 
         private Cards _cachedCards;
