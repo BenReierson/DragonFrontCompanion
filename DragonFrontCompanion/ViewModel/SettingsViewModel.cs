@@ -43,7 +43,7 @@ namespace DragonFrontCompanion.ViewModel
             {
                 if (_latestInfo == null || invalidateCache) _latestInfo = await _cardsService.CheckForUpdatesAsync();
                 CardDataUpdateAvailable = _latestInfo.CardDataVersion > activeVersion;
-                UpdateAvailableText = CardDataUpdateAvailable ? $"Newer card data v{_latestInfo.CardDataVersion.ToString()} available" : "";
+                UpdateAvailableText = CardDataUpdateAvailable ? $"Newer card data v{_latestInfo.CardDataVersion} available" : "";
                 if (CardDataUpdateAvailable && _latestInfo.CardDataStatus == DragonFrontDb.Enums.DataStatus.PREVIEW) UpdateAvailableText += " - PREVIEW";
             }
             catch (Exception) { //TODO:Log
@@ -69,7 +69,10 @@ namespace DragonFrontCompanion.ViewModel
             get
             {
                 var version = Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion;
-                return "Card Data v" + version;
+                var label = $"Cards v{version}";
+                if (_latestInfo?.CardDataVersion == version) label += $" '{_latestInfo.CardDataName}'";
+                else if (Info.Current.CardDataVersion == version) label += $" '{Info.Current.CardDataName}'";
+                return label;
             }
         }
 
