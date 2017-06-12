@@ -33,15 +33,21 @@ namespace DragonFrontCompanion.ViewModel
             await CheckForUpdate();
         }
 
-        private async Task CheckForUpdate(bool invalidateCache = true)
+        public async Task CheckForUpdate(bool invalidateCache = true)
         {
-            if (_latestInfo == null || invalidateCache) _latestInfo = await _cardsService.CheckForUpdatesAsync();
             var activeVersion = Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion;
-            CardDataUpdateAvailable = _latestInfo.CardDataVersion > activeVersion;
-            UpdateAvailableText = CardDataUpdateAvailable ? $"Newer card data v{_latestInfo.CardDataVersion.ToString()} available" : "";
-            if (CardDataUpdateAvailable && _latestInfo.CardDataStatus == DragonFrontDb.Enums.DataStatus.PREVIEW) UpdateAvailableText += " - PREVIEW";
             ResetAvailable = activeVersion != Info.Current.CardDataVersion;
             RaisePropertyChanged(nameof(ActiveCardDataVersion));
+
+            try
+            {
+                if (_latestInfo == null || invalidateCache) _latestInfo = await _cardsService.CheckForUpdatesAsync();
+                CardDataUpdateAvailable = _latestInfo.CardDataVersion > activeVersion;
+                UpdateAvailableText = CardDataUpdateAvailable ? $"Newer card data v{_latestInfo.CardDataVersion.ToString()} available" : "";
+                if (CardDataUpdateAvailable && _latestInfo.CardDataStatus == DragonFrontDb.Enums.DataStatus.PREVIEW) UpdateAvailableText += " - PREVIEW";
+            }
+            catch (Exception) { //TODO:Log
+            }
         }
 
         #region Properties
@@ -102,6 +108,19 @@ namespace DragonFrontCompanion.ViewModel
             }
         }
 
+        private bool _dataSourceVisible = false;
+        public bool DataSourceVisible
+        {
+            get { return _dataSourceVisible; }
+            set { Set(ref _dataSourceVisible, value); }
+        }
+
+        public string ActiveDataSource
+        {
+            get { return _cardsService.ActiveDataSource; }
+            set { _cardsService.ActiveDataSource = value; RaisePropertyChanged(); }
+        }
+
         #endregion
 
         private RelayCommand _resetCardData;
@@ -119,6 +138,7 @@ namespace DragonFrontCompanion.ViewModel
                     {
                         ResetAvailable = false;
                         await _cardsService.ResetCardDataAsync();
+                        RaisePropertyChanged(nameof(ActiveDataSource));
                         await CheckForUpdate();
                     }));
             }
@@ -141,6 +161,24 @@ namespace DragonFrontCompanion.ViewModel
                         MessagingCenter.Send<string>("Updating Card Data", App.MESSAGES.SHOW_TOAST);
                         await _cardsService.UpdateCardDataAsync();
                         await CheckForUpdate(false);
+                    }));
+            }
+        }
+
+        private RelayCommand _showCardData;
+
+        /// <summary>
+        /// Gets the ShowCardDataSourceCommand.
+        /// </summary>
+        public RelayCommand ShowCardDataSourceCommand
+        {
+            get
+            {
+                return _showCardData
+                    ?? (_showCardData = new RelayCommand(
+                    () =>
+                    {
+                        DataSourceVisible = true;
                     }));
             }
         }

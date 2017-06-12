@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!--  Random Decks  -->
@@ -67,7 +68,11 @@
             Grid.Column="0"
             Orientation="Vertical"
             Spacing="0">
-            <Label Text="{Binding ActiveCardDataVersion}" />
+            <Label Text="{Binding ActiveCardDataVersion}">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ShowCardDataSourceCommand}" NumberOfTapsRequired="2" />
+                </Label.GestureRecognizers>
+            </Label>
             <Label
                 FontSize="Micro"
                 Opacity=".8"
@@ -87,5 +92,21 @@
                 IsVisible="{Binding ResetAvailable}"
                 Text="Reset" />
         </StackLayout>
+
+        <!--  Data Source  -->
+        <Label
+            Grid.Row="5"
+            Grid.Column="0"
+            IsVisible="{Binding DataSourceVisible}"
+            Text="Card data update branch" />
+        <Entry
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            HorizontalOptions="Fill"
+            HorizontalTextAlignment="End"
+            IsVisible="{Binding DataSourceVisible}"
+            Text="{Binding ActiveDataSource, Mode=TwoWay}"
+            Unfocused="DataSource_Unfocused" />
     </Grid>
 </ContentPage>

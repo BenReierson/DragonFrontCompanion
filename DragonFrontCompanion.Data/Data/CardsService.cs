@@ -15,10 +15,28 @@ namespace DragonFrontCompanion.Data
     public class CardsService : ICardsService
     {
         private const string CardsFolderName = "Data";
+        private const string DefaultCardInfoUrl = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/{0}/Info.json";
+        private const string DefaultCardUpdateUrl = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/{0}/AllCards.json";
 
-        public string CardDataInfoUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/master/Info.json";
-        public string CardDataUpdateUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/master/AllCards.json";
-        public string TraitsDataUpdateUrl { get; set; } = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/master/CardTraits.json";
+        public static readonly string[] DataSources = { "master", "development" };
+
+        private string _activeDataSource = DataSources[0];
+        public string ActiveDataSource
+        {
+            get
+            {
+                return _activeDataSource;
+            }
+            set
+            {
+                _activeDataSource = value;
+                CardDataInfoUrl = string.Format(DefaultCardInfoUrl, value);
+                CardDataUpdateUrl = string.Format(DefaultCardUpdateUrl, value);
+            }
+        }
+
+        public string CardDataInfoUrl { get; set; } = string.Format(DefaultCardInfoUrl, DataSources[0]);
+        public string CardDataUpdateUrl { get; set; } = string.Format(DefaultCardUpdateUrl, DataSources[0]);
 
         private Cards _cachedCards;
         private bool _updating;
@@ -105,6 +123,9 @@ namespace DragonFrontCompanion.Data
         public async Task ResetCardDataAsync()
         {
             CachedCards = null;
+            ActiveDataSource = DataSources[0];
+            CardDataInfoUrl = string.Format(DefaultCardInfoUrl, ActiveDataSource);
+            CardDataUpdateUrl = string.Format(DefaultCardUpdateUrl, ActiveDataSource);
             Settings.ActiveCardDataVersion = null;
             Settings.HighestNotifiedCardDataVersion = Settings.ActiveCardDataVersion;
             DataUpdated?.Invoke(this, await GetCachedCardsAsync());
@@ -147,10 +168,6 @@ namespace DragonFrontCompanion.Data
             }
 
             return CachedCards;
-        }
-
-        public CardsService() {
-            System.Diagnostics.Debug.WriteLine("Card Service");
         }
 
         public async Task<ReadOnlyDictionary<string, Card>> GetCardsDictionaryAsync()

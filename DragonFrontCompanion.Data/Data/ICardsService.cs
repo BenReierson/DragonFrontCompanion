@@ -8,6 +8,7 @@ namespace DragonFrontCompanion.Data
 {
     public interface ICardsService
     {
+        string ActiveDataSource { get; set; }
         Task<ReadOnlyCollection<Card>> GetAllCardsAsync();
         Task<ReadOnlyDictionary<string, Card>> GetCardsDictionaryAsync();
 

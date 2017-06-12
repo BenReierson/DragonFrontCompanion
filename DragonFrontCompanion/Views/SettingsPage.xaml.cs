@@ -11,6 +11,15 @@ namespace DragonFrontCompanion.Views
 {
     public partial class SettingsPage : ContentPage
     {
+
+        public SettingsViewModel Vm
+        {
+            get
+            {
+                return (SettingsViewModel)BindingContext;
+            }
+        }
+
         public SettingsPage()
         {
             InitializeComponent();
@@ -19,7 +28,13 @@ namespace DragonFrontCompanion.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ((SettingsViewModel)BindingContext).Initialize();
+            Vm.DataSourceVisible = false;
+            Vm.Initialize();
+        }
+
+        private void DataSource_Unfocused(object sender, FocusEventArgs e)
+        {
+            Vm.CheckForUpdate();
         }
     }
 }
