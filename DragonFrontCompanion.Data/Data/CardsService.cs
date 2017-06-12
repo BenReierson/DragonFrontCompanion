@@ -16,7 +16,6 @@ namespace DragonFrontCompanion.Data
     {
         private const string CardsFolderName = "Data";
         private const string DefaultCardInfoUrl = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/{0}/Info.json";
-        private const string DefaultCardUpdateUrl = "https://raw.githubusercontent.com/BenReierson/DragonFrontDb/{0}/AllCards.json";
 
         public static readonly string[] DataSources = { "master", "development" };
 
@@ -31,12 +30,10 @@ namespace DragonFrontCompanion.Data
             {
                 _activeDataSource = value;
                 CardDataInfoUrl = string.Format(DefaultCardInfoUrl, value);
-                CardDataUpdateUrl = string.Format(DefaultCardUpdateUrl, value);
             }
         }
 
         public string CardDataInfoUrl { get; set; } = string.Format(DefaultCardInfoUrl, DataSources[0]);
-        public string CardDataUpdateUrl { get; set; } = string.Format(DefaultCardUpdateUrl, DataSources[0]);
 
         private Cards _cachedCards;
         private bool _updating;
@@ -104,7 +101,7 @@ namespace DragonFrontCompanion.Data
                 {
                     client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
                     var latestCardInfo = await GetLatestCardInfo();
-                    var latestCardJson = await client.GetStringAsync(CardDataUpdateUrl);
+                    var latestCardJson = await client.GetStringAsync(latestCardInfo.CardDataUrl);
                     CachedCards = new Cards(latestCardJson);
                     await SaveCardDataAsync(latestCardInfo, latestCardJson);
 
@@ -125,7 +122,6 @@ namespace DragonFrontCompanion.Data
             CachedCards = null;
             ActiveDataSource = DataSources[0];
             CardDataInfoUrl = string.Format(DefaultCardInfoUrl, ActiveDataSource);
-            CardDataUpdateUrl = string.Format(DefaultCardUpdateUrl, ActiveDataSource);
             Settings.ActiveCardDataVersion = null;
             Settings.HighestNotifiedCardDataVersion = Settings.ActiveCardDataVersion;
             DataUpdated?.Invoke(this, await GetCachedCardsAsync());
