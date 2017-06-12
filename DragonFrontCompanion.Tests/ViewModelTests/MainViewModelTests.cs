@@ -4,20 +4,28 @@ using DragonFrontCompanion.ViewModel;
 using GalaSoft.MvvmLight.Views;
 using Moq;
 using DragonFrontCompanion;
+using DragonFrontCompanion.Data;
+using DragonFrontDb;
 
 namespace DragonFrontCompanion.Tests
 {
     [TestClass]
     public class MainViewModelTests
     {
+        Cards cardsDb;
         MainViewModel mainVM;
         Mock<INavigationService> mockNav;
+        Mock<ICardsService> mockCardsService;
 
         [TestInitialize]
         public void MainVMSetup()
         {
+            cardsDb = new Cards();
+            mockCardsService = new Mock<ICardsService>();
+            mockCardsService.Setup(c => c.GetAllCardsAsync()).Returns(async () => cardsDb.All);
+
             mockNav = new Mock<INavigationService>();
-            mainVM = new MainViewModel(mockNav.Object);
+            mainVM = new MainViewModel(mockNav.Object, mockCardsService.Object);
         }
 
         [TestMethod]

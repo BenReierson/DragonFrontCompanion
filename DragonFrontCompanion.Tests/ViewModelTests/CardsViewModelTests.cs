@@ -29,7 +29,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestInitialize]
         public void VMSetup()
         {
-            cardsDb = Cards.Instance();
+            cardsDb = new Cards();
             mockNav = new Mock<INavigationService>();
             mockDialogService = new Mock<IDialogService>(MockBehavior.Loose);
             mockDeckService = new Mock<IDeckService>();

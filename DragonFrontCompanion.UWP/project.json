@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "DragonFrontDb": "2.0.0.2",
+    "DragonFrontDb": "2.0.0.3",
     "Microsoft.Azure.Mobile.Analytics": "0.12.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.3",
     "Microsoft.Toolkit.Uwp.Notifications": "1.4.1",

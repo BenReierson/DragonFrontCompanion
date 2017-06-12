@@ -34,7 +34,7 @@ namespace DragonFrontCompanion.Tests
         public void TestBuildDeckEclipse()
         {
 
-            var cards = Cards.Instance();
+            var cards = new Cards();
             var testDeck = new Deck(Faction.ECLIPSE);
 
             Assert.IsFalse(testDeck.IsValid);
@@ -173,7 +173,7 @@ namespace DragonFrontCompanion.Tests
 
             //create a deck
             var newDeck = new Deck(Faction.THORNS) { Name = "Service Test Deck" };
-            newDeck.Add(Cards.Instance().All.First((c)=>c.Faction == Faction.THORNS && c.Type != CardType.CHAMPION));
+            newDeck.Add(new Cards().All.First((c)=>c.Faction == Faction.THORNS && c.Type != CardType.CHAMPION));
 
             var savedDeck = await service.SaveDeckAsync(newDeck);
             Assert.AreEqual(newDeck.ID, savedDeck.ID);

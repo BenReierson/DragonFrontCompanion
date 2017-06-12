@@ -138,7 +138,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -232,8 +234,8 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DragonFrontDb, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DragonFrontDb.2.0.0.2\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
+    <Reference Include="DragonFrontDb, Version=2.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DragonFrontDb.2.0.0.3\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ExifLib">

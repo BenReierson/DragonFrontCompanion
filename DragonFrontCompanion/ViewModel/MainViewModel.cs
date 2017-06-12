@@ -26,13 +26,11 @@ namespace DragonFrontCompanion.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private INavigationService _navigationService;
-        private IDialogService _dialogService;
         private ICardsService _cardsService;
         private bool _cardDataReset;
-        public MainViewModel(INavigationService navigationService, ICardsService cardsService, IDialogService dialogService)
+        public MainViewModel(INavigationService navigationService, ICardsService cardsService)
         {
             _navigationService = navigationService;
-            _dialogService = dialogService;
             _cardsService = cardsService;
 
             VersionDisplay = "v" + App.VersionName;

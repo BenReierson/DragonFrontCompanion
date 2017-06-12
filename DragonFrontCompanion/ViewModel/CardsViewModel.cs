@@ -270,7 +270,7 @@ namespace DragonFrontCompanion.ViewModel
             get { return _msg; }
             set {
                 Set(ref _msg, value);
-                if (Device.RuntimePlatform == Device.Android &&
+                if (App.RuntimePlatform == App.Device.Android &&
                     !string.IsNullOrEmpty(value)) MessagingCenter.Send<string>(value, App.MESSAGES.SHOW_TOAST);
             }
         }

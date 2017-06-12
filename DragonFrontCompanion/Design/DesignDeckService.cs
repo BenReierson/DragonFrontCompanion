@@ -32,7 +32,7 @@ namespace DragonFrontCompanion.Design
         public async Task<List<Deck>> GetSavedDecksAsync()
         {
             var decks = new List<Deck>() { new Deck(Faction.THORNS, "Design") { Name = "Design Deck", Description = "Design Description" } };
-            decks[0].Add(Cards.Instance().All.First(c=>c.Faction == Faction.THORNS));
+            decks[0].Add(new Cards().All.First(c=>c.Faction == Faction.THORNS));
             return decks;
         }
 
