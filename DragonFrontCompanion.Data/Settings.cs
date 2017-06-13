@@ -1,6 +1,8 @@
 // Helpers/Settings.cs
+using DragonFrontDb;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
+using System;
 
 namespace DragonFrontCompanion
 {
@@ -23,9 +25,13 @@ namespace DragonFrontCompanion
 
         private const string AllowDeckOverloadSettingsKey = "deck_overload";
         private const string EnableRandomDeckSettingsKey = "random_decks";
+        private const string CardDataVersionSettingsKey = "card_data_version";
+        private const string EnableAutoUpdateSettingsKey = "auto_update";
+        private const string HighestNotifiedDataSettingsKey = "data_notify";
 
         public const bool DEFAULT_AllowDeckOverload = false;
         public const bool DEFAULT_EnableRandomDeck = true;
+        public static string DEFAULT_CardDataVersion = Info.Current.CardDataVersion.ToString();
         #endregion
 
 
@@ -50,6 +56,44 @@ namespace DragonFrontCompanion
             set
             {
                 AppSettings.AddOrUpdateValue<bool>(EnableRandomDeckSettingsKey, value);
+            }
+        }
+
+        public static Version ActiveCardDataVersion
+        {
+            get
+            {
+                var setting = Version.Parse(AppSettings.GetValueOrDefault<string>(CardDataVersionSettingsKey, DEFAULT_CardDataVersion));
+                if (setting < Info.Current.CardDataVersion) setting = Info.Current.CardDataVersion;
+                return setting;
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<string>(CardDataVersionSettingsKey, value != null ? value.ToString() : DEFAULT_CardDataVersion);
+            }
+        }
+
+        public static Version HighestNotifiedCardDataVersion
+        {
+            get
+            {
+                return Version.Parse(AppSettings.GetValueOrDefault<string>(HighestNotifiedDataSettingsKey, DEFAULT_CardDataVersion));
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<string>(HighestNotifiedDataSettingsKey, value.ToString());
+            }
+        }
+
+        public static bool EnableAutoUpdate
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault<bool>(EnableAutoUpdateSettingsKey, true);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<bool>(EnableAutoUpdateSettingsKey, value);
             }
         }
     }

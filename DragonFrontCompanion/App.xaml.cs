@@ -94,7 +94,8 @@ namespace DragonFrontCompanion
         {
             try
             {
-                var deck = await new LocalDeckService().OpenDeckDataAsync(data);
+                var deckservice = SimpleIoc.Default.GetInstance<IDeckService>();
+                var deck = await deckservice.OpenDeckDataAsync(data);
                 if (deck != null)
                 {
                     _navService?.NavigateTo(ViewModelLocator.DeckPageKey, deck);
@@ -120,8 +121,9 @@ namespace DragonFrontCompanion
                 try
                 {
                     //open the file
-                    var deck = await new LocalDeckService().OpenDeckFileAsync(file);
-               
+                    var deckservice = SimpleIoc.Default.GetInstance<IDeckService>();
+                    var deck = await deckservice.OpenDeckFileAsync(file);
+
                     if (deck != null)
                     {
                         _navService.NavigateTo(ViewModelLocator.DeckPageKey, deck);

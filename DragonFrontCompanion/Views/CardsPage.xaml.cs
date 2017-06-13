@@ -49,7 +49,7 @@ namespace DragonFrontCompanion.Views
         }
         
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             ((CardPopup)Resources["SelectedCardPopup"]).BindingContext = Vm;
@@ -62,6 +62,8 @@ namespace DragonFrontCompanion.Views
                 MessageLabel.BackgroundColor = Color.Black;
                 DeckStatusLabel.BackgroundColor = Color.Black;
             }
+
+            await Vm.InitializeAsync();
         }
 
         private void FiltersButton_Clicked(object sender, EventArgs e)

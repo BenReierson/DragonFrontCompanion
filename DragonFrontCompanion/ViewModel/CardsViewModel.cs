@@ -37,15 +37,27 @@ namespace DragonFrontCompanion.ViewModel
             _dialog = dialog;
             _deckService = deckService;
 
-            Initialize();
+            _cardsService.DataUpdated += async (o, e) =>
+            {
+                await InitializeAsync();
+                ApplyFilters();
+            };
+
+            InitializeAsync();
         }
 
-        private async void Initialize()
+        public async Task InitializeAsync()
         {
+            if (_cardsTask != null && !_cardsTask.IsCompleted) return;
+
             IsBusy = true;
             _cardsTask = _cardsService.GetAllCardsAsync();
-            _unfilteredCards = await _cardsTask;
-            AllCards = _unfilteredCards.ToList();
+            var freshCards = await _cardsTask;
+            if (_unfilteredCards != freshCards)
+            {
+                _unfilteredCards = freshCards;
+                AllCards = _unfilteredCards.ToList();
+            }
             IsBusy = false;
         }
 
@@ -112,9 +124,7 @@ namespace DragonFrontCompanion.ViewModel
         public List<Card> AllCards
         {
             get { return _allCards; }
-            set {
-                Set(ref _allCards, value);
-            }
+            set {Set(ref _allCards, value);}
         }
 
         private Card _selectedCard = null;
@@ -260,7 +270,8 @@ namespace DragonFrontCompanion.ViewModel
             get { return _msg; }
             set {
                 Set(ref _msg, value);
-                if (!string.IsNullOrEmpty(value)) MessagingCenter.Send<string>(value, App.MESSAGES.SHOW_TOAST);
+                if (App.RuntimePlatform == App.Device.Android &&
+                    !string.IsNullOrEmpty(value)) MessagingCenter.Send<string>(value, App.MESSAGES.SHOW_TOAST);
             }
         }
 

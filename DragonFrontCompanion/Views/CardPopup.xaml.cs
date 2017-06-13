@@ -1,7 +1,9 @@
-﻿using DragonFrontDb;
+﻿using DragonFrontCompanion.Data;
+using DragonFrontDb;
 using DragonFrontDb.Enums;
 using FFImageLoading;
 using FFImageLoading.Cache;
+using GalaSoft.MvvmLight.Ioc;
 using Rg.Plugins.Popup.Animations;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Interfaces.Animations;
@@ -149,10 +151,11 @@ namespace DragonFrontCompanion.Views
             Animation = Resources["NextAnimation"] as IPopupAnimation;
         }
 
-        private void OnTraitsTapped(object sender, EventArgs e)
+        private async void OnTraitsTapped(object sender, EventArgs e)
         {
+            var cardsTraits = await SimpleIoc.Default.GetInstance<ICardsService>().GetCardTraitsAsync();
             var traits = from t in ((Card)FrameContainer.BindingContext).Traits
-                         select new { Trait = t.ToString().Trim('_').Replace('_',' '), Description = Cards.TraitsDictionary[t] };
+                         select new { Trait = t.ToString().Trim('_').Replace('_',' '), Description = cardsTraits[t] };
 
             Navigation.PushPopupAsync(new TraitsPopup() { BindingContext = traits});
         }

@@ -18,6 +18,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!--  Random Decks  -->
@@ -49,5 +52,61 @@
             IsToggled="{Binding AllowDeckOverload}"
             VerticalOptions="Center" />
 
+        <!--  Auto Update  -->
+        <Label
+            Grid.Row="3"
+            Grid.Column="0"
+            Text="Auto update card data" />
+        <Switch
+            Grid.Row="3"
+            Grid.Column="1"
+            IsToggled="{Binding EnableAutoUpdate}" />
+
+        <!--  Card Data  -->
+        <StackLayout
+            Grid.Row="4"
+            Grid.Column="0"
+            Orientation="Vertical"
+            Spacing="0">
+            <Label Text="{Binding ActiveCardDataVersion}">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ShowCardDataSourceCommand}" NumberOfTapsRequired="2" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label
+                FontSize="Micro"
+                Opacity=".8"
+                Text="{Binding UpdateAvailableText}" />
+        </StackLayout>
+        <StackLayout
+            Grid.Row="4"
+            Grid.Column="1"
+            Orientation="Vertical"
+            Spacing="0">
+            <Button
+                Command="{Binding UpdateCardDataCommand}"
+                IsVisible="{Binding CardDataUpdateAvailable}"
+                Text="Update" />
+            <Button
+                Command="{Binding ResetCardDataCommand}"
+                IsVisible="{Binding ResetAvailable}"
+                Text="Reset" />
+        </StackLayout>
+
+        <!--  Data Source  -->
+        <Label
+            Grid.Row="5"
+            Grid.Column="0"
+            IsVisible="{Binding DataSourceVisible}"
+            Text="Card data update branch" />
+        <Entry
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            HorizontalOptions="Fill"
+            HorizontalTextAlignment="End"
+            IsVisible="{Binding DataSourceVisible}"
+            Text="{Binding ActiveDataSource, Mode=TwoWay}"
+            Unfocused="DataSource_Unfocused" />
     </Grid>
 </ContentPage>
