@@ -18,6 +18,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DragonFrontCompanion.Data;
+using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.Toolkit.Uwp.Notifications;
+using GalaSoft.MvvmLight.Ioc;
+using Windows.UI.Notifications;
 
 namespace DragonFrontCompanion.UWP
 {
@@ -29,6 +34,9 @@ namespace DragonFrontCompanion.UWP
         private bool _launched = false;
         private Deck _deckToShare;
 
+        public ToastNotification Toast { get; private set; }
+        public ToastNotifier Toaster { get; private set; } = ToastNotificationManager.CreateToastNotifier();
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -37,7 +45,7 @@ namespace DragonFrontCompanion.UWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            
+            MobileCenter.Start("6013a5e1-18f0-4e45-95b8-bb7ce1411d6c", typeof(Analytics));
         }
 
         /// <summary>
@@ -108,12 +116,13 @@ namespace DragonFrontCompanion.UWP
 
                 global::Xamarin.Forms.MessagingCenter.Subscribe<Deck>(this, DragonFrontCompanion.App.MESSAGES.SHARE_DECK, ShareDeck, null);
                 global::Xamarin.Forms.MessagingCenter.Subscribe<Deck>(this, DragonFrontCompanion.App.MESSAGES.EXPORT_DECK, ExportDeck, null);
+                global::Xamarin.Forms.MessagingCenter.Subscribe<string>(this, DragonFrontCompanion.App.MESSAGES.SHOW_TOAST, (message)=>ShowToast(message));
+
                 Windows.ApplicationModel.DataTransfer.DataTransferManager.GetForCurrentView().DataRequested += App_DataRequested;
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
-            
         }
 
         private async void ExportDeck(Deck deck)
@@ -131,7 +140,7 @@ namespace DragonFrontCompanion.UWP
             {
                 if (string.IsNullOrEmpty(_deckToShare.FilePath))
                 {
-                    _deckToShare = await new LocalDeckService().SaveDeckAsync(_deckToShare);
+                    _deckToShare = await SimpleIoc.Default.GetInstance<IDeckService>().SaveDeckAsync(_deckToShare);
                     if (_deckToShare == null) return;
                 }
 
@@ -162,7 +171,7 @@ namespace DragonFrontCompanion.UWP
                 {
                     if (string.IsNullOrEmpty(_deckToShare.FilePath))
                     {
-                        _deckToShare = await new LocalDeckService().SaveDeckAsync(_deckToShare);
+                        _deckToShare = await SimpleIoc.Default.GetInstance<IDeckService>().SaveDeckAsync(_deckToShare);
                         if (_deckToShare == null) return;
                     }
 
@@ -179,6 +188,40 @@ namespace DragonFrontCompanion.UWP
             }
         }
 
+        private void ShowToast(string message)
+        {
+            ToastContent content = new ToastContent()
+            {
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            //new AdaptiveText()
+                            //{
+                            //    Text = "Dragon Front Companion",
+                            //    HintMaxLines = 1
+                            //},
+                            new AdaptiveText()
+                            {
+                                Text = message,
+                                HintMaxLines = 2
+                            }
+                        },
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = @"Assets\FileLogo.png",
+                            HintCrop = ToastGenericAppLogoCrop.Default
+                        }
+                    }
+                }
+            };
+
+            if (Toast != null) Toaster.Hide(Toast);
+            Toast = new ToastNotification(content.GetXml()) { ExpirationTime = DateTime.Now + TimeSpan.FromSeconds(5) };
+            Toaster.Show(Toast);
+        }
 
         /// <summary>
         /// Invoked when Navigation to a certain page fails
@@ -229,22 +272,5 @@ namespace DragonFrontCompanion.UWP
             base.OnFileActivated(args);
         }
 
-        //protected async override void OnShareTargetActivated(ShareTargetActivatedEventArgs args)
-        //{
-        //    if (!_launched)
-        //    {
-        //        InitializeApp(args);
-        //    }
-        //    _launched = true;
-
-        //    var files = await args.ShareOperation.Data.GetStorageItemsAsync();
-        //    if (files?.Count > 0)
-        //    {
-        //        var deckText = await FileIO.ReadTextAsync(files[0] as StorageFile);
-        //        global::Xamarin.Forms.MessagingCenter.Send<object, string>(this, DragonFrontCompanion.App.MESSAGES.OPEN_DECK_DATA, deckText);
-        //    }
-
-        //    base.OnShareTargetActivated(args);
-        //}
     }
 }

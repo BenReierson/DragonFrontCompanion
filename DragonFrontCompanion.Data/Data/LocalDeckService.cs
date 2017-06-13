@@ -19,12 +19,19 @@ namespace DragonFrontCompanion.Data
         private static Deck _lastDelectedDeck = null;
         private static Dictionary<Guid, string> _deckUndoStates = new Dictionary<Guid, string>();
 
+        private ICardsService _cardsService;
         private Deck _randomDeck;
-        private Deck RandomDeck => _randomDeck ?? (_randomDeck = CreateRandomDeck());
+        private Task _initializing;
+        public LocalDeckService(ICardsService cardsService)
+        {
+            _cardsService = cardsService;
+            _initializing = InitializeAsync();
+        }
 
-        public LocalDeckService()
+        private async Task InitializeAsync()
         {
             Deck.CurrentAppVersion = AppVersion;
+            Deck.CardDictionary = await _cardsService.GetCardsDictionaryAsync();
         }
 
         public bool DeckRestoreAvailable => _lastDelectedDeck != null;
@@ -60,6 +67,8 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> GetSavedDeckAsync(Guid ID)
         {
+            if (!_initializing.IsCompleted) await _initializing;
+
             var folder = await GetDecksFolderAsync();
             var deckFiles = await folder?.GetFilesAsync();
 
@@ -69,7 +78,7 @@ namespace DragonFrontCompanion.Data
                 if (deckFile != null)
                 {
                     var text = await deckFile.ReadAllTextAsync();
-                    var newDeck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(text));
+                    var newDeck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(text)).ConfigureAwait(false);
                     newDeck.FilePath = deckFile.Path;
                     return newDeck;
                 }
@@ -80,6 +89,9 @@ namespace DragonFrontCompanion.Data
 
         public async Task<List<Deck>> GetSavedDecksAsync()
         {
+            if (!_initializing.IsCompleted)
+                await _initializing;
+
             var folder = await GetDecksFolderAsync();
             var deckFiles = await folder?.GetFilesAsync();
             var savedDecks = new List<Deck>();
@@ -91,7 +103,7 @@ namespace DragonFrontCompanion.Data
                     var fileData = await file.ReadAllTextAsync();
                     try
                     {
-                        var newDeck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(fileData));
+                        var newDeck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(fileData)).ConfigureAwait(false);
                         newDeck.FilePath = file.Path;
                         newDeck.CanUndo = _deckUndoStates.ContainsKey(newDeck.ID);
                         savedDecks.Add(newDeck);
@@ -112,17 +124,17 @@ namespace DragonFrontCompanion.Data
                 savedDecks = savedDecks.OrderByDescending(c => c.LastModified).ToList();
             }
 
-            if (Settings.EnableRandomDeck) savedDecks.Add(RandomDeck);
+            if (Settings.EnableRandomDeck) savedDecks.Add(_randomDeck ?? (_randomDeck = await CreateRandomDeck()));
 
             return savedDecks;
         }
 
-        private Deck CreateRandomDeck()
+        private async Task<Deck> CreateRandomDeck()
         {
             var diceRoll = new Random();
-            var faction = (Faction)diceRoll.Next(2, 7);
+            var faction = (Faction)diceRoll.Next(2, 8);
             var deck = new Deck(faction, AppVersion, DeckType.GENERATED_DECK) { Name = "RANDOM DECK", Description = "I wouldn't recommend actually playing as is. Edit this deck to save it, or share it as a challenge!"};
-            var cards = Cards.All.Where((c) => c.Faction == faction || c.Faction == Faction.UNALIGNED).ToList();
+            var cards = (await _cardsService.GetAllCardsAsync()).Where((c) => c.Faction == faction || c.Faction == Faction.UNALIGNED).ToList();
             cards.Shuffle();
             deck.Champion = cards.FirstOrDefault((c) => c.Type == CardType.CHAMPION);
             while (!deck.IsValid)
@@ -133,7 +145,9 @@ namespace DragonFrontCompanion.Data
                     deck.Add(cards[0]);
                     if (diceRoll.Next(0, 1) == 1) deck.Add(cards[0]);
                 }
-                catch (Exception) { }
+                catch (Exception) {
+                    break;
+                }
             }
 
             return deck;
@@ -141,11 +155,13 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> OpenDeckDataAsync(string deckData, bool sourceExternal = true)
         {
+            if (!_initializing.IsCompleted) await _initializing;
+
             if (deckData != null)
             {
                 try
                 {
-                    var deck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(deckData));
+                    var deck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(deckData)).ConfigureAwait(false);
                     if (sourceExternal) deck.Type = DeckType.EXTERNAL_DECK;
                     return deck;
                 }
@@ -156,6 +172,8 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> OpenDeckFileAsync(string filePath, bool sourceExternal = true)
         {
+            if (!_initializing.IsCompleted) await _initializing;
+
             filePath = filePath.Replace(@"file://", "");
             var deckFile = await FileSystem.Current.GetFileFromPathAsync(filePath);
             var json = await deckFile?.ReadAllTextAsync();
@@ -163,7 +181,7 @@ namespace DragonFrontCompanion.Data
             {
                 try
                 {
-                    var deck = await Task.Run(()=>JsonConvert.DeserializeObject<Deck>(json));
+                    var deck = await Task.Run(()=>JsonConvert.DeserializeObject<Deck>(json)).ConfigureAwait(false);
                     deck.FilePath = deckFile.Path;
                     if (sourceExternal) deck.Type = DeckType.EXTERNAL_DECK;
                     return deck;
@@ -192,6 +210,8 @@ namespace DragonFrontCompanion.Data
 
         public async Task<Deck> SaveDeckAsync(Deck deckToSave)
         {
+            if (!_initializing.IsCompleted) await _initializing;
+
             var existingDeck = await GetSavedDeckAsync(deckToSave.ID);
             var oldJson = await Task.Run(() => JsonConvert.SerializeObject(existingDeck, Formatting.Indented));
             var newJson = await Task.Run(() => JsonConvert.SerializeObject(deckToSave, Formatting.Indented));
@@ -237,7 +257,7 @@ namespace DragonFrontCompanion.Data
 
             try
             {
-                var restoredDeck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(_deckUndoStates[deckToUndo.ID]));
+                var restoredDeck = await Task.Run(() => JsonConvert.DeserializeObject<Deck>(_deckUndoStates[deckToUndo.ID])).ConfigureAwait(false);
 
                 await DeleteDeckAsync(deckToUndo, false);
                 await SaveDeckAsync(restoredDeck);

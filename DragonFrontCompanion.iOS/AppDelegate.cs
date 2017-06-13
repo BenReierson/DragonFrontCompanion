@@ -9,6 +9,7 @@ using CoreGraphics;
 using System.Drawing;
 using Xamarin.Forms.Platform.iOS;
 using System.IO;
+using DragonFrontCompanion.iOS.Controls;
 
 namespace DragonFrontCompanion.iOS
 {
@@ -41,6 +42,7 @@ namespace DragonFrontCompanion.iOS
             LoadApplication(_app);
 
             global::Xamarin.Forms.MessagingCenter.Subscribe<Deck>(this, App.MESSAGES.SHARE_DECK, ShareDeck, null);
+            global::Xamarin.Forms.MessagingCenter.Subscribe<string>(this, App.MESSAGES.SHOW_TOAST, (message) => ToastMessage.ShortAlert(message));
 
             return base.FinishedLaunching(app, options);
         }

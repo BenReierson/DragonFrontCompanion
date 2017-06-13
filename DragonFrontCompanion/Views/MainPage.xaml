@@ -20,11 +20,13 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="10" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
 
             <Button
                 Grid.Row="0"
@@ -43,9 +45,19 @@
                     BackgroundColor="Transparent"
                     Command="{Binding NavigateToCardsCommand}" />
             </Grid>
+            <Button
+                Grid.Row="2"
+                BackgroundColor="#E1CA35"
+                Command="{Binding NavigateToNewCardsCommand}"
+                CommandParameter="CONQUEST"
+                FontAttributes="Bold"
+                FontSize="Medium"
+                HorizontalOptions="Center"
+                Text="Conquest Champions"
+                TextColor="#123338" />
 
             <Button
-                Grid.Row="3"
+                Grid.Row="4"
                 Margin="0,0,0,-20"
                 BackgroundColor="Transparent"
                 Command="{Binding NavigateToDecksCommand}"
@@ -54,7 +66,7 @@
                 Text="Deck Builder"
                 TextColor="#E1CA35"
                 VerticalOptions="Start" />
-            <Grid Grid.Row="4" HorizontalOptions="Center">
+            <Grid Grid.Row="5" HorizontalOptions="Center">
                 <Image HorizontalOptions="Center" Source="IconDeck.png" />
                 <Button
                     AutomationId="DecksPage"
@@ -65,7 +77,7 @@
 
             <Button
                 x:Name="AboutButton"
-                Grid.Row="5"
+                Grid.Row="6"
                 AutomationId="AboutPage"
                 BackgroundColor="Transparent"
                 Command="{Binding NavigateToAboutCommand}"

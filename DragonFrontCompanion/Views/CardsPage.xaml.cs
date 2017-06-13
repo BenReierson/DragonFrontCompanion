@@ -20,6 +20,17 @@ namespace DragonFrontCompanion.Views
 
         public CardsPage() : this(deck: null) { }
 
+        public CardsPage(string searchText) : this(deck: null)
+        {
+            SearchForCards(searchText);
+        }
+
+        private async void SearchForCards(string searchText)
+        {
+            while (Vm.IsBusy) await Task.Delay(100);
+            Vm.SearchText = searchText;
+        }
+
         public CardsPage(Deck deck = null)
         {
             InitializeComponent();
@@ -38,7 +49,7 @@ namespace DragonFrontCompanion.Views
         }
         
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             ((CardPopup)Resources["SelectedCardPopup"]).BindingContext = Vm;
@@ -51,6 +62,8 @@ namespace DragonFrontCompanion.Views
                 MessageLabel.BackgroundColor = Color.Black;
                 DeckStatusLabel.BackgroundColor = Color.Black;
             }
+
+            await Vm.InitializeAsync();
         }
 
         private void FiltersButton_Clicked(object sender, EventArgs e)

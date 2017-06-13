@@ -21,6 +21,7 @@ namespace DragonFrontCompanion
         public const int MAX_DISTRIBUTION_LEVEL = 7;
 
         public static string CurrentAppVersion = "";
+        internal static ReadOnlyDictionary<string, Card> CardDictionary = null;
 
         private bool _suppressEvents = false;
 
@@ -157,12 +158,12 @@ namespace DragonFrontCompanion
                 {
                     for (int i = 1; i <= cardGroup.Count && i <= CARD_DUPLICATE_LIMIT; i++)
                     {
-                        if (oldData && !Cards.CardDictionary.ContainsKey(cardGroup.Card.ID))
+                        if (CardDictionary != null && oldData && !CardDictionary.ContainsKey(cardGroup.Card.ID))
                         {//find old card by name in new data, this allows for ID udpates
-                            var updatedCard = Cards.All.FirstOrDefault(c => c.Name == cardGroup.Card.Name);
-                            this.Add(updatedCard);
+                            var updatedCard = CardDictionary.FirstOrDefault(c => c.Value.Name == cardGroup.Card.Name);
+                            this.Add(updatedCard.Value);
                         }
-                        else this.Add(Cards.CardDictionary[cardGroup.Card.ID]);
+                        else this.Add(CardDictionary[cardGroup.Card.ID]);
                     }
                 }
                 this.AppVersion = CurrentAppVersion;
@@ -345,7 +346,7 @@ namespace DragonFrontCompanion
         {
             Card validCard;
             //validate
-            if (Cards.All.Contains(newCard)) validCard = Cards.CardDictionary[newCard.ID];
+            if (CardDictionary != null && CardDictionary.ContainsKey(newCard.ID)) validCard = CardDictionary[newCard.ID];
             else throw new ArgumentException("Card is not recognized.");
 
             if (validCard.Faction != Faction.UNALIGNED && validCard.Faction != this.DeckFaction) throw new ArgumentException("Card is the wrong faction for this deck.");

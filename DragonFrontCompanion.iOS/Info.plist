@@ -28,9 +28,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.benreierson.dragonfrontcompanion</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.8</string>
+	<string>1.1.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.8</string>
+	<string>1.1.0</string>
 	<key>CFBundleName</key>
 	<string>DF Companion</string>
 	<key>CFBundleDocumentTypes</key>
@@ -101,5 +101,7 @@
 	<string>Calendar is not currently used, this permission should not be accepted.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>DF Companion needs access to photos to store deck screenshots.</string>
+	<key>CFBundleShortVersion</key>
+	<string>1.0.81</string>
 </dict>
 </plist>

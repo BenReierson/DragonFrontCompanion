@@ -14,6 +14,8 @@
             <helpers:RarityImageConverter x:Key="RarityImage" />
             <helpers:ManaFragmentImageConverter x:Key="ManaFragmentImage" />
             <helpers:HealthIconConverter x:Key="HealthIcon" />
+            <helpers:CardSetDisplayConverter x:Key="CardSetDisplay" />
+            <helpers:CardSetVisibilityConverter x:Key="CardSetVisibility" />
         </ResourceDictionary>
     </ContentView.Resources>
     <Grid x:Name="CardGrid" BackgroundColor="#123338">
@@ -153,6 +155,16 @@
                                                        WinPhone=Micro,
                                                        ViewType={x:Type Label}}"
                 Text="{Binding Type}"
+                TextColor="#D0D6D7" />
+            <Label
+                x:Name="SetLabel"
+                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
+                                                       iOS=Small,
+                                                       WinPhone=Micro,
+                                                       ViewType={x:Type Label}}"
+                IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
+                Opacity=".5"
+                Text="{Binding CardSet, Converter={StaticResource CardSetDisplay}}"
                 TextColor="#D0D6D7" />
             <ffImage:CachedImage
                 x:Name="ManaFragments"

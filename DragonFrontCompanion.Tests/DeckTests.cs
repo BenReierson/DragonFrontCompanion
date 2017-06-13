@@ -34,6 +34,7 @@ namespace DragonFrontCompanion.Tests
         public void TestBuildDeckEclipse()
         {
 
+            var cards = new Cards();
             var testDeck = new Deck(Faction.ECLIPSE);
 
             Assert.IsFalse(testDeck.IsValid);
@@ -45,7 +46,7 @@ namespace DragonFrontCompanion.Tests
                 Assert.IsTrue(group.Count == 0);
             }
 
-            var champion = Cards.CardDictionary["EcC002"];
+            var champion = cards.CardDictionary["EcC002"];
             testDeck.Add(champion);
 
             Assert.IsFalse(testDeck.IsValid);
@@ -66,10 +67,10 @@ namespace DragonFrontCompanion.Tests
             try
             {//test changing champions via add
                 int count = testDeck.Count;
-                testDeck.Add(Cards.CardDictionary["EcC001"]);
+                testDeck.Add(cards.CardDictionary["EcC001"]);
                 Assert.AreEqual(count, testDeck.Count);
                 Assert.AreNotEqual(champion, testDeck.Champion);
-                Assert.AreEqual(Cards.CardDictionary["EcC001"], testDeck.Champion);
+                Assert.AreEqual(cards.CardDictionary["EcC001"], testDeck.Champion);
             }
             catch (ArgumentException) { }
 
@@ -78,7 +79,7 @@ namespace DragonFrontCompanion.Tests
             Assert.AreEqual(champion, testDeck.Champion);
 
             //test card validation
-            var unalignedCard = Cards.AllUnaligned[0];
+            var unalignedCard = cards.All.First(c => c.Faction == Faction.UNALIGNED);
             testDeck.Add(unalignedCard);
             Assert.IsFalse(testDeck.IsValid);
             Assert.IsTrue(testDeck.Contains(unalignedCard));
@@ -108,14 +109,14 @@ namespace DragonFrontCompanion.Tests
             catch (ArgumentException) { }
             try
             {
-                testDeck.Add(Cards.AllStrife[0]); 
+                testDeck.Add(cards.All.First(c=>c.Faction == Faction.STRIFE)); 
                 Assert.Fail("Adding a card from a different class should throw an exception.");
             }
             catch (ArgumentException) { }
 
 
             //Add a third card of same cost
-            var newCard = Cards.All.FirstOrDefault((c) => c != unalignedCard && c.Cost == unalignedCard.Cost && c.Faction == Faction.UNALIGNED);
+            var newCard = cards.All.FirstOrDefault((c) => c != unalignedCard && c.Cost == unalignedCard.Cost && c.Faction == Faction.UNALIGNED);
             testDeck.Add(newCard);
             Assert.IsFalse(testDeck.IsValid);
             Assert.IsTrue(testDeck.CountCard(newCard) == 1);
@@ -123,13 +124,14 @@ namespace DragonFrontCompanion.Tests
 
             //fill deck
             int index = 0;
+            var eclipseCards = cards.All.Where(c => c.Faction == Faction.ECLIPSE).ToList();
             while (testDeck.Count < Deck.MAX_CARD_COUNT )
             {
                 try
                 {
-                    if (Cards.AllEclipse[index].Type == CardType.CHAMPION) index++;
-                    testDeck.Add(Cards.AllEclipse[index]);
-                    testDeck.Add(Cards.AllEclipse[index]);
+                    if (eclipseCards[index].Type == CardType.CHAMPION) index++;
+                    testDeck.Add(eclipseCards[index]);
+                    testDeck.Add(eclipseCards[index]);
                 } catch (ArgumentException) { index++; }
             }
             Assert.IsFalse(testDeck.IsValid);
@@ -144,13 +146,13 @@ namespace DragonFrontCompanion.Tests
             Assert.IsTrue(testDeck.Count == Deck.MAX_CARD_COUNT);
             try
             {
-                testDeck.Add(Cards.AllEclipse[++index]);
+                testDeck.Add(eclipseCards[++index]);
                 Assert.Fail("Adding cards beyond the limit should throw an exception.");
             }
             catch (ArgumentException) {}
 
             testDeck.CanOverload = true;
-            testDeck.Add(Cards.AllEclipse[++index]);
+            testDeck.Add(eclipseCards[++index]);
             Assert.IsTrue(testDeck.Count > Deck.MAX_CARD_COUNT);
 
             //write to json
@@ -161,7 +163,8 @@ namespace DragonFrontCompanion.Tests
         [TestMethod]
         public async Task TestLocalDeckService()
         {
-            var service = new LocalDeckService();
+            var cardsService = new CardsService();
+            var service = new LocalDeckService(cardsService);
             var decks = await service.GetSavedDecksAsync();
 
             Assert.IsTrue(decks.Count == 1);
@@ -170,14 +173,14 @@ namespace DragonFrontCompanion.Tests
 
             //create a deck
             var newDeck = new Deck(Faction.THORNS) { Name = "Service Test Deck" };
-            newDeck.Add(Cards.AllThorns.First((c)=>c.Type != CardType.CHAMPION));
+            newDeck.Add(new Cards().All.First((c)=>c.Faction == Faction.THORNS && c.Type != CardType.CHAMPION));
 
             var savedDeck = await service.SaveDeckAsync(newDeck);
             Assert.AreEqual(newDeck.ID, savedDeck.ID);
             Assert.AreEqual(newDeck, savedDeck);
 
             //test retrieving saved deck
-            service = new LocalDeckService();
+            service = new LocalDeckService(cardsService);
             decks = await service.GetSavedDecksAsync();
             var deck = decks[0];
             Assert.AreEqual(savedDeck.ID, deck.ID);
@@ -194,7 +197,7 @@ namespace DragonFrontCompanion.Tests
 
             Assert.IsTrue(await service.DeleteDeckAsync(deck));
 
-            service = new LocalDeckService();
+            service = new LocalDeckService(cardsService);
             decks = await service.GetSavedDecksAsync();
             Assert.IsTrue(decks.Count == 1);
             defaultDeck = decks[0];
@@ -208,7 +211,8 @@ namespace DragonFrontCompanion.Tests
         [TestCleanup]
         public void Cleanup()
         {
-            var service = new LocalDeckService();
+            var cardsService = new CardsService();
+            var service = new LocalDeckService(cardsService);
 
             var decksGetter = service.GetSavedDecksAsync().ContinueWith((t) =>
             {
