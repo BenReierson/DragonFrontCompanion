@@ -3,6 +3,7 @@
     x:Class="DragonFrontCompanion.Views.SettingsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
     xmlns:local="clr-namespace:DragonFrontCompanion"
     Title="Settings"
     BindingContext="{Binding Settings, Source={StaticResource Locator}}">
@@ -68,7 +69,7 @@
             Grid.Column="0"
             Orientation="Vertical"
             Spacing="0">
-            <Label Text="{Binding ActiveCardDataVersion}">
+            <Label FontSize="Small" Text="{Binding ActiveCardDataVersion}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ShowCardDataSourceCommand}" NumberOfTapsRequired="2" />
                 </Label.GestureRecognizers>
@@ -94,12 +95,7 @@
         </StackLayout>
 
         <!--  Data Source  -->
-        <Label
-            Grid.Row="5"
-            Grid.Column="0"
-            IsVisible="{Binding DataSourceVisible}"
-            Text="Card data update branch" />
-        <Entry
+        <controls:SelectOnFocusEntry
             Grid.Row="5"
             Grid.Column="0"
             Grid.ColumnSpan="2"
@@ -108,5 +104,11 @@
             IsVisible="{Binding DataSourceVisible}"
             Text="{Binding ActiveDataSource, Mode=TwoWay}"
             Unfocused="DataSource_Unfocused" />
+        <Label
+            Grid.Row="5"
+            Grid.Column="0"
+            FontSize="Small"
+            IsVisible="{Binding DataSourceVisible}"
+            Text="Card data update branch" />
     </Grid>
 </ContentPage>
