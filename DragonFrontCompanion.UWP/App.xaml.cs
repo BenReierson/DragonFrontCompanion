@@ -45,7 +45,6 @@ namespace DragonFrontCompanion.UWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            MobileCenter.Start("6013a5e1-18f0-4e45-95b8-bb7ce1411d6c", typeof(Analytics));
         }
 
         /// <summary>
