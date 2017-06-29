@@ -95,13 +95,17 @@
 	</array>
 	<key>UIStatusBarHidden</key>
 	<true/>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Calendar is not currently used, this permission should not be accepted.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>DF Companion needs access to photos to store deck screenshots.</string>
 	<key>CFBundleShortVersion</key>
 	<string>1.0.81</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>XSLaunchImageAssets</key>
+	<string>Assets.xcassets/LaunchImage.launchimage</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 </dict>
 </plist>
