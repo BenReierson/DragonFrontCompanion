@@ -3,6 +3,7 @@
     x:Class="DragonFrontCompanion.Views.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
     Title="{Binding Title}"
     BindingContext="{Binding Main, Source={StaticResource Locator}}">
     <ContentPage.ToolbarItems>
@@ -46,15 +47,20 @@
                     Command="{Binding NavigateToCardsCommand}" />
             </Grid>
             <Button
+                x:Name="NewCardsButton"
                 Grid.Row="2"
                 BackgroundColor="#E1CA35"
                 Command="{Binding NavigateToNewCardsCommand}"
                 CommandParameter="CONQUEST"
                 FontAttributes="Bold"
-                FontSize="Medium"
+                FontSize="{helpers:NamedSizeOnPlatform Android=Medium,
+                                                       iOS=Default,
+                                                       WinPhone=Default,
+                                                       ViewType={x:Type Button}}"
                 HorizontalOptions="Center"
                 Text="Conquest Champions"
                 TextColor="#123338" />
+
 
             <Button
                 Grid.Row="4"

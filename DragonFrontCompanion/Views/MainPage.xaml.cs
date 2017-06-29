@@ -21,11 +21,18 @@ namespace DragonFrontCompanion.Views
             }
         }
 
-        public MainPage()
-        {
-            InitializeComponent();
-            
-        }
+		public MainPage()
+		{
+			InitializeComponent();
+
+			if (Device.RuntimePlatform == Device.iOS)
+			{//Add padding to ios button
+				this.SizeChanged += (o, e) =>
+				{
+					NewCardsButton.WidthRequest = NewCardsButton.Width + 20;
+				};
+			}
+		}
 
         protected override void OnAppearing()
         {
