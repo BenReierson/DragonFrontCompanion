@@ -241,3 +241,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /MasterUITests.bat
+uitestsMac.sh
