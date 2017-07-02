@@ -205,7 +205,7 @@ namespace DragonFrontCompanion
                     OnCardsChanged();
                     return;
                 }
-                if (value.Type != CardType.CHAMPION || value.Faction != DeckFaction)
+                if (value.Type != CardType.CHAMPION || !value.ValidFactions.Contains(DeckFaction))
                     throw new ArgumentException("Invalid Champion for this deck.");
 
                 _champion = value;
@@ -349,7 +349,7 @@ namespace DragonFrontCompanion
             if (CardDictionary != null && CardDictionary.ContainsKey(newCard.ID)) validCard = CardDictionary[newCard.ID];
             else throw new ArgumentException("Card is not recognized.");
 
-            if (validCard.Faction != Faction.UNALIGNED && validCard.Faction != this.DeckFaction) throw new ArgumentException("Card is the wrong faction for this deck.");
+            if (!validCard.ValidFactions.Contains(DeckFaction)) throw new ArgumentException("Card is the wrong faction for this deck.");
             if (CountCard(validCard) >= CARD_DUPLICATE_LIMIT) throw new ArgumentException("Deck is at capacity for this card.");
             if (validCard.Type != CardType.CHAMPION && !CanOverload && Count >= MAX_CARD_COUNT) throw new ArgumentException("Deck is at capacity.");
 

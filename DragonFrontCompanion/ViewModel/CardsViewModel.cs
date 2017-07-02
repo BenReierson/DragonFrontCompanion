@@ -183,7 +183,7 @@ namespace DragonFrontCompanion.ViewModel
             if (_deck != null)
             {
                //filter cards according to deck
-                AllCards = _unfilteredCards.Where((c) => (c.Faction == Faction.UNALIGNED || c.Faction == _deck.DeckFaction)).ToList();
+                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(_deck.DeckFaction))).ToList();
 
                 ChooserFilterText = "IconDeckFilter.png";
                 CanFilterByEclipse = _deck.DeckFaction == Faction.ECLIPSE;
