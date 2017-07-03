@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using DragonFrontCompanion.Controls;
 using DragonFrontCompanion.ViewModel;
 using Xamarin.Forms;
+using DragonFrontDb.Enums;
 
 namespace DragonFrontCompanion.Views
 {
@@ -29,7 +30,15 @@ namespace DragonFrontCompanion.Views
         {
             while (Vm.IsBusy) await Task.Delay(100).ConfigureAwait(false);
             await Task.Delay(100).ConfigureAwait(false); ; //let it settle
-            Device.BeginInvokeOnMainThread(() => Vm.SearchText = searchText);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                if (Vm.CardSets.Contains(searchText))
+                {
+                    Vm.CardSetFilter = searchText;
+                    MessagingCenter.Send<string>($"Card Set: {searchText}", App.MESSAGES.SHOW_TOAST);
+                }
+                else Vm.SearchText = searchText;
+            });
         }
 
         public CardsPage(Deck deck = null)
