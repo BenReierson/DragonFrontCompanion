@@ -242,3 +242,4 @@ ModelManifest.xml
 .fake/
 /MasterUITests.bat
 uitestsMac.sh
+*.bak
