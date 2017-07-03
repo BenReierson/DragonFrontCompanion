@@ -134,7 +134,7 @@ namespace DragonFrontCompanion.Data
             var diceRoll = new Random();
             var faction = (Faction)diceRoll.Next(2, 8);
             var deck = new Deck(faction, AppVersion, DeckType.GENERATED_DECK) { Name = "RANDOM DECK", Description = "I wouldn't recommend actually playing as is. Edit this deck to save it, or share it as a challenge!"};
-            var cards = (await _cardsService.GetAllCardsAsync()).Where((c) => c.Faction == faction || c.Faction == Faction.UNALIGNED).ToList();
+            var cards = (await _cardsService.GetAllCardsAsync()).Where((c) => c.ValidFactions.Contains(faction)).ToList();
             cards.Shuffle();
             deck.Champion = cards.FirstOrDefault((c) => c.Type == CardType.CHAMPION);
             while (!deck.IsValid)
@@ -142,7 +142,7 @@ namespace DragonFrontCompanion.Data
                 try
                 {
                     cards.Shuffle();
-                    deck.Add(cards[0]);
+                    if (cards[0].Type != CardType.CHAMPION && deck.CountCard(cards[0]) < Deck.MAX_CARD_COUNT) deck.Add(cards[0]);
                     if (diceRoll.Next(0, 1) == 1) deck.Add(cards[0]);
                 }
                 catch (Exception) {
