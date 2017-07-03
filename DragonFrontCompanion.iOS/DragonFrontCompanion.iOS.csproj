@@ -326,6 +326,11 @@
     <BundleResource Include="Resources\Icon.png" />
     <BundleResource Include="Resources\IconTwo.png" />
     <BundleResource Include="Resources\IconOne.png" />
+    <BundleResource Include="Resources\IconChamp_1.png" />
+    <BundleResource Include="Resources\IconFort_1.png" />
+    <BundleResource Include="Resources\IconSpell_1.png" />
+    <BundleResource Include="Resources\IconUnaligned_1.png" />
+    <BundleResource Include="Resources\IconUnit_1.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\IconUnit.png" />

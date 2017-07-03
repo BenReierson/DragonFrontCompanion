@@ -276,6 +276,11 @@
     <AndroidResource Include="Resources\drawable\IconShare.png" />
     <AndroidResource Include="Resources\drawable\IconCards.png" />
     <AndroidResource Include="Resources\drawable\IconDeck.png" />
+    <AndroidResource Include="Resources\drawable\IconChamp_1.png" />
+    <AndroidResource Include="Resources\drawable\IconFort_1.png" />
+    <AndroidResource Include="Resources\drawable\IconSpell_1.png" />
+    <AndroidResource Include="Resources\drawable\IconUnaligned_1.png" />
+    <AndroidResource Include="Resources\drawable\IconUnit_1.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

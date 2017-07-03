@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <pages:PopupPage
     x:Class="DragonFrontCompanion.Views.CardPopup"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -13,6 +13,7 @@
     <pages:PopupPage.Resources>
         <ResourceDictionary>
             <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:CardImagePlaceholderConverter x:Key="CardPlaceholders" />
             <helpers:RaceDisplayConverter x:Key="RaceDisplayConverter" />
             <helpers:TraitsTextConverter x:Key="TraitsString" />
             <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
@@ -67,6 +68,7 @@
                         Aspect="AspectFill"
                         DownsampleHeight="400"
                         HeightRequest="400"
+                        ErrorPlaceholder="{Binding ., Converter={StaticResource Key=CardPlaceholders}}"
                         Source="{Binding ., Converter={StaticResource CardImages}, ConverterParameter='Large'}"
                         VerticalOptions="Start">
                         <ffImage:CachedImage.GestureRecognizers>
