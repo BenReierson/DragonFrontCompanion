@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 using DragonFrontDb;
 using Plugin.DeviceInfo;
 using Rg.Plugins.Popup.Extensions;
@@ -29,7 +29,7 @@ namespace DragonFrontCompanion.Views
         private async void SearchForCards(string searchText)
         {
             while (Vm.IsBusy) await Task.Delay(100).ConfigureAwait(false);
-            await Task.Delay(100).ConfigureAwait(false); ; //let it settle
+            await Task.Delay(1250).ConfigureAwait(false); ; //let it settle
             Device.BeginInvokeOnMainThread(() =>
             {
                 if (Vm.CardSets.Contains(searchText))

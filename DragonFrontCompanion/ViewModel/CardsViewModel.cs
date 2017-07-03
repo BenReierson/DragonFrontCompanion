@@ -56,14 +56,14 @@ namespace DragonFrontCompanion.ViewModel
             if (_unfilteredCards != freshCards)
             {
                 _unfilteredCards = freshCards;
-
-                var newCards = _unfilteredCards.Any(c => c.CardSet == CardSet.NEXT);
-                if (newCards && !_cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Add(CardSet.NEXT.ToString());
-                else if (!newCards && _cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Remove(CardSet.NEXT.ToString());
-
                 AllCards = _unfilteredCards.ToList();
             }
-            IsBusy = false;
+
+			//var newCards = _unfilteredCards.Any(c => c.CardSet == CardSet.NEXT);
+			//if (newCards && !_cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Add(CardSet.NEXT.ToString());
+			//else if (!newCards && _cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Remove(CardSet.NEXT.ToString());
+
+			IsBusy = false;
         }
 
         private async void ApplyFilters()
@@ -120,6 +120,7 @@ namespace DragonFrontCompanion.ViewModel
                 {
                     _cardSets = Enum.GetValues(typeof(CardSet)).Cast<CardSet>().Skip(2).AsQueryable().Select(cs => cs.ToString()).ToList();
                     _cardSets.Insert(0, _CARD_SET_FILTER_DEFAULT);
+                    //_cardSets.Remove(CardSet.NEXT.ToString());
                     CardSetFilter = _CARD_SET_FILTER_DEFAULT;
                     return _cardSets;
                 }

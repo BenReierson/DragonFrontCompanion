@@ -646,7 +646,8 @@
                 <Picker 
                     BackgroundColor="#123338"
                     TextColor="#E1CA35"
-                    HorizontalOptions="Fill"
+                    HorizontalOptions="FillAndExpand"
+                    MinimumWidthRequest="200"
                     ItemsSource="{Binding CardSets}"
                     SelectedItem="{Binding CardSetFilter}"
                     />
