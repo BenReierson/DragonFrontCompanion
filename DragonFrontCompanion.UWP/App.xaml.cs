@@ -40,12 +40,11 @@ namespace DragonFrontCompanion.UWP
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
+        /// </summary
         public App()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            MobileCenter.Start("6013a5e1-18f0-4e45-95b8-bb7ce1411d6c", typeof(Analytics));
         }
 
         /// <summary>
