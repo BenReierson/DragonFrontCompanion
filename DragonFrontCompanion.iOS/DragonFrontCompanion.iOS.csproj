@@ -331,6 +331,13 @@
     <BundleResource Include="Resources\IconSpell_1.png" />
     <BundleResource Include="Resources\IconUnaligned_1.png" />
     <BundleResource Include="Resources\IconUnit_1.png" />
+    <BundleResource Include="Resources\IconDELIRIUM_1.png" />
+    <BundleResource Include="Resources\IconECLIPSE_1.png" />
+    <BundleResource Include="Resources\IconESSENCE_1.png" />
+    <BundleResource Include="Resources\IconSCALES_1.png" />
+    <BundleResource Include="Resources\IconSILENCE_1.png" />
+    <BundleResource Include="Resources\IconSTRIFE_1.png" />
+    <BundleResource Include="Resources\IconTHORNS_1.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\IconUnit.png" />
