@@ -146,7 +146,7 @@
             <StackLayout 
                 Orientation="Horizontal"
                 Margin="-4,2,0,2"
-                Spacing="-3">
+                Spacing="-2">
                 <ffImage:CachedImage 
                     HeightRequest="22" 
                     WidthRequest="22"
@@ -163,12 +163,14 @@
                 <ffImage:CachedImage 
                     HeightRequest="26" 
                     WidthRequest="26"
+                    Margin="-2,0,0,0"
                     DownsampleToViewSize="true"
                     Source="{Binding ., Converter={StaticResource CardIcons}, ConverterParameter=2}"
                     />
                 <ffImage:CachedImage 
                     HeightRequest="26" 
                     WidthRequest="26"
+                    Margin="-2,0,0,0"
                     DownsampleToViewSize="true"
                     Source="{Binding ., Converter={StaticResource CardIcons}, ConverterParameter=3}"
                     />

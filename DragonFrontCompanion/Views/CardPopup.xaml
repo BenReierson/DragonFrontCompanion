@@ -140,6 +140,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <!--  Cost  -->
@@ -241,22 +242,6 @@
                             TextColor="#15CEEA"
                             XAlign="End" />
 
-                        <!--  Card Set  -->
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
-                            Style="{StaticResource CardStatLabelStyle}"
-                            Text="Set" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.ColumnSpan="2"
-                            HorizontalOptions="End"
-                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
-                            Style="{StaticResource CardStatLabelStyle}"
-                            Text="{Binding CardSet}"
-                            XAlign="End" />
-
                         <!--  Giant  -->
                         <Label
                             Grid.Row="2"
@@ -272,6 +257,16 @@
                             Style="{StaticResource CardStatLabelStyle}"
                             Text="{Binding IsGiant, Converter={StaticResource YesOrNo}}"
                             XAlign="End" />
+                        
+                        <!--  Card Set  -->
+                        <Label
+                            Grid.Row="3"
+                            Grid.ColumnSpan="4"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding CardSet, StringFormat='Card Set: {0}'}" />
+
                     </Grid>
 
                     <Button

@@ -15,9 +15,11 @@ namespace DragonFrontCompanion.Helpers
 		private const string SPELL_IMAGE = "IconSpell.png";
 		private const string FORT_IMAGE = "IconFort.png";
 		private const string UNIT_IMAGE = "IconUnit.png";
-		private const string UNALIGNED_IMAGE = "IconUnaligned.png";
+		private const string UNALIGNED_IMAGE = "IconUnaligned_1.png";
 
         private const string FACTION_TEMPLATE = "Icon{0}_1.png";
+
+        private static int _totalFactionCount = Enum.GetValues(typeof(Faction)).Length - 2;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -28,6 +30,7 @@ namespace DragonFrontCompanion.Helpers
 
             //Show type then valid factions
             if (index == 0) return GetTypeIcon(card.Type);
+            else if (card.ValidFactions.Length == _totalFactionCount) return index == 1 ? UNALIGNED_IMAGE : null;
             else return card.ValidFactions.Length > index-1 ? string.Format(FACTION_TEMPLATE, card.ValidFactions[index-1]) : null;
         }
 
