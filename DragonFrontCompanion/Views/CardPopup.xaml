@@ -20,6 +20,7 @@
             <helpers:BooleanToYesNoConverter x:Key="YesOrNo" />
             <helpers:RarityImageConverter x:Key="RarityImage" />
             <helpers:CardSetVisibilityConverter x:Key="CardSetVisibility" />
+            <helpers:FactionsToLabelConverter x:Key="FactionsToLabel"/>
             <animations:MoveAnimation
                 x:Key="NextAnimation"
                 DurationIn="100"
@@ -98,7 +99,7 @@
                                                                        WinPhone=Default,
                                                                        ViewType={x:Type Label}}"
                                 HorizontalOptions="Center"
-                                Text="{Binding Faction}"
+                                Text="{Binding ValidFactions, Converter={StaticResource FactionsToLabel}"
                                 TextColor="White"
                                 XAlign="Center" />
                             <Label
