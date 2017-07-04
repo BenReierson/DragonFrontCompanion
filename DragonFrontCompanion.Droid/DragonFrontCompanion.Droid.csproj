@@ -281,6 +281,13 @@
     <AndroidResource Include="Resources\drawable\IconSpell_1.png" />
     <AndroidResource Include="Resources\drawable\IconUnaligned_1.png" />
     <AndroidResource Include="Resources\drawable\IconUnit_1.png" />
+    <AndroidResource Include="Resources\drawable\IconDELIRIUM_1.png" />
+    <AndroidResource Include="Resources\drawable\IconECLIPSE_1.png" />
+    <AndroidResource Include="Resources\drawable\IconESSENCE_1.png" />
+    <AndroidResource Include="Resources\drawable\IconSCALES_1.png" />
+    <AndroidResource Include="Resources\drawable\IconSILENCE_1.png" />
+    <AndroidResource Include="Resources\drawable\IconSTRIFE_1.png" />
+    <AndroidResource Include="Resources\drawable\IconTHORNS_1.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

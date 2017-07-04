@@ -58,7 +58,12 @@ namespace DragonFrontCompanion.ViewModel
                 _unfilteredCards = freshCards;
                 AllCards = _unfilteredCards.ToList();
             }
-            IsBusy = false;
+
+			//var newCards = _unfilteredCards.Any(c => c.CardSet == CardSet.NEXT);
+			//if (newCards && !_cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Add(CardSet.NEXT.ToString());
+			//else if (!newCards && _cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Remove(CardSet.NEXT.ToString());
+
+			IsBusy = false;
         }
 
         private async void ApplyFilters()
@@ -73,6 +78,7 @@ namespace DragonFrontCompanion.ViewModel
                       (RarityFilter == 0 || (int)c.Rarity == RarityFilter) &&
                       ((TraitFilter == null || TraitFilter.Count() == 0) || TraitFilter.Intersect(c.Traits).Any()) &&
                       (CurrentDeck == null || !FilterByDeck || CurrentDeck.Contains(c) || CurrentDeck.Champion == c) &&
+                      (string.IsNullOrEmpty(CardSetFilter) || CardSetFilter == _CARD_SET_FILTER_DEFAULT || c.CardSet == (CardSet)Enum.Parse(typeof(CardSet), CardSetFilter)) &&
                       (string.IsNullOrEmpty(SearchText) || 
                        c.Text.ToLower().Contains(SearchText.ToLower()) || 
                        c.Name.ToLower().Contains(SearchText.ToLower()) || 
@@ -104,6 +110,22 @@ namespace DragonFrontCompanion.ViewModel
         }
 
         #region Properties
+        private List<string> _cardSets;
+        public List<string> CardSets
+        {
+            get
+            {
+                if (_cardSets != null) return _cardSets;
+                else
+                {
+                    _cardSets = Enum.GetValues(typeof(CardSet)).Cast<CardSet>().Skip(2).AsQueryable().Select(cs => cs.ToString()).ToList();
+                    _cardSets.Insert(0, _CARD_SET_FILTER_DEFAULT);
+                    //_cardSets.Remove(CardSet.NEXT.ToString());
+                    CardSetFilter = _CARD_SET_FILTER_DEFAULT;
+                    return _cardSets;
+                }
+            }
+        }
 
         private bool _isBusy = false;
         public bool IsBusy
@@ -461,6 +483,17 @@ namespace DragonFrontCompanion.ViewModel
             set { Set(ref _traitFilterDisplay, value); }
         }
 
+        private const string _CARD_SET_FILTER_DEFAULT = "ALL";
+        private string _cardSetFilter;
+        public string CardSetFilter
+        {
+			get { return _cardSetFilter; }
+			set {
+                Set(ref _cardSetFilter, value);
+                ApplyFilters();
+            }
+        }
+
         private string _searchText = "";
         public string SearchText
         {
@@ -713,6 +746,7 @@ namespace DragonFrontCompanion.ViewModel
                         CostFilter = MAX_COSTS_FILTER;
                         RarityFilter = 0;
                         SearchText = "";
+                        CardSetFilter = _CARD_SET_FILTER_DEFAULT;
 
                         _suspendFilters = false;
 
@@ -727,7 +761,8 @@ namespace DragonFrontCompanion.ViewModel
                                     CostFilter < MAX_COSTS_FILTER || 
                                     FilterByDeck ||
                                     TraitFilter != null || 
-                                    RarityFilter != 0 || 
+                                    RarityFilter != 0 ||
+                                    (CardSetFilter != null && CardSetFilter != _CARD_SET_FILTER_DEFAULT) ||
                                     !string.IsNullOrEmpty(SearchText);
 
                             ResetFilterIcon = canExecute ? "IconFilterReset.png" : "";

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <t:SlideMenuView
     x:Class="DragonFrontCompanion.Controls.CardTypeFilter"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -636,6 +636,22 @@
                     </controls:ImageButton.WidthRequest>
                 </controls:ImageButton>
             </Grid>
+            <StackLayout Orientation="Horizontal" Margin="0,10,0,10">
+                <Label
+                    FontSize="Medium"
+                    Text="Card Set "
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center"
+                    TextColor="White" />
+                <Picker 
+                    BackgroundColor="#123338"
+                    TextColor="#E1CA35"
+                    HorizontalOptions="FillAndExpand"
+                    MinimumWidthRequest="200"
+                    ItemsSource="{Binding CardSets}"
+                    SelectedItem="{Binding CardSetFilter}"
+                    />
+            </StackLayout>
             <Label
                 FontSize="Medium"
                 Text="{Binding TraitFilterDisplay}"

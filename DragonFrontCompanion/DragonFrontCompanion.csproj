@@ -126,6 +126,8 @@
     <Compile Include="Views\TraitsPopup.xaml.cs">
       <DependentUpon>TraitsPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CardIconsConverter.cs" />
+    <Compile Include="Helpers\FactionsToLabelConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\MainPage.xaml">

@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <helpers:CardImageConverter x:Key="CardImages" />
             <helpers:CardImagePlaceholderConverter x:Key="CardPlaceholders" />
+            <helpers:CardIconsConverter x:Key="CardIcons" />
             <helpers:RaceDisplayConverter x:Key="RaceDisplayConverter" />
             <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
             <helpers:RarityImageConverter x:Key="RarityImage" />
@@ -141,41 +142,58 @@
             Grid.Column="1"
             HorizontalOptions="FillAndExpand"
             Orientation="Vertical"
-            Spacing="0">
-            <Label
-                x:Name="FactionLabel"
-                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                       iOS=Small,
-                                                       WinPhone=Micro,
-                                                       ViewType={x:Type Label}}"
-                Text="{Binding Faction}"
-                TextColor="#D0D6D7" />
-            <Label
-                x:Name="TypeLabel"
-                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                       iOS=Small,
-                                                       WinPhone=Micro,
-                                                       ViewType={x:Type Label}}"
-                Text="{Binding Type}"
-                TextColor="#D0D6D7" />
-            <Label
-                x:Name="SetLabel"
-                FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                       iOS=Small,
-                                                       WinPhone=Micro,
-                                                       ViewType={x:Type Label}}"
-                IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
-                Opacity=".5"
-                Text="{Binding CardSet, Converter={StaticResource CardSetDisplay}}"
-                TextColor="#D0D6D7" />
+            Spacing="-2">
+            <StackLayout 
+                Orientation="Horizontal"
+                Margin="-4,2,0,2"
+                Spacing="-2">
+                <ffImage:CachedImage 
+                    HeightRequest="22" 
+                    WidthRequest="22"
+                    Margin="0,2,4,2"
+                    DownsampleToViewSize="true"
+                    Source="{Binding ., Converter={StaticResource CardIcons}, ConverterParameter=0}"
+                    />
+                <ffImage:CachedImage 
+                    HeightRequest="26" 
+                    WidthRequest="26"
+                    DownsampleToViewSize="true"
+                    Source="{Binding ., Converter={StaticResource CardIcons}, ConverterParameter=1}"
+                    />
+                <ffImage:CachedImage 
+                    HeightRequest="26" 
+                    WidthRequest="26"
+                    Margin="-2,0,0,0"
+                    DownsampleToViewSize="true"
+                    Source="{Binding ., Converter={StaticResource CardIcons}, ConverterParameter=2}"
+                    />
+                <ffImage:CachedImage 
+                    HeightRequest="26" 
+                    WidthRequest="26"
+                    Margin="-2,0,0,0"
+                    DownsampleToViewSize="true"
+                    Source="{Binding ., Converter={StaticResource CardIcons}, ConverterParameter=3}"
+                    />
+            </StackLayout>
             <ffImage:CachedImage
                 x:Name="ManaFragments"
-                Margin="0,2,0,0"
+                Margin="-2,2,0,0"
                 Aspect="AspectFill"
                 HeightRequest="16"
                 HorizontalOptions="StartAndExpand"
                 Source="{Binding ManaFragments, Converter={StaticResource ManaFragmentImage}}"
                 WidthRequest="100" />
+            <Label
+                x:Name="SetLabel"
+                FontSize="{helpers:NamedSizeOnPlatform Android=Small,
+                                                       iOS=Micro,
+                                                       WinPhone=Micro,
+                                                       ViewType={x:Type Label}}"
+                
+                IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
+                Opacity=".5"
+                Text="{Binding CardSet, Converter={StaticResource CardSetDisplay}}"
+                TextColor="#D0D6D7" />
         </StackLayout>
 
         <StackLayout

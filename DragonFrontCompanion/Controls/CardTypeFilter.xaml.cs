@@ -25,7 +25,10 @@ namespace DragonFrontCompanion.Controls
             if (App.RuntimePlatform == App.Device.Android)
                 this.HeightRequest += 50;
             else if (App.RuntimePlatform == App.Device.iOS)
+            {
                 MainContent.Margin = new Thickness(10, 55, 10, 20);
+                this.HeightRequest += 20;
+            }
             else
             {
                 this.HeightRequest += 100;
