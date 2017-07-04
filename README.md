@@ -15,7 +15,7 @@
 Dragon Front Companion is a way to learn all the details of every card in the Dragon Front game, build your own decks, and share them with the community. It was initially built by a single developer over approxmiately two months as a side-project to support the growing Dragon Front community, and as a way to explore the latest Xamarin development tools and techniques.
 
 ## Development 
-Master Branch ![Build status](https://build.mobile.azure.com/v0.1/apps/86a9b93d-0a39-41a7-bd1b-095dd3c60bad/branches/master/badge)
+Master Branch - Android ![Build status](https://build.mobile.azure.com/v0.1/apps/86a9b93d-0a39-41a7-bd1b-095dd3c60bad/branches/master/badge)    iOS ![Build status](https://build.mobile.azure.com/v0.1/apps/f8a07383-f377-47f7-95ac-76d54540e807/branches/master/badge)    UWP ![Build status](https://build.mobile.azure.com/v0.1/apps/314986bc-890b-4391-be88-7a5bb6242e6d/branches/master/badge)
 
 The app is written in C# using Xamarin.Forms, MVVMLight, and various Xamarin plugins including FFImageLoading, PCLStorage, SlideOverKit, DeviceInfo, and RG Popup. It utilizes [DragonFrontDB] (https://github.com/BenReierson/DragonFrontDb) for the game data. Throughout initial development, it was hosted on Visual Studio online, but has now been migrated to Github and integrated with mobile.azure.com for CI, UITests, analytics, and alpha testing.
 
