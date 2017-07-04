@@ -26,7 +26,8 @@ namespace DragonFrontCompanion.Helpers
             var card = value as Card;
             if (card == null || parameter == null) return null;
 
-            int.TryParse(parameter.ToString(), out int index);
+            int index = -1;
+            int.TryParse(parameter.ToString(), out index);
 
             //Show type then valid factions
             if (index == 0) return GetTypeIcon(card.Type);
