@@ -243,3 +243,5 @@ ModelManifest.xml
 /MasterUITests.bat
 uitestsMac.sh
 *.bak
+*.orig
+Thumbs.db
