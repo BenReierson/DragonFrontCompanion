@@ -135,7 +135,10 @@
     <Content Include="IconChamp_1.png" />
     <Content Include="IconDeck.png" />
     <Content Include="IconDeckFilter.png" />
+    <Content Include="IconDELIRIUM_1.png" />
+    <Content Include="IconECLIPSE_1.png" />
     <Content Include="IconEdit.png" />
+    <Content Include="IconESSENCE_1.png" />
     <Content Include="IconFilter.png" />
     <Content Include="IconFilterReset.png" />
     <Content Include="IconFort.png" />
@@ -159,9 +162,13 @@
     <Content Include="IconRarityCommon.png" />
     <Content Include="IconRarityEpic.png" />
     <Content Include="IconRarityRare.png" />
+    <Content Include="IconSCALES_1.png" />
     <Content Include="IconShare.png" />
+    <Content Include="IconSILENCE_1.png" />
     <Content Include="IconSpell.png" />
     <Content Include="IconSpell_1.png" />
+    <Content Include="IconSTRIFE_1.png" />
+    <Content Include="IconTHORNS_1.png" />
     <Content Include="IconTwo.png" />
     <Content Include="IconUnaligned.png" />
     <Content Include="IconUnaligned_1.png" />
