@@ -15,7 +15,17 @@
             <helpers:RarityImageConverter x:Key="RarityImage" />
         </ResourceDictionary>
     </t:SlideMenuView.Resources>
-    <ScrollView BackgroundColor="#BF000000">
+    <Grid x:Name="OuterContainer" RowSpacing="0">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="5" />
+    </Grid.RowDefinitions>
+      <Frame x:Name="Handle"
+            Grid.Row="1"
+            BackgroundColor="#E1CA35"
+            CornerRadius="0"
+            OutlineColor="Black"/>
+      <ScrollView BackgroundColor="#BF000000">
         <StackLayout
             x:Name="MainContent"
             Margin="10,10,10,20"
@@ -659,4 +669,5 @@
                 VerticalOptions="Start" />
         </StackLayout>
     </ScrollView>
+  </Grid>
 </t:SlideMenuView>
