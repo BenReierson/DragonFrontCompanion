@@ -669,5 +669,27 @@
                 VerticalOptions="Start" />
         </StackLayout>
     </ScrollView>
+    <Button
+        x:Name="CloseButton"
+        Clicked="Close_Clicked"
+        IsVisible="false"
+        Margin="0,20,5,0"
+        BackgroundColor="Red"
+        FontAttributes="Bold"
+        HeightRequest="20"
+        HorizontalOptions="End"
+        Opacity=".8"
+        Text="X"
+        TextColor="White"
+        VerticalOptions="Start"
+        WidthRequest="20">
+        <Button.IsVisible>
+            <OnPlatform
+                x:TypeArguments="x:Boolean"
+                Android="False"
+                WinPhone="False"
+                iOS="True" />
+        </Button.IsVisible>
+    </Button>
   </Grid>
 </t:SlideMenuView>
