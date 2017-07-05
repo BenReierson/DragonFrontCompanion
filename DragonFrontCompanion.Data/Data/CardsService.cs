@@ -28,8 +28,8 @@ namespace DragonFrontCompanion.Data
             }
             set
             {
-                _activeDataSource = value;
-                CardDataInfoUrl = string.Format(DefaultCardInfoUrl, value);
+                _activeDataSource = value                if (Uri.IsWellFormedUriString(value, UriKind.Absolute)) CardDataInfoUrl = value;
+                else CardDataInfoUrl = string.Format(DefaultCardInfoUrl, value);
             }
         }
 
