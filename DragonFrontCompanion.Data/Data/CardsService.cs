@@ -64,7 +64,16 @@ namespace DragonFrontCompanion.Data
                     var cardDataFolder = await FileSystem.Current.LocalStorage.GetFolderAsync(CardsFolderName).ConfigureAwait(false);
                     var cardsFile = await cardDataFolder.GetFileAsync(Settings.ActiveCardDataVersion.ToString()).ConfigureAwait(false);
                     var cardsJson = await cardsFile.ReadAllTextAsync().ConfigureAwait(false);
-                    return new Cards(cardsJson);
+
+                    var traitsExist = await cardDataFolder.CheckExistsAsync(Settings.ActiveCardDataVersion + "_traits");
+                    string traitsJson = null;
+                    if (traitsExist == ExistenceCheckResult.FileExists)
+                    {
+                        var traitsFile = await cardDataFolder.GetFileAsync(Settings.ActiveCardDataVersion + "_traits").ConfigureAwait(false);
+                        traitsJson = traitsFile != null ? await traitsFile.ReadAllTextAsync().ConfigureAwait(false) : null;
+                    }
+
+                    return new Cards(cardsJson, traitsJson);
                 }
                 else return await Task.Run(() => new Cards()).ConfigureAwait(false);
             }
@@ -74,13 +83,19 @@ namespace DragonFrontCompanion.Data
             }
         }
 
-        private async Task SaveCardDataAsync(Info version, string cardsJson)
+        private async Task SaveCardDataAsync(Info version, string cardsJson, string traitsJson)
         {
             try
             {
                 var cardDataFolder = await FileSystem.Current.LocalStorage.CreateFolderAsync(CardsFolderName, CreationCollisionOption.OpenIfExists);
                 var cardsFile = await cardDataFolder.CreateFileAsync(version.CardDataVersion.ToString(), CreationCollisionOption.ReplaceExisting);
                 await cardsFile.WriteAllTextAsync(cardsJson);
+
+                if (!string.IsNullOrEmpty(traitsJson))
+                {
+                    var traitsFile = await cardDataFolder.CreateFileAsync(version.CardDataVersion + "_traits", CreationCollisionOption.ReplaceExisting);
+                    await traitsFile.WriteAllTextAsync(traitsJson);
+                }
 
                 Settings.ActiveCardDataVersion = version.CardDataVersion;
             }
@@ -102,9 +117,12 @@ namespace DragonFrontCompanion.Data
                 {
                     client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
                     var latestCardInfo = await GetLatestCardInfo();
+
                     var latestCardJson = await client.GetStringAsync(latestCardInfo.CardDataUrl);
-                    CachedCards = new Cards(latestCardJson);
-                    await SaveCardDataAsync(latestCardInfo, latestCardJson);
+                    var latestTraitsJson = string.IsNullOrEmpty(latestCardInfo.CardTraitsUrl) ? null : await client.GetStringAsync(latestCardInfo.CardTraitsUrl);
+
+                    CachedCards = new Cards(latestCardJson, latestTraitsJson);
+                    await SaveCardDataAsync(latestCardInfo, latestCardJson, latestTraitsJson);
 
                     DataUpdated?.Invoke(this, CachedCards);
                     _updating = false;
