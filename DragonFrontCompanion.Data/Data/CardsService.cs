@@ -177,7 +177,7 @@ namespace DragonFrontCompanion.Data
             return (await GetCachedCardsAsync()).All;
         }
 
-        public async Task<ReadOnlyDictionary<Traits, string>> GetCardTraitsAsync()
+        public async Task<ReadOnlyDictionary<string, string>> GetCardTraitsAsync()
         {
             return (await GetCachedCardsAsync()).TraitsDictionary;
         }

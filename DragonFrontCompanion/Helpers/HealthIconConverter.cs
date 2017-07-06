@@ -16,7 +16,7 @@ namespace DragonFrontCompanion.Helpers
             var card = value as Card;
             if (card != null && 
                 card.Traits != null && 
-                card.Traits.Contains(DragonFrontDb.Enums.Traits.ARMOR))
+                card.Traits.Contains(DragonFrontDb.Enums.Traits.ARMOR.ToString()))
             {
                 return "IconArmor.png";
             }

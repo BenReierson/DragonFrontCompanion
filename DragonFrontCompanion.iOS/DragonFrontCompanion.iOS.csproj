@@ -292,7 +292,7 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="DragonFrontDb">
-      <HintPath>..\packages\DragonFrontDb.2.1.0-preview\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
+      <HintPath>..\packages\DragonFrontDb.2.1.0.1-preview\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
