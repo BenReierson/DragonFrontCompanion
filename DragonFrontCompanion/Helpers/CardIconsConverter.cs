@@ -16,6 +16,7 @@ namespace DragonFrontCompanion.Helpers
 		private const string FORT_IMAGE = "IconFort.png";
 		private const string UNIT_IMAGE = "IconUnit.png";
 		private const string UNALIGNED_IMAGE = "IconUnaligned_1.png";
+        private const string TOKEN_IMAGE = "IconToken.png";
 
         private const string FACTION_TEMPLATE = "Icon{0}_1.png";
 

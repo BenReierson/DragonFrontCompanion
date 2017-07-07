@@ -31,6 +31,8 @@ namespace DragonFrontCompanion.Helpers
                     return "IconRarityEpic.png";
                 case Rarity.CHAMPION:
                     return "IconRarityChampion.png";
+                case Rarity.TOKEN:
+                    return "IconToken.png";
                 default:
                     return "";
             }

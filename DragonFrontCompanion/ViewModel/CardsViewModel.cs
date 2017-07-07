@@ -84,7 +84,7 @@ namespace DragonFrontCompanion.ViewModel
                        c.Name.ToLower().Contains(SearchText.ToLower()) ||
                        c.Race.ToString().ToLower().Contains(SearchText.ToLower()) ||
                        SearchText.ToUpper().Contains(c.CardSet.ToString()))
-                orderby c.Rarity == Rarity.INVALID, c.Type == CardType.CHAMPION descending, c.Faction descending, c.Cost, c.Name
+                orderby c.Rarity == Rarity.TOKEN, c.Type == CardType.CHAMPION descending, c.Faction descending, c.Cost, c.Name
                 select c;
 
                 IsBusy = true;
@@ -205,7 +205,7 @@ namespace DragonFrontCompanion.ViewModel
             if (_deck != null)
             {
                 //filter cards according to deck
-                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(_deck.DeckFaction) && c.Rarity != Rarity.INVALID)).ToList();
+                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(_deck.DeckFaction) && c.Rarity != Rarity.TOKEN)).ToList();
 
                 ChooserFilterText = "IconDeckFilter.png";
                 CanFilterByEclipse = _deck.DeckFaction == Faction.ECLIPSE;
