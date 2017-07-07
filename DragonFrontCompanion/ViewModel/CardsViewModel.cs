@@ -18,6 +18,7 @@ namespace DragonFrontCompanion.ViewModel
     public class CardsViewModel : ViewModelBase
     {
         public const int MAX_COSTS_FILTER = Deck.MAX_DISTRIBUTION_LEVEL + 1;
+        private static int FACTION_COUNT = Enum.GetNames(typeof(Faction)).Count() - 2;
 
         private ReadOnlyCollection<Card> _unfilteredCards = null;
         private Task<ReadOnlyCollection<Card>> _cardsTask;
@@ -72,7 +73,8 @@ namespace DragonFrontCompanion.ViewModel
             {
                 var filtered =
                 from c in AllCards
-                where (!FilteredByFaction || c.Faction == FactionFilter) &&
+                where (!FilteredByFaction || (FactionFilter != Faction.UNALIGNED && c.ValidFactions.Contains(FactionFilter) && c.ValidFactions.Count() != FACTION_COUNT) || 
+                                             (FactionFilter == Faction.UNALIGNED && c.Faction == Faction.UNALIGNED && c.ValidFactions.Count() == FACTION_COUNT)) &&
                       (!FilteredByType || c.Type == TypeFilter) &&
                       (CostFilter == MAX_COSTS_FILTER || ((CostFilter == MAX_COSTS_FILTER - 1 && c.Cost >= CostFilter) || c.Cost == CostFilter)) &&
                       (RarityFilter == 0 || (int)c.Rarity == RarityFilter) &&
