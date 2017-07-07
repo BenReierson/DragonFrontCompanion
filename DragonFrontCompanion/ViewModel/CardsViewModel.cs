@@ -72,7 +72,7 @@ namespace DragonFrontCompanion.ViewModel
             {
                 var filtered =
                 from c in AllCards
-                where (!FilteredByFaction || (c.Faction == FactionFilter || c.ValidFactions.Contains(FactionFilter))) &&
+                where (!FilteredByFaction || c.Faction == FactionFilter) &&
                       (!FilteredByType || c.Type == TypeFilter) &&
                       (CostFilter == MAX_COSTS_FILTER || ((CostFilter == MAX_COSTS_FILTER - 1 && c.Cost >= CostFilter) || c.Cost == CostFilter)) &&
                       (RarityFilter == 0 || (int)c.Rarity == RarityFilter) &&

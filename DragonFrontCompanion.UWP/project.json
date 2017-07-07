@@ -1,11 +1,11 @@
 ﻿{
   "dependencies": {
-    "DragonFrontDb": "2.1.0-preview",
+    "DragonFrontDb": "2.1.0.3-preview",
     "Microsoft.Azure.Mobile.Analytics": "0.12.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.3",
     "Microsoft.Toolkit.Uwp.Notifications": "1.4.1",
     "MvvmLightLibs": "5.3.0",
-    "Newtonsoft.Json": "10.0.2",
+    "Newtonsoft.Json": "10.0.3",
     "PCLStorage": "1.0.2",
     "Plugin.Permissions": "1.2.1",
     "Rg.Plugins.Popup": "1.0.4",

@@ -21,7 +21,7 @@ namespace DragonFrontCompanion
         public const int MAX_DISTRIBUTION_LEVEL = 7;
 
         public static string CurrentAppVersion = "";
-        internal static ReadOnlyDictionary<string, Card> CardDictionary = null;
+        public static ReadOnlyDictionary<string, Card> CardDictionary = null;
 
         private bool _suppressEvents = false;
 
