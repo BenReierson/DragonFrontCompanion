@@ -13,6 +13,7 @@
     <AssemblyName>DragonFrontCompanion.iOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ReleaseVersion>1.2.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -145,9 +146,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="DragonFrontDb, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DragonFrontDb.2.1.0.3-preview\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
-    </Reference>
     <Reference Include="ExifLib">
       <HintPath>..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
       <Private>True</Private>
@@ -293,6 +291,9 @@
     <Reference Include="Xamarin.iOS" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="DragonFrontDb">
+      <HintPath>..\packages\DragonFrontDb.2.1.0.4\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
