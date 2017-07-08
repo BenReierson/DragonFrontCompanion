@@ -108,16 +108,7 @@ namespace DragonFrontCompanion.Data
                         newDeck.CanUndo = _deckUndoStates.ContainsKey(newDeck.ID);
                         savedDecks.Add(newDeck);
                     }
-                    catch (Exception ex)
-                    {
-                        string version = "NA";
-                        if (fileData?.Length > 0)
-                        {
-                            var index = fileData?.IndexOf("AppVersion");
-                            if (index.HasValue && fileData.Length > index + 19)
-                            { version = fileData.Substring(index.Value + 14, 5); }
-                        }
-                    }
+                    catch (Exception) { } //TODO:Log/Display error
                 }
 
                 //sort by date
@@ -269,6 +260,20 @@ namespace DragonFrontCompanion.Data
             catch (Exception) { }
 
             return null;
+        }
+
+        public string GetDeckVersionFromDeckJson(string deckJson)
+        {
+            string version = null;
+
+            if (deckJson?.Length > 0)
+            {
+                var index = deckJson?.IndexOf(nameof(Deck.AppVersion));
+                if (index.HasValue && deckJson.Length > index + 19)
+                { version = deckJson.Substring(index.Value + 14, 5); }
+            }
+
+            return version;
         }
     }
 }

@@ -18,5 +18,7 @@ namespace DragonFrontCompanion.Data
         Task<Deck> OpenDeckFileAsync(string filePath, bool sourceExternal = true);
         Task<Deck> OpenDeckDataAsync(string deckData, bool sourceExternal = true);
         Task<Deck> UndoLastSave(Deck deckToUndo);
+
+        string GetDeckVersionFromDeckJson(string deckJson);
     }
 }

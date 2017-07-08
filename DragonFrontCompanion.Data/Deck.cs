@@ -32,6 +32,8 @@ namespace DragonFrontCompanion
                 deckFaction == Faction.INVALID)
             { throw new ArgumentException("Invalid deck class."); }
 
+            if (CardDictionary == null) throw new ArgumentException("Deck.CardDictionary must be set before creating decks.");
+
             DeckFaction = deckFaction;
             ID = Guid.NewGuid();
             AppVersion = appVersion;

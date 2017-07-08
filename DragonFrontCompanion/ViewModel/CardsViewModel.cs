@@ -38,10 +38,13 @@ namespace DragonFrontCompanion.ViewModel
             _dialog = dialog;
             _deckService = deckService;
 
-            _cardsService.DataUpdated += async (o, e) =>
+            _cardsService.DataUpdated += (o, e) =>
             {
-                await InitializeAsync();
-                ApplyFilters();
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await InitializeAsync();
+                    ApplyFilters();
+                });
             };
 
             InitializeAsync();

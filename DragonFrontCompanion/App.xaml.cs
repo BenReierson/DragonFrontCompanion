@@ -100,7 +100,18 @@ namespace DragonFrontCompanion
                 {
                     _navService?.NavigateTo(ViewModelLocator.DeckPageKey, deck);
                 }
-                else _dialog.ShowError("The data may be invalid or corrupt.", "Failed to open deck", "OK", null);
+                else
+                {
+                    Version deckVersion;
+                    var parsedDeckVersion = Version.TryParse(deckservice.GetDeckVersionFromDeckJson(data), out deckVersion);
+                    Version CurrenVersion;
+                    var parsedCurrentVersion = Version.TryParse(VersionName, out CurrenVersion);
+                    if (parsedDeckVersion && parsedCurrentVersion && deckVersion > CurrenVersion)
+                    {
+                        _dialog.ShowError($"Failed to open deck made with app version {deckVersion}. You have version {CurrenVersion}. You may need to update the app.", "Failed to open deck", "OK", null);
+                    }
+                    else _dialog.ShowError("The data may be invalid or corrupt.", "Failed to open deck", "OK", null);
+                }
             }
             catch (Exception e)
             {
