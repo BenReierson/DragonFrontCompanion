@@ -17,6 +17,8 @@ namespace DragonFrontCompanion.Views
 {
     public partial class CardsPage : MenuContainerPage
     {
+        private Deck _deckToShow = null;
+
         public CardsViewModel Vm => (CardsViewModel)BindingContext;
 
         public CardsPage() : this(deck: null) { }
@@ -45,13 +47,13 @@ namespace DragonFrontCompanion.Views
         {
             InitializeComponent();
 
+            _deckToShow = deck;
+
             if (App.RuntimePlatform == App.Device.Android &&
                 CrossDeviceInfo.Current.VersionNumber.Major < 5)
             {SlideMenu = new CardTypeFilterLegacy();}
             else SlideMenu = new CardTypeFilter();
-
-
-            Vm.CurrentDeck = deck;
+           
             this.SlideMenu.BindingContext = Vm;
 
             //Android uses toast messages instead of the label
@@ -64,16 +66,9 @@ namespace DragonFrontCompanion.Views
             base.OnAppearing();
             ((CardPopup)Resources["SelectedCardPopup"]).BindingContext = Vm;
 
-            if (App.RuntimePlatform == App.Device.iOS)
-            {//bug in xamarin forms 2.3.3 preventing color from sticking the first time
-                MessageLabel.BackgroundColor = Color.White;
-                DeckStatusLabel.BackgroundColor = Color.White;
-
-                MessageLabel.BackgroundColor = Color.Black;
-                DeckStatusLabel.BackgroundColor = Color.Black;
-            }
-
             await Vm.InitializeAsync();
+            Vm.CurrentDeck = _deckToShow;
+            _deckToShow = null;
         }
 
         private void FiltersButton_Clicked(object sender, EventArgs e)

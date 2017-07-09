@@ -20,6 +20,8 @@ namespace DragonFrontCompanion.ViewModel
         public const int MAX_COSTS_FILTER = Deck.MAX_DISTRIBUTION_LEVEL + 1;
         private static int FACTION_COUNT = Enum.GetNames(typeof(Faction)).Count() - 2;
 
+        private static bool _firstLoad = true;
+
         private ReadOnlyCollection<Card> _unfilteredCards = null;
         private Task<ReadOnlyCollection<Card>> _cardsTask;
 
@@ -46,13 +48,18 @@ namespace DragonFrontCompanion.ViewModel
                     ApplyFilters();
                 });
             };
-
-            InitializeAsync();
         }
 
         public async Task InitializeAsync()
         {
-            if (_cardsTask != null && !_cardsTask.IsCompleted) return;
+            if (_firstLoad)
+            {//Wait for the ui to load
+                _firstLoad = false;
+                IsBusy = true;
+                await Task.Delay(1000);
+            }
+
+            if (_cardsTask != null && !_cardsTask.IsCompleted) return; //called while still getting cards
 
             IsBusy = true;
             _cardsTask = _cardsService.GetAllCardsAsync();
@@ -62,12 +69,55 @@ namespace DragonFrontCompanion.ViewModel
                 _unfilteredCards = freshCards;
                 AllCards = _unfilteredCards.ToList();
             }
-
-            //var newCards = _unfilteredCards.Any(c => c.CardSet == CardSet.NEXT);
-            //if (newCards && !_cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Add(CardSet.NEXT.ToString());
-            //else if (!newCards && _cardSets.Contains(CardSet.NEXT.ToString())) _cardSets.Remove(CardSet.NEXT.ToString());
-
             IsBusy = false;
+        }
+        private async void DeckInitialize()
+        {
+            if (!_cardsTask.IsCompleted) await _cardsTask;
+
+            if (_deck != null)
+            {
+                //filter cards according to deck
+                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(_deck.DeckFaction) && c.Rarity != Rarity.TOKEN)).ToList();
+
+                ChooserFilterText = "IconDeckFilter.png";
+                CanFilterByEclipse = _deck.DeckFaction == Faction.ECLIPSE;
+                CanFilterByScales = _deck.DeckFaction == Faction.SCALES;
+                CanFilterByStrife = _deck.DeckFaction == Faction.STRIFE;
+                CanFilterByThorns = _deck.DeckFaction == Faction.THORNS;
+                CanFilterBySilence = _deck.DeckFaction == Faction.SILENCE;
+                CanFilterByEssence = _deck.DeckFaction == Faction.ESSENCE;
+                CanFilterByDelirium = _deck.DeckFaction == Faction.DELIRIUM;
+
+                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
+                else ApplyFilters();
+
+                RaisePropertyChanged(nameof(CanFilterByEclipse));
+                RaisePropertyChanged(nameof(CanFilterByScales));
+                RaisePropertyChanged(nameof(CanFilterByStrife));
+                RaisePropertyChanged(nameof(CanFilterByThorns));
+                RaisePropertyChanged(nameof(CanFilterBySilence));
+                RaisePropertyChanged(nameof(CanFilterByEssence));
+                RaisePropertyChanged(nameof(CanFilterByDelirium));
+
+            }
+            else
+            {
+                AllCards = _unfilteredCards?.ToList();
+                FilteredCards = AllCards;
+
+                CanFilterByEclipse = true;
+                CanFilterByScales = true;
+                CanFilterByStrife = true;
+                CanFilterByThorns = true;
+                CanFilterBySilence = true;
+                CanFilterByEssence = true;
+                CanFilterByDelirium = true;
+                FilterByDeck = false;
+
+                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
+                else ApplyFilters();
+            }
         }
 
         private async void ApplyFilters()
@@ -200,55 +250,6 @@ namespace DragonFrontCompanion.ViewModel
                 Set(ref _deck, value);
 
                 if (changed) DeckInitialize();
-            }
-        }
-
-        private async void DeckInitialize()
-        {
-            if (!_cardsTask.IsCompleted) await _cardsTask;
-
-            if (_deck != null)
-            {
-                //filter cards according to deck
-                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(_deck.DeckFaction) && c.Rarity != Rarity.TOKEN)).ToList();
-
-                ChooserFilterText = "IconDeckFilter.png";
-                CanFilterByEclipse = _deck.DeckFaction == Faction.ECLIPSE;
-                CanFilterByScales = _deck.DeckFaction == Faction.SCALES;
-                CanFilterByStrife = _deck.DeckFaction == Faction.STRIFE;
-                CanFilterByThorns = _deck.DeckFaction == Faction.THORNS;
-                CanFilterBySilence = _deck.DeckFaction == Faction.SILENCE;
-                CanFilterByEssence = _deck.DeckFaction == Faction.ESSENCE;
-                CanFilterByDelirium = _deck.DeckFaction == Faction.DELIRIUM;
-
-                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
-                else ApplyFilters();
-
-                RaisePropertyChanged(nameof(CanFilterByEclipse));
-                RaisePropertyChanged(nameof(CanFilterByScales));
-                RaisePropertyChanged(nameof(CanFilterByStrife));
-                RaisePropertyChanged(nameof(CanFilterByThorns));
-                RaisePropertyChanged(nameof(CanFilterBySilence));
-                RaisePropertyChanged(nameof(CanFilterByEssence));
-                RaisePropertyChanged(nameof(CanFilterByDelirium));
-
-            }
-            else
-            {
-                AllCards = _unfilteredCards?.ToList();
-                FilteredCards = AllCards;
-
-                CanFilterByEclipse = true;
-                CanFilterByScales = true;
-                CanFilterByStrife = true;
-                CanFilterByThorns = true;
-                CanFilterBySilence = true;
-                CanFilterByEssence = true;
-                CanFilterByDelirium = true;
-                FilterByDeck = false;
-
-                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
-                else ApplyFilters();
             }
         }
 

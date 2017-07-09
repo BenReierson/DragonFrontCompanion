@@ -139,7 +139,7 @@ namespace DragonFrontCompanion
                     {
                         _navService.NavigateTo(ViewModelLocator.DeckPageKey, deck);
                     }
-                    else _dialog.ShowError("The data may be invalid or corrupt.", "Failed to open deck", "OK", null);
+                    else _dialog.ShowError("The data may be from a newer version of the app or corrupt.", "Failed to open deck", "OK", null);
                 }
                 catch (Exception e)
                 {
