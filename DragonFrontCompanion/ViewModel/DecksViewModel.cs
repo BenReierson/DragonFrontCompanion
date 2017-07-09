@@ -13,6 +13,7 @@ using DragonFrontDb.Enums;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
+using Plugin.FilePicker;
 
 namespace DragonFrontCompanion.ViewModel
 {
@@ -100,6 +101,38 @@ namespace DragonFrontCompanion.ViewModel
         #endregion
 
         #region Commands
+
+        private RelayCommand _openFile;
+
+        /// <summary>
+        /// Gets the ToggleEditDeckDetailsCommand.
+        /// </summary>
+        public RelayCommand OpenFileCommand
+        {
+            get
+            {
+                return _openFile
+                    ?? (_openFile = new RelayCommand(
+                    async () =>
+                    {
+                        var file = await CrossFilePicker.Current.PickFile();
+                        if (file != null)
+                        {
+                            try
+                            {
+                                var deck = await _deckService.OpenDeckDataAsync(Encoding.UTF8.GetString(file.DataArray, 0, file.DataArray.Length));
+                                HasNavigated = true;
+                                _navigationService.NavigateTo(ViewModelLocator.DeckPageKey, deck);
+                            }
+                            catch (Exception)
+                            {
+                                await _dialogService.ShowMessage("Could not open deck. Data may be invalid or corrupt.", "Error");
+                            }
+                        }
+                    }));
+            }
+        }
+
         private RelayCommand<Deck> _openDeck;
 
         /// <summary>
