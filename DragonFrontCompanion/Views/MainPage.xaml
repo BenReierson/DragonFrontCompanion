@@ -59,6 +59,7 @@
                                                        ViewType={x:Type Button}}"
                 HorizontalOptions="Center"
                 Text="{Binding NewCardsText}"
+                IsEnabled="{Binding NewCardsEnabled}"
                 TextColor="#123338" />
 
 

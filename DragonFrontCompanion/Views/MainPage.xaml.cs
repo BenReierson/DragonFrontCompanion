@@ -34,10 +34,10 @@ namespace DragonFrontCompanion.Views
 			}
 		}
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
-            Vm.HasNavigated = false;
+            await Vm.InitializeAsync();
         }
 
     }

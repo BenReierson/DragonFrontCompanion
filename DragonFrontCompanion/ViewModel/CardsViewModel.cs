@@ -70,13 +70,13 @@ namespace DragonFrontCompanion.ViewModel
                 AllCards = _unfilteredCards.ToList();
             }
 
-            await Task.Delay(250);
+            await Task.Delay(250); //let the ui populate
 
             CurrentDeck = deck;
 
             if (searchText != null)
             {
-				await Task.Delay(250);//let the deck init settle
+				await Task.Delay(500);//let the ui settle
 				if (CardSets.Contains(searchText))
                 {
                     CardSetFilter = searchText;

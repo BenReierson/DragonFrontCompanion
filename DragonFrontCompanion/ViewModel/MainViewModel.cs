@@ -29,9 +29,12 @@ namespace DragonFrontCompanion.ViewModel
     {
         private const string NEW_CARDS_DEFAULT_TEXT = "Conquest Champions";
 
+        private static bool _firstLoad = true;
+
         private INavigationService _navigationService;
         private ICardsService _cardsService;
         private bool _cardDataReset;
+
         public MainViewModel(INavigationService navigationService, ICardsService cardsService)
         {
             _navigationService = navigationService;
@@ -42,14 +45,26 @@ namespace DragonFrontCompanion.ViewModel
 
             cardsService.DataUpdateAvailable += CardsService_DataUpdateAvailable;
             cardsService.DataUpdated += CardsService_DataUpdated;
-            _cardsService.CheckForUpdatesAsync();
-
-            CheckForNewCardsAsync();
         }
 
-        private async Task CheckForNewCardsAsync()
+        public async Task InitializeAsync()
         {
-			await Task.Delay(4000);
+			HasNavigated = false;
+
+            if (_firstLoad)
+            {
+				NewCardsEnabled = false;
+				_firstLoad = false;
+                NewCardsText = "Checking for updates...";
+                await Task.Delay(1000);
+                await _cardsService.CheckForUpdatesAsync();
+				await CheckForNewCardsAsync();
+				NewCardsEnabled = true;
+			}
+        }
+
+        public async Task CheckForNewCardsAsync()
+        {
 			var cards = await _cardsService.GetAllCardsAsync();
 			_newCardsToShow = cards.Any(c => c.CardSet == CardSet.NEXT);
             if (_newCardsToShow) NewCardsText = "New Cards!";
@@ -60,10 +75,10 @@ namespace DragonFrontCompanion.ViewModel
         {
             _cardDataReset = Settings.ActiveCardDataVersion == Info.Current.CardDataVersion;
 
-            Device.BeginInvokeOnMainThread(() =>
+            Device.BeginInvokeOnMainThread(async () =>
             {
                 MessagingCenter.Send<string>("Loaded Card Data v" + (Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion), App.MESSAGES.SHOW_TOAST);
-                CheckForNewCardsAsync();
+                await CheckForNewCardsAsync();
             });
         }
 
@@ -135,6 +150,13 @@ namespace DragonFrontCompanion.ViewModel
 			get { return _newCardsText; }
 			set { Set(ref _newCardsText, value); }
 		}
+
+        private bool _newCardsEnabled = false;
+        public bool NewCardsEnabled
+        {
+            get { return _newCardsEnabled; }
+            set { Set(ref _newCardsEnabled, value); }
+        }
         #endregion
 
         #region Commands
