@@ -18,6 +18,8 @@ namespace DragonFrontCompanion.Views
     public partial class CardsPage : MenuContainerPage
     {
         private Deck _deckToShow = null;
+        private string _pendingSearch = null;
+        private bool _initialized = false;
 
         public CardsViewModel Vm => (CardsViewModel)BindingContext;
 
@@ -25,22 +27,7 @@ namespace DragonFrontCompanion.Views
 
         public CardsPage(string searchText) : this(deck: null)
         {
-            SearchForCards(searchText);
-        }
-
-        private async void SearchForCards(string searchText)
-        {
-            while (Vm.IsBusy) await Task.Delay(100).ConfigureAwait(false);
-            await Task.Delay(1250).ConfigureAwait(false); ; //let it settle
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                if (Vm.CardSets.Contains(searchText))
-                {
-                    Vm.CardSetFilter = searchText;
-                    MessagingCenter.Send<string>($"Card Set: {searchText}", App.MESSAGES.SHOW_TOAST);
-                }
-                else Vm.SearchText = searchText;
-            });
+            _pendingSearch = searchText;
         }
 
         public CardsPage(Deck deck = null)
@@ -66,9 +53,11 @@ namespace DragonFrontCompanion.Views
             base.OnAppearing();
             ((CardPopup)Resources["SelectedCardPopup"]).BindingContext = Vm;
 
-            await Vm.InitializeAsync();
-            Vm.CurrentDeck = _deckToShow;
-            _deckToShow = null;
+            if (!_initialized)
+            {
+                await Vm.InitializeAsync(_deckToShow, _pendingSearch);
+                _initialized = true;
+            }
         }
 
         private void FiltersButton_Clicked(object sender, EventArgs e)

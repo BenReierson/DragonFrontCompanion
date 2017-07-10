@@ -50,7 +50,7 @@ namespace DragonFrontCompanion.ViewModel
             };
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(Deck deck = null, string searchText = null)
         {
             if (_firstLoad)
             {//Wait for the ui to load
@@ -69,6 +69,22 @@ namespace DragonFrontCompanion.ViewModel
                 _unfilteredCards = freshCards;
                 AllCards = _unfilteredCards.ToList();
             }
+
+            await Task.Delay(250);
+
+            CurrentDeck = deck;
+
+            if (searchText != null)
+            {
+				await Task.Delay(250);//let the deck init settle
+				if (CardSets.Contains(searchText))
+                {
+                    CardSetFilter = searchText;
+                    MessagingCenter.Send<string>($"Card Set: {searchText}", App.MESSAGES.SHOW_TOAST);
+                }
+                else SearchText = searchText;
+            }
+
             IsBusy = false;
         }
         private async void DeckInitialize()
@@ -122,7 +138,9 @@ namespace DragonFrontCompanion.ViewModel
 
         private async void ApplyFilters()
         {
-            if (AllCards != null && !_suspendFilters)
+			if (_cardsTask != null && !_cardsTask.IsCompleted) return; //called while still getting cards
+
+			if (AllCards != null && !_suspendFilters)
             {
                 var filtered =
                 from c in AllCards
