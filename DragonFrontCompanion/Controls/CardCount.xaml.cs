@@ -12,32 +12,39 @@ namespace DragonFrontCompanion.Controls
 {
     public partial class CardCount : ContentView
     {
-        public CardCount()
+        private const string ICON_ONE = "IconOne.png";
+		private const string ICON_TWO = "IconTwo.png";
+
+		public CardCount()
         {
             InitializeComponent();
         }
 
-        public static readonly BindableProperty CardGroupsProperty = BindableProperty.Create(nameof(CardGroups), typeof(List<Deck.CardGroup>), typeof(CardCount), propertyChanged: OnCardGroupsChanged);
+        public static readonly BindableProperty CardGroupsProperty = BindableProperty.Create(nameof(CardGroups), typeof(Dictionary<string, CardGroup>), typeof(CardCount), propertyChanged: OnCardGroupsChanged);
 
         private static void OnCardGroupsChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var instance = bindable as CardCount;
             if (instance == null || newValue == null) return;
 
-            if (instance.Card == null) instance.CountIcon.Source = "";
-            else
+            if (instance.Card != null)
             {
-                var group = ((List<Deck.CardGroup>)newValue).FirstOrDefault(g => g.Card == instance.Card);
-                
-                if (group == null) instance.CountIcon.Source = "";
-                else if (group.Count == 1) instance.CountIcon.Source = "IconOne.png";
-                else if (group.Count == 2) instance.CountIcon.Source = "IconTwo.png";
+                if (((Dictionary<string, CardGroup>)newValue).ContainsKey(instance.Card.ID))
+                {
+                    instance.CountIcon.IsVisible = true;
+                    var group = ((Dictionary<string, CardGroup>)newValue)[instance.Card.ID];
+
+                    if      (group.Count == 1) instance.CountIcon.Source = ICON_ONE;
+                    else if (group.Count == 2) instance.CountIcon.Source = ICON_TWO;
+                }
+                else instance.CountIcon.IsVisible = false;
             }
+            else instance.CountIcon.IsVisible = false;
         }
 
-        public List<Deck.CardGroup> CardGroups
+        public Dictionary<string, CardGroup>CardGroups
         {
-            get { return (List<Deck.CardGroup>)GetValue(CardGroupsProperty); }
+            get { return (Dictionary<string, CardGroup>)GetValue(CardGroupsProperty); }
             set { SetValue(CardGroupsProperty, value); }
         }
 
@@ -51,18 +58,22 @@ namespace DragonFrontCompanion.Controls
 
         private static void OnCardChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var instance = bindable as CardCount;
-            if (instance == null || newValue == null) return;
+			var instance = bindable as CardCount;
+			if (instance == null || newValue == null || instance.CardGroups == null) return;
 
-            if (instance.Card == null) instance.CountIcon.Source = "";
-            else
-            {
-                var group = instance.CardGroups?.FirstOrDefault(g => g.Card == instance.Card);
+			if (instance.Card != null)
+			{
+				if (instance.CardGroups.ContainsKey(instance.Card.ID))
+				{
+					instance.CountIcon.IsVisible = true;
+					var group = instance.CardGroups[instance.Card.ID];
 
-                if (group == null) instance.CountIcon.Source = "";
-                else if (group.Count == 1) instance.CountIcon.Source = "IconOne.png";
-                else if (group.Count == 2) instance.CountIcon.Source = "IconTwo.png";
-            }
+					if      (group.Count == 1) instance.CountIcon.Source = ICON_ONE;
+					else if (group.Count == 2) instance.CountIcon.Source = ICON_TWO;
+				}
+				else instance.CountIcon.IsVisible = false;
+			}
+			else instance.CountIcon.IsVisible = false;
         }
     }
 }

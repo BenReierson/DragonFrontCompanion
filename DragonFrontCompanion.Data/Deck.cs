@@ -1,4 +1,4 @@
-﻿using DragonFrontDb;
+﻿﻿using DragonFrontDb;
 using DragonFrontDb.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -185,6 +185,10 @@ namespace DragonFrontCompanion
         private List<CardGroup> _distinctUnaligned;
         [JsonIgnore]
         public List<CardGroup> DistinctUnaligned => _distinctUnaligned ?? (_distinctUnaligned = DistinctView.Where(c => c.Card.Faction == Faction.UNALIGNED).ToList());
+
+        private Dictionary<string, CardGroup> _disctintDictionary;
+		[JsonIgnore]
+		public Dictionary<string, CardGroup> DistinctDictionary => _disctintDictionary ?? (_disctintDictionary = DistinctView.ToDictionary(k => k.Card.ID, g => g));
 
 
         private Card _champion = null;
@@ -412,10 +416,12 @@ namespace DragonFrontCompanion
 
             _distinctView = null;
             _distinctUnaligned = null;
-            _distinctFaction = null;
+			_distinctFaction = null;
+			_disctintDictionary = null;
             OnPropertyChanged(nameof(Deck.DistinctView));
             OnPropertyChanged(nameof(Deck.DistinctUnaligned));
-            OnPropertyChanged(nameof(Deck.DistinctFaction));
+			OnPropertyChanged(nameof(Deck.DistinctFaction));
+			OnPropertyChanged(nameof(Deck.DistinctDictionary));
 
 
             OnPropertyChanged(nameof(Deck.IsValid));
