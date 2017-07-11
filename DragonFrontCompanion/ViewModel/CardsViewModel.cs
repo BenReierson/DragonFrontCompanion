@@ -23,7 +23,6 @@ namespace DragonFrontCompanion.ViewModel
         private static bool _firstLoad = true;
 
         private ReadOnlyCollection<Card> _unfilteredCards = null;
-        private Task<ReadOnlyCollection<Card>> _cardsTask;
 
         private INavigationService _navigationService;
         private ICardsService _cardsService;
@@ -44,39 +43,39 @@ namespace DragonFrontCompanion.ViewModel
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    await InitializeAsync();
-                    ApplyFilters();
+                    await InitializeAsync(CurrentDeck);
+                    await ApplyFilters();
                 });
             };
         }
 
         public async Task InitializeAsync(Deck deck = null, string searchText = null)
         {
-            if (_firstLoad)
-            {//Wait for the ui to load
+			IsBusy = true;
+
+			if (_firstLoad)
+            {//Wait longer for the ui to load
                 _firstLoad = false;
-                IsBusy = true;
-                await Task.Delay(1000);
+                await Task.Delay(1500);
             }
-
-            if (_cardsTask != null && !_cardsTask.IsCompleted) return; //called while still getting cards
-
-            IsBusy = true;
-            _cardsTask = _cardsService.GetAllCardsAsync();
-            var freshCards = await _cardsTask;
+            else await Task.Delay(500);
+                
+            var freshCards = await _cardsService.GetAllCardsAsync();
             if (_unfilteredCards != freshCards)
             {
                 _unfilteredCards = freshCards;
-                AllCards = _unfilteredCards.ToList();
+                AllCards = _unfilteredCards.ToList(); 
             }
 
-            await Task.Delay(250); //let the ui populate
+            _suspendFilters = searchText != null;
 
-            CurrentDeck = deck;
+            if (deck == null || deck != CurrentDeck) await DeckInitialize(deck);
 
             if (searchText != null)
             {
+                IsBusy = true;
 				await Task.Delay(500);//let the ui settle
+                _suspendFilters = false;
 				if (CardSets.Contains(searchText))
                 {
                     CardSetFilter = searchText;
@@ -87,26 +86,30 @@ namespace DragonFrontCompanion.ViewModel
 
             IsBusy = false;
         }
-        private async void DeckInitialize()
-        {
-            if (!_cardsTask.IsCompleted) await _cardsTask;
 
-            if (_deck != null)
+        private async Task DeckInitialize(Deck deck)
+        {
+			CurrentDeck = deck;
+			IsChooser = CurrentDeck != null;
+			if (!IsChooser) ChooserFilterText = "";
+			Message = "";
+
+			if (IsChooser)
             {
                 //filter cards according to deck
-                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(_deck.DeckFaction) && c.Rarity != Rarity.TOKEN)).ToList();
+                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(CurrentDeck.DeckFaction) && c.Rarity != Rarity.TOKEN)).ToList();
 
                 ChooserFilterText = "IconDeckFilter.png";
-                CanFilterByEclipse = _deck.DeckFaction == Faction.ECLIPSE;
-                CanFilterByScales = _deck.DeckFaction == Faction.SCALES;
-                CanFilterByStrife = _deck.DeckFaction == Faction.STRIFE;
-                CanFilterByThorns = _deck.DeckFaction == Faction.THORNS;
-                CanFilterBySilence = _deck.DeckFaction == Faction.SILENCE;
-                CanFilterByEssence = _deck.DeckFaction == Faction.ESSENCE;
-                CanFilterByDelirium = _deck.DeckFaction == Faction.DELIRIUM;
+                CanFilterByEclipse = CurrentDeck.DeckFaction == Faction.ECLIPSE;
+                CanFilterByScales = CurrentDeck.DeckFaction == Faction.SCALES;
+                CanFilterByStrife = CurrentDeck.DeckFaction == Faction.STRIFE;
+                CanFilterByThorns = CurrentDeck.DeckFaction == Faction.THORNS;
+                CanFilterBySilence = CurrentDeck.DeckFaction == Faction.SILENCE;
+                CanFilterByEssence = CurrentDeck.DeckFaction == Faction.ESSENCE;
+                CanFilterByDelirium = CurrentDeck.DeckFaction == Faction.DELIRIUM;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
-                else ApplyFilters();
+                else await ApplyFilters();
 
                 RaisePropertyChanged(nameof(CanFilterByEclipse));
                 RaisePropertyChanged(nameof(CanFilterByScales));
@@ -132,14 +135,12 @@ namespace DragonFrontCompanion.ViewModel
                 FilterByDeck = false;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
-                else ApplyFilters();
+                else await ApplyFilters();
             }
         }
 
-        private async void ApplyFilters()
+        private async Task ApplyFilters()
         {
-			if (_cardsTask != null && !_cardsTask.IsCompleted) return; //called while still getting cards
-
 			if (AllCards != null && !_suspendFilters)
             {
                 var filtered =
@@ -172,7 +173,7 @@ namespace DragonFrontCompanion.ViewModel
 
         private void UpdateStatus()
         {
-            CardsTitle = "Cards (" + FilteredCards.Count + ")";
+            CardsTitle = $"Cards ({FilteredCards.Count})";
 
             if (IsChooser) DeckStatus = "Deck    " + CurrentDeck.Count + " / 30    " +
                              (CurrentDeck.Champion != null ? "1C | " : "0C | ") +
@@ -193,7 +194,6 @@ namespace DragonFrontCompanion.ViewModel
                 {
                     _cardSets = Enum.GetValues(typeof(CardSet)).Cast<CardSet>().Skip(2).AsQueryable().Select(cs => cs.ToString()).ToList();
                     _cardSets.Insert(0, _CARD_SET_FILTER_DEFAULT);
-                    //_cardSets.Remove(CardSet.NEXT.ToString());
                     CardSetFilter = _CARD_SET_FILTER_DEFAULT;
                     return _cardSets;
                 }
@@ -257,28 +257,14 @@ namespace DragonFrontCompanion.ViewModel
         public Deck CurrentDeck
         {
             get { return _deck; }
-            set
-            {
-                Message = "";
-                IsChooser = value != null;
-                if (!IsChooser) ChooserFilterText = "";
-
-                bool changed = _deck == null || _deck != value;
-
-                Set(ref _deck, value);
-
-                if (changed) DeckInitialize();
-            }
+            set {Set(ref _deck, value);}
         }
 
         private string _cardsTitle = "Cards";
         public string CardsTitle
         {
             get { return _cardsTitle; }
-            set
-            {
-                Set(ref _cardsTitle, value);
-            }
+            set {Set(ref _cardsTitle, value);}
         }
 
         private bool _isChooser = false;

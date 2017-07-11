@@ -55,8 +55,10 @@ namespace DragonFrontCompanion.Views
 
             if (!_initialized)
             {
-                await Vm.InitializeAsync(_deckToShow, _pendingSearch);
-                _initialized = true;
+				_initialized = true;
+				await Vm.InitializeAsync(_deckToShow, _pendingSearch);
+                _deckToShow = null;
+                _pendingSearch = null;
             }
         }
 
