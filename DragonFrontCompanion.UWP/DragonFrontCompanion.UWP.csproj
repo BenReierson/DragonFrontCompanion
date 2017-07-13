@@ -21,6 +21,7 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>56BDEDC89B8F79B12EAFFF94EA4E674E3174FC79</PackageCertificateThumbprint>
+    <ReleaseVersion>1.2.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -132,12 +133,17 @@
     <Content Include="IconCards.png" />
     <Content Include="IconCardsAll.png" />
     <Content Include="IconChamp.png" />
+    <Content Include="IconChamp_1.png" />
     <Content Include="IconDeck.png" />
     <Content Include="IconDeckFilter.png" />
+    <Content Include="IconDELIRIUM_1.png" />
+    <Content Include="IconECLIPSE_1.png" />
     <Content Include="IconEdit.png" />
+    <Content Include="IconESSENCE_1.png" />
     <Content Include="IconFilter.png" />
     <Content Include="IconFilterReset.png" />
     <Content Include="IconFort.png" />
+    <Content Include="IconFort_1.png" />
     <Content Include="IconHealth.png" />
     <Content Include="IconMana.png" />
     <Content Include="IconManaFragment.png" />
@@ -157,13 +163,21 @@
     <Content Include="IconRarityCommon.png" />
     <Content Include="IconRarityEpic.png" />
     <Content Include="IconRarityRare.png" />
+    <Content Include="IconSCALES_1.png" />
     <Content Include="IconShare.png" />
+    <Content Include="IconSILENCE_1.png" />
     <Content Include="IconSpell.png" />
+    <Content Include="IconSpell_1.png" />
+    <Content Include="IconSTRIFE_1.png" />
+    <Content Include="IconTHORNS_1.png" />
+    <Content Include="IconToken.png" />
     <Content Include="IconTwo.png" />
     <Content Include="IconUnaligned.png" />
+    <Content Include="IconUnaligned_1.png" />
     <Content Include="IconUndo.png" />
     <Content Include="IconUnit.png" />
     <None Include="Package.StoreAssociation.xml" />
+    <Content Include="IconUnit_1.png" />
     <Content Include="Search.png" />
     <Content Include="Settings.png" />
     <Content Include="Assets\SplashScreen.png" />

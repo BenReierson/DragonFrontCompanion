@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <pages:PopupPage
     x:Class="DragonFrontCompanion.Views.CardPopup"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -13,12 +13,14 @@
     <pages:PopupPage.Resources>
         <ResourceDictionary>
             <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:CardImagePlaceholderConverter x:Key="CardPlaceholders" />
             <helpers:RaceDisplayConverter x:Key="RaceDisplayConverter" />
             <helpers:TraitsTextConverter x:Key="TraitsString" />
             <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
             <helpers:BooleanToYesNoConverter x:Key="YesOrNo" />
             <helpers:RarityImageConverter x:Key="RarityImage" />
             <helpers:CardSetVisibilityConverter x:Key="CardSetVisibility" />
+            <helpers:FactionsToLabelConverter x:Key="FactionsToLabel"/>
             <animations:MoveAnimation
                 x:Key="NextAnimation"
                 DurationIn="100"
@@ -67,6 +69,7 @@
                         Aspect="AspectFill"
                         DownsampleHeight="400"
                         HeightRequest="400"
+                        ErrorPlaceholder="{Binding ., Converter={StaticResource Key=CardPlaceholders}}"
                         Source="{Binding ., Converter={StaticResource CardImages}, ConverterParameter='Large'}"
                         VerticalOptions="Start">
                         <ffImage:CachedImage.GestureRecognizers>
@@ -96,7 +99,7 @@
                                                                        WinPhone=Default,
                                                                        ViewType={x:Type Label}}"
                                 HorizontalOptions="Center"
-                                Text="{Binding Faction}"
+                                Text="{Binding ValidFactions, Converter={StaticResource FactionsToLabel}"
                                 TextColor="White"
                                 XAlign="Center" />
                             <Label
@@ -135,6 +138,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -239,22 +243,6 @@
                             TextColor="#15CEEA"
                             XAlign="End" />
 
-                        <!--  Card Set  -->
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
-                            Style="{StaticResource CardStatLabelStyle}"
-                            Text="Set" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.ColumnSpan="2"
-                            HorizontalOptions="End"
-                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
-                            Style="{StaticResource CardStatLabelStyle}"
-                            Text="{Binding CardSet}"
-                            XAlign="End" />
-
                         <!--  Giant  -->
                         <Label
                             Grid.Row="2"
@@ -270,6 +258,16 @@
                             Style="{StaticResource CardStatLabelStyle}"
                             Text="{Binding IsGiant, Converter={StaticResource YesOrNo}}"
                             XAlign="End" />
+                        
+                        <!--  Card Set  -->
+                        <Label
+                            Grid.Row="3"
+                            Grid.ColumnSpan="4"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding CardSet, StringFormat='Card Set: {0}'}" />
+
                     </Grid>
 
                     <Button

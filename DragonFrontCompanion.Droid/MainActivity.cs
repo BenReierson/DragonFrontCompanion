@@ -15,6 +15,8 @@ using Java.Util.Concurrent.Atomic;
 using System.Collections.Generic;
 using System.Reflection;
 using Xamarin.Forms;
+using System.Net.Http;
+using Java.IO;
 
 namespace DragonFrontCompanion.Droid
 {
@@ -133,24 +135,43 @@ namespace DragonFrontCompanion.Droid
         }
 
 
-        protected override void OnNewIntent(Intent intent)
+        protected override async void OnNewIntent(Intent intent)
         {
-            //base.OnNewIntent(intent);
             if (intent != null && !intent.GetBooleanExtra("handled", false))
             {
                 if (intent.Action == Intent.ActionSend)
                 {
                     intent.PutExtra("handled", true);
                     var data = intent.GetParcelableExtra(Intent.ExtraStream);
-                    var fileStream = new System.IO.StreamReader(ContentResolver.OpenInputStream((Android.Net.Uri)data));
-                    var filetext = fileStream.ReadToEnd();
-                    OpenDeckDataInApp(filetext);
+                    if (data == null)
+                    { //Open from url
+                        data = intent.GetStringExtra(Intent.ExtraText);
+                        using (var client = new HttpClient())
+                        {
+                            var remotedata = await client.GetAsync(data.ToString());
+                            if (remotedata != null && remotedata.IsSuccessStatusCode) OpenDeckDataInApp(await remotedata.Content.ReadAsStringAsync());
+                        }
+                    }
+                    else
+                    {
+                        var fileStream = new System.IO.StreamReader(ContentResolver.OpenInputStream((Android.Net.Uri)data));
+                        var filetext = fileStream.ReadToEnd();
+                        OpenDeckDataInApp(filetext);
+                    }
 
                 }
                 else if (intent.Action == Intent.ActionView)
                 {
                     intent.PutExtra("handled", true);
-                    OpenDeckFileInApp(intent.Data.Path);
+                    if (intent.Data.Scheme == "content")
+                    {
+                        var stream = ContentResolver.OpenInputStream(intent.Data);
+                        var reader = new BufferedReader(new InputStreamReader(stream));
+                        var deckData = new StringBuilder();
+                        while (reader.Ready()) deckData.Append(await reader.ReadLineAsync());
+                        OpenDeckDataInApp(deckData.ToString());
+                    }
+                    else OpenDeckFileInApp(intent.Data.Path);
                 }
             }
 

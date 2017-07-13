@@ -1,4 +1,4 @@
-﻿using DragonFrontDb;
+﻿﻿using DragonFrontDb;
 using DragonFrontDb.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -21,7 +21,7 @@ namespace DragonFrontCompanion
         public const int MAX_DISTRIBUTION_LEVEL = 7;
 
         public static string CurrentAppVersion = "";
-        internal static ReadOnlyDictionary<string, Card> CardDictionary = null;
+        public static ReadOnlyDictionary<string, Card> CardDictionary = null;
 
         private bool _suppressEvents = false;
 
@@ -31,6 +31,8 @@ namespace DragonFrontCompanion
                 deckFaction == Faction.UNALIGNED ||
                 deckFaction == Faction.INVALID)
             { throw new ArgumentException("Invalid deck class."); }
+
+            if (CardDictionary == null) throw new ArgumentException("Deck.CardDictionary must be set before creating decks.");
 
             DeckFaction = deckFaction;
             ID = Guid.NewGuid();
@@ -184,6 +186,10 @@ namespace DragonFrontCompanion
         [JsonIgnore]
         public List<CardGroup> DistinctUnaligned => _distinctUnaligned ?? (_distinctUnaligned = DistinctView.Where(c => c.Card.Faction == Faction.UNALIGNED).ToList());
 
+        private Dictionary<string, CardGroup> _disctintDictionary;
+		[JsonIgnore]
+		public Dictionary<string, CardGroup> DistinctDictionary => _disctintDictionary ?? (_disctintDictionary = DistinctView.ToDictionary(k => k.Card.ID, g => g));
+
 
         private Card _champion = null;
         [JsonProperty]
@@ -205,7 +211,7 @@ namespace DragonFrontCompanion
                     OnCardsChanged();
                     return;
                 }
-                if (value.Type != CardType.CHAMPION || value.Faction != DeckFaction)
+                if (value.Type != CardType.CHAMPION || !value.ValidFactions.Contains(DeckFaction))
                     throw new ArgumentException("Invalid Champion for this deck.");
 
                 _champion = value;
@@ -349,7 +355,7 @@ namespace DragonFrontCompanion
             if (CardDictionary != null && CardDictionary.ContainsKey(newCard.ID)) validCard = CardDictionary[newCard.ID];
             else throw new ArgumentException("Card is not recognized.");
 
-            if (validCard.Faction != Faction.UNALIGNED && validCard.Faction != this.DeckFaction) throw new ArgumentException("Card is the wrong faction for this deck.");
+            if (!validCard.ValidFactions.Contains(DeckFaction)) throw new ArgumentException("Card is the wrong faction for this deck.");
             if (CountCard(validCard) >= CARD_DUPLICATE_LIMIT) throw new ArgumentException("Deck is at capacity for this card.");
             if (validCard.Type != CardType.CHAMPION && !CanOverload && Count >= MAX_CARD_COUNT) throw new ArgumentException("Deck is at capacity.");
 
@@ -410,10 +416,12 @@ namespace DragonFrontCompanion
 
             _distinctView = null;
             _distinctUnaligned = null;
-            _distinctFaction = null;
+			_distinctFaction = null;
+			_disctintDictionary = null;
             OnPropertyChanged(nameof(Deck.DistinctView));
             OnPropertyChanged(nameof(Deck.DistinctUnaligned));
-            OnPropertyChanged(nameof(Deck.DistinctFaction));
+			OnPropertyChanged(nameof(Deck.DistinctFaction));
+			OnPropertyChanged(nameof(Deck.DistinctDictionary));
 
 
             OnPropertyChanged(nameof(Deck.IsValid));

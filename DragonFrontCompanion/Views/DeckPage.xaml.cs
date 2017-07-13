@@ -17,6 +17,8 @@ namespace DragonFrontCompanion.Views
 
         public DeckViewModel Vm => (DeckViewModel)BindingContext;
 
+        public DeckPage() : this(deck:null) { }
+
         public DeckPage(Deck deck)
         {
             InitializeComponent();

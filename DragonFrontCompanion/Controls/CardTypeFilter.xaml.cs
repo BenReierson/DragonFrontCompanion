@@ -23,14 +23,25 @@ namespace DragonFrontCompanion.Controls
             this.BackgroundViewColor = Color.Transparent;
 
             if (App.RuntimePlatform == App.Device.Android)
+            {
                 this.HeightRequest += 50;
+            }
             else if (App.RuntimePlatform == App.Device.iOS)
+            {
                 MainContent.Margin = new Thickness(10, 55, 10, 20);
+                this.HeightRequest += 20;
+                CloseButton.IsVisible = true;
+            }
             else
             {
                 this.HeightRequest += 100;
                 this.LeftMargin = 20;
             }
+        }
+
+        void Close_Clicked(object sender, System.EventArgs e)
+        {
+            this.HideWithoutAnimations();
         }
     }
 }

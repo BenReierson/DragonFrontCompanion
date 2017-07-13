@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <t:MenuContainerPage
     x:Class="DragonFrontCompanion.Views.CardsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -107,7 +107,7 @@
                             <controls:CardCount
                                 Margin="30"
                                 Card="{Binding .}"
-                                CardGroups="{Binding Vm.CurrentDeck.DistinctView, Source={x:Reference Name=CardsPage}}"
+                                CardGroups="{Binding Vm.CurrentDeck.DistinctDictionary, Source={x:Reference Name=CardsPage}}"
                                 HeightRequest="40"
                                 HorizontalOptions="Start"
                                 IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CardsPage}}"

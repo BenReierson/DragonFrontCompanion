@@ -8,6 +8,8 @@ using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace DragonFrontCompanion.ViewModel
 {
@@ -25,9 +27,14 @@ namespace DragonFrontCompanion.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private const string NEW_CARDS_DEFAULT_TEXT = "Conquest Champions";
+
+        private static bool _firstLoad = true;
+
         private INavigationService _navigationService;
         private ICardsService _cardsService;
         private bool _cardDataReset;
+
         public MainViewModel(INavigationService navigationService, ICardsService cardsService)
         {
             _navigationService = navigationService;
@@ -38,16 +45,40 @@ namespace DragonFrontCompanion.ViewModel
 
             cardsService.DataUpdateAvailable += CardsService_DataUpdateAvailable;
             cardsService.DataUpdated += CardsService_DataUpdated;
-            cardsService.CheckForUpdatesAsync();
+        }
+
+        public async Task InitializeAsync()
+        {
+			HasNavigated = false;
+
+            if (_firstLoad)
+            {
+				NewCardsEnabled = false;
+				_firstLoad = false;
+                NewCardsText = "Checking for updates...";
+                await Task.Delay(1000);
+                await _cardsService.CheckForUpdatesAsync();
+				await CheckForNewCardsAsync();
+				NewCardsEnabled = true;
+			}
+        }
+
+        public async Task CheckForNewCardsAsync()
+        {
+			var cards = await _cardsService.GetAllCardsAsync();
+			_newCardsToShow = cards.Any(c => c.CardSet == CardSet.NEXT);
+            if (_newCardsToShow) NewCardsText = "New Cards!";
+            else NewCardsText = NEW_CARDS_DEFAULT_TEXT;
         }
 
         private void CardsService_DataUpdated(object sender, Cards e)
         {
             _cardDataReset = Settings.ActiveCardDataVersion == Info.Current.CardDataVersion;
 
-            Device.BeginInvokeOnMainThread(() =>
+            Device.BeginInvokeOnMainThread(async () =>
             {
                 MessagingCenter.Send<string>("Loaded Card Data v" + (Settings.ActiveCardDataVersion ?? Info.Current.CardDataVersion), App.MESSAGES.SHOW_TOAST);
+                await CheckForNewCardsAsync();
             });
         }
 
@@ -112,6 +143,20 @@ namespace DragonFrontCompanion.ViewModel
             set { Set(ref _hasNavigated, value); }
         }
 
+        private bool _newCardsToShow = false;
+        private string _newCardsText = NEW_CARDS_DEFAULT_TEXT;
+		public string NewCardsText
+		{
+			get { return _newCardsText; }
+			set { Set(ref _newCardsText, value); }
+		}
+
+        private bool _newCardsEnabled = false;
+        public bool NewCardsEnabled
+        {
+            get { return _newCardsEnabled; }
+            set { Set(ref _newCardsEnabled, value); }
+        }
         #endregion
 
         #region Commands
@@ -211,7 +256,7 @@ namespace DragonFrontCompanion.ViewModel
                     {
                         if (HasNavigated) return;
                         HasNavigated = true;
-                        _navigationService.NavigateTo(ViewModelLocator.CardsPageKey, searchText);
+                        _navigationService.NavigateTo(ViewModelLocator.CardsPageKey, _newCardsToShow ? "NEXT" : searchText);
                     }));
             }
         }

@@ -68,7 +68,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
 
             Assert.IsTrue(cardsVM.IsChooser);
-            Assert.AreEqual(cardsDb.All.Count(c => c.Faction == Faction.ECLIPSE || c.Faction == Faction.UNALIGNED), cardsVM.AllCards.Count);
+            Assert.AreEqual(cardsDb.All.Count(c => c.Rarity != Rarity.TOKEN && c.ValidFactions.Contains(Faction.ECLIPSE)), cardsVM.AllCards.Count);
 
             //Check all filters status
             Assert.IsTrue(cardsVM.CanFilterByEclipse);
@@ -87,7 +87,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             Assert.AreEqual(null, cardsVM.TraitFilter);
             Assert.AreEqual(Faction.INVALID, cardsVM.FactionFilter);
 
-            Assert.AreEqual(cardsDb.All.Count(c => c.Faction == Faction.ECLIPSE || c.Faction == Faction.UNALIGNED), cardsVM.FilteredCards.Count, "All faction cards should be included by default.");
+            Assert.AreEqual(cardsDb.All.Count(c => c.Rarity != Rarity.TOKEN && c.ValidFactions.Contains(Faction.ECLIPSE)), cardsVM.FilteredCards.Count, "All faction cards should be included by default.");
 
         }
 
@@ -228,7 +228,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             shuffledCards.Shuffle();
 
             //test on a subset of cards with traits to reduce overall test time
-            foreach (var card in shuffledCards.Where(c=>c.Traits?.Length > 0).Take(20))
+            foreach (var card in shuffledCards.Where(c=>c.Traits?.Count > 0).Take(20))
             {
                 cardsVM.FindSimilarCommand.Execute(card);
                 await Task.Delay(FILTER_TIMEOUT); //Allow filters to run

@@ -35,6 +35,8 @@ namespace DragonFrontCompanion.Tests
         {
 
             var cards = new Cards();
+            Deck.CardDictionary = cards.CardDictionary;
+
             var testDeck = new Deck(Faction.ECLIPSE);
 
             Assert.IsFalse(testDeck.IsValid);

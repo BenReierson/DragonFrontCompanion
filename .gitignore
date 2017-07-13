@@ -241,3 +241,7 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /MasterUITests.bat
+uitestsMac.sh
+*.bak
+*.orig
+Thumbs.db

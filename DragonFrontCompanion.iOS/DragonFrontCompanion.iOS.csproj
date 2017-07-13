@@ -13,6 +13,7 @@
     <AssemblyName>DragonFrontCompanion.iOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ReleaseVersion>1.2.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,8 +33,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
@@ -69,8 +68,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
@@ -149,10 +146,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="DragonFrontDb, Version=2.0.0.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DragonFrontDb.2.0.0.4\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ExifLib">
       <HintPath>..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
       <Private>True</Private>
@@ -216,10 +209,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PCLStorage">
@@ -300,6 +289,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="DragonFrontDb">
+      <HintPath>..\packages\DragonFrontDb.2.1.0.4\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DragonFrontCompanion.Data\DragonFrontCompanion.Data.csproj">
@@ -335,6 +330,19 @@
     <BundleResource Include="Resources\Icon.png" />
     <BundleResource Include="Resources\IconTwo.png" />
     <BundleResource Include="Resources\IconOne.png" />
+    <BundleResource Include="Resources\IconChamp_1.png" />
+    <BundleResource Include="Resources\IconFort_1.png" />
+    <BundleResource Include="Resources\IconSpell_1.png" />
+    <BundleResource Include="Resources\IconUnaligned_1.png" />
+    <BundleResource Include="Resources\IconUnit_1.png" />
+    <BundleResource Include="Resources\IconDELIRIUM_1.png" />
+    <BundleResource Include="Resources\IconECLIPSE_1.png" />
+    <BundleResource Include="Resources\IconESSENCE_1.png" />
+    <BundleResource Include="Resources\IconSCALES_1.png" />
+    <BundleResource Include="Resources\IconSILENCE_1.png" />
+    <BundleResource Include="Resources\IconSTRIFE_1.png" />
+    <BundleResource Include="Resources\IconTHORNS_1.png" />
+    <BundleResource Include="Resources\IconToken.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\IconUnit.png" />
