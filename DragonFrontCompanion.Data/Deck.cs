@@ -153,20 +153,13 @@ namespace DragonFrontCompanion
             {//should only be called during deserialization
                 _suppressEvents = true;
 
-                var oldData = String.Compare(CurrentAppVersion, this.AppVersion) > 0;
                 CanOverload = true; //allow overloading while deserializing
 
                 foreach (var cardGroup in value)
                 {
-                    for (int i = 1; i <= cardGroup.Count && i <= CARD_DUPLICATE_LIMIT; i++)
-                    {
-                        if (CardDictionary != null && oldData && !CardDictionary.ContainsKey(cardGroup.Card.ID))
-                        {//find old card by name in new data, this allows for ID udpates
-                            var updatedCard = CardDictionary.FirstOrDefault(c => c.Value.Name == cardGroup.Card.Name);
-                            this.Add(updatedCard.Value);
-                        }
-                        else this.Add(CardDictionary[cardGroup.Card.ID]);
-                    }
+                    var validCard = GetValidCard(cardGroup.Card);
+                    if (validCard != null)
+                        for (int i = 1; i <= cardGroup.Count && i <= CARD_DUPLICATE_LIMIT; i++) this.Add(validCard);
                 }
                 this.AppVersion = CurrentAppVersion;
 
@@ -347,6 +340,17 @@ namespace DragonFrontCompanion
         #endregion
 
         #region Methods
+
+        private Card GetValidCard(Card externalCard)
+        {
+            if ((externalCard.ID == null && !string.IsNullOrEmpty(externalCard.Name)) ||
+                !CardDictionary.ContainsKey(externalCard.ID))
+            {//find card by name in current data, this allows for ID udpates or loading by name
+                var updatedCard = CardDictionary.FirstOrDefault(c => c.Value.Name == externalCard.Name);
+                return updatedCard.Value;
+            }
+            else return CardDictionary[externalCard.ID];
+        }
 
         private Card ValidateForDeck(Card newCard)
         {

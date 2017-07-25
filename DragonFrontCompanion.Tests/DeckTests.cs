@@ -9,6 +9,7 @@ using System.IO;
 using DragonFrontCompanion;
 using DragonFrontCompanion.Data;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace DragonFrontCompanion.Tests
 {
@@ -210,21 +211,70 @@ namespace DragonFrontCompanion.Tests
 
         }
 
+        [TestMethod]
+        public async Task TestLoadDeck_v1()
+        {
+            var deckJson = ReadDeckFile("v1.dfd");
+            Assert.IsNotNull(deckJson);
+
+            var cardsService = new CardsService();
+            var service = new LocalDeckService(cardsService);
+            var deck = await service.OpenDeckDataAsync(deckJson);
+
+            Assert.IsNotNull(deck);
+            Assert.AreEqual(Faction.THORNS, deck.DeckFaction);
+            Assert.AreEqual(DeckType.EXTERNAL_DECK, deck.Type);
+            Assert.AreEqual(30, deck.Count);
+            Assert.AreEqual("ThC002", deck.Champion.ID);
+
+        }
+
+
+        [TestMethod]
+        public async Task TestLoadDeck_minimalData()
+        {
+            var deckJson = ReadDeckFile("minimum.dfd");
+            Assert.IsNotNull(deckJson);
+
+            var cardsService = new CardsService();
+            var service = new LocalDeckService(cardsService);
+            var deck = await service.OpenDeckDataAsync(deckJson);
+
+            Assert.IsNotNull(deck);
+            Assert.AreEqual(Faction.THORNS, deck.DeckFaction);
+            Assert.AreEqual(DeckType.EXTERNAL_DECK, deck.Type);
+
+        }
+
         [TestCleanup]
         public void Cleanup()
         {
             var cardsService = new CardsService();
             var service = new LocalDeckService(cardsService);
 
-            var decksGetter = service.GetSavedDecksAsync().ContinueWith((t) =>
+            var decksGetter = service.GetSavedDecksAsync().ContinueWith(async (t) =>
             {
                 var decks = t.Result;
 
                 foreach (var deck in decks)
                 {
-                    service.DeleteDeckAsync(deck);
+                    await service.DeleteDeckAsync(deck);
                 }
             });
+        }
+
+        internal static string ReadDeckFile(string deckFileName)
+        {
+            string result = string.Empty;
+
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DragonFrontCompanion.Tests.Decks." + deckFileName))
+            {
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    result = sr.ReadToEnd();
+                }
+            }
+            return result;
         }
     }
 }
