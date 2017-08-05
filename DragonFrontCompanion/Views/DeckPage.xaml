@@ -71,7 +71,7 @@
                             LineBreakMode="NoWrap"
                             Text="Faction Cards"
                             TextColor="White"
-                            XAlign="Center" />
+                            HorizontalTextAlignment="Center" />
                     </ListView.Header>
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -108,7 +108,7 @@
                             LineBreakMode="NoWrap"
                             Text="Unaligned Cards"
                             TextColor="White"
-                            XAlign="Center" />
+                            HorizontalTextAlignment="Center" />
                     </ListView.Header>
                     <ListView.ItemTemplate>
                         <DataTemplate>

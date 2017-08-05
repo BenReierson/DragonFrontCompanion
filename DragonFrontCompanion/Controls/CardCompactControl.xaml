@@ -37,7 +37,7 @@
                     VerticalOptions="Fill"
                     VerticalTextAlignment="Center"
                     WidthRequest="20"
-                    XAlign="Center" />
+                    HorizontalTextAlignment="Center" />
                 <Label
                     FontSize="{helpers:NamedSizeOnPlatform Android=Default,
                                                            iOS=Small,

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="DragonFrontCompanion.Views.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -101,6 +101,6 @@
             Text="{Binding VersionDisplay}"
             TextColor="Gray"
             VerticalOptions="End"
-            XAlign="Center" />
+            HorizontalTextAlignment="Center" />
     </Grid>
 </ContentPage>

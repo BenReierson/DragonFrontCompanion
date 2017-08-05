@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <t:SlideMenuView
     x:Class="DragonFrontCompanion.Controls.FactionPicker"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -38,8 +38,8 @@
                 HorizontalOptions="Center"
                 Text="CHOOSE A FACTION"
                 TextColor="White"
-                XAlign="Center"
-                YAlign="Center" />
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center" />
 
             <Grid
                 Grid.Row="1"
@@ -53,7 +53,7 @@
                     Text="ECLIPSE"
                     TextColor="White"
                     VerticalOptions="Start"
-                    XAlign="Center" />
+                    HorizontalTextAlignment="Center" />
                 <Button
                     Margin="-4"
                     BackgroundColor="Transparent"
@@ -72,7 +72,7 @@
                     Text="SCALES"
                     TextColor="White"
                     VerticalOptions="Start"
-                    XAlign="Center" />
+                    HorizontalTextAlignment="Center" />
                 <Button
                     Margin="-4"
                     BackgroundColor="Transparent"
@@ -91,7 +91,7 @@
                     Text="STRIFE"
                     TextColor="White"
                     VerticalOptions="Start"
-                    XAlign="Center" />
+                    HorizontalTextAlignment="Center" />
                 <Button
                     Margin="-4"
                     BackgroundColor="Transparent"
@@ -110,7 +110,7 @@
                     Text="THORNS"
                     TextColor="White"
                     VerticalOptions="Start"
-                    XAlign="Center" />
+                    HorizontalTextAlignment="Center" />
                 <Button
                     Margin="-4"
                     BackgroundColor="Transparent"
@@ -129,7 +129,7 @@
                     Text="SILENCE"
                     TextColor="White"
                     VerticalOptions="Start"
-                    XAlign="Center" />
+                    HorizontalTextAlignment="Center" />
                 <Button
                     Margin="-4"
                     BackgroundColor="Transparent"
@@ -148,7 +148,7 @@
                 Text="ESSENCE"
                 TextColor="White"
                 VerticalOptions="Start"
-                XAlign="Center" />
+                HorizontalTextAlignment="Center" />
             <Button
                 Margin="-4"
                 BackgroundColor="Transparent"
@@ -167,7 +167,7 @@
                     Text="DELIRIUM"
                     TextColor="White"
                     VerticalOptions="Start"
-                    XAlign="Center" />
+                    HorizontalTextAlignment="Center" />
                 <Button
                     Margin="-4"
                     BackgroundColor="Transparent"

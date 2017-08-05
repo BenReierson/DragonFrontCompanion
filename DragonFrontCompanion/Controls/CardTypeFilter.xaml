@@ -50,8 +50,8 @@
                     HorizontalOptions="Center"
                     Text="{Binding FactionFilterText}"
                     TextColor="White"
-                    XAlign="Center"
-                    YAlign="Center" />
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"/>
 
                 <StackLayout
                     Grid.Row="1"
@@ -474,8 +474,8 @@
                             Text="{Binding CostFilterText}"
                             TextColor="White"
                             VerticalOptions="Center"
-                            XAlign="Center"
-                            YAlign="Center" />
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center" />
                     </Grid>
                 </StackLayout>
                 <Slider
