@@ -360,6 +360,7 @@ namespace DragonFrontCompanion
             else throw new ArgumentException("Card is not recognized.");
 
             if (!validCard.ValidFactions.Contains(DeckFaction)) throw new ArgumentException("Card is the wrong faction for this deck.");
+            if (validCard.Rarity == Rarity.TOKEN) throw new ArgumentException("Can't add token cards to a deck.");
             if (CountCard(validCard) >= CARD_DUPLICATE_LIMIT) throw new ArgumentException("Deck is at capacity for this card.");
             if (validCard.Type != CardType.CHAMPION && !CanOverload && Count >= MAX_CARD_COUNT) throw new ArgumentException("Deck is at capacity.");
 

@@ -125,7 +125,7 @@ namespace DragonFrontCompanion.Data
             var diceRoll = new Random();
             var faction = (Faction)diceRoll.Next(2, 8);
             var deck = new Deck(faction, AppVersion, DeckType.GENERATED_DECK) { Name = "RANDOM DECK", Description = "I wouldn't recommend actually playing as is. Edit this deck to save it, or share it as a challenge!"};
-            var cards = (await _cardsService.GetAllCardsAsync()).Where((c) => c.ValidFactions.Contains(faction)).ToList();
+            var cards = (await _cardsService.GetAllCardsAsync()).Where((c) => c.ValidFactions.Contains(faction) && c.Rarity != Rarity.TOKEN).ToList();
             cards.Shuffle();
             deck.Champion = cards.FirstOrDefault((c) => c.Type == CardType.CHAMPION);
             while (!deck.IsValid)
