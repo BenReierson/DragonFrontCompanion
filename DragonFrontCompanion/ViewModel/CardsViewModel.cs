@@ -64,7 +64,7 @@ namespace DragonFrontCompanion.ViewModel
             if (_unfilteredCards != freshCards)
             {
                 _unfilteredCards = freshCards;
-                RaisePropertyChanged(nameof(EigthFactionEnabled));
+                RaisePropertyChanged(nameof(EighthFactionEnabled));
                 AllCards = _unfilteredCards.ToList(); 
             }
 
@@ -108,7 +108,7 @@ namespace DragonFrontCompanion.ViewModel
                 CanFilterBySilence = CurrentDeck.DeckFaction == Faction.SILENCE;
                 CanFilterByEssence = CurrentDeck.DeckFaction == Faction.ESSENCE;
                 CanFilterByDelirium = CurrentDeck.DeckFaction == Faction.DELIRIUM;
-                CanFilterByEigth = (int)CurrentDeck.DeckFaction == 9;
+                CanFilterByEighth = (int)CurrentDeck.DeckFaction == 9;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
                 else await ApplyFilters();
@@ -120,7 +120,7 @@ namespace DragonFrontCompanion.ViewModel
                 RaisePropertyChanged(nameof(CanFilterBySilence));
                 RaisePropertyChanged(nameof(CanFilterByEssence));
                 RaisePropertyChanged(nameof(CanFilterByDelirium));
-                RaisePropertyChanged(nameof(CanFilterByEigth));
+                RaisePropertyChanged(nameof(CanFilterByEighth));
 
             }
             else
@@ -135,7 +135,7 @@ namespace DragonFrontCompanion.ViewModel
                 CanFilterBySilence = true;
                 CanFilterByEssence = true;
                 CanFilterByDelirium = true;
-                CanFilterByEigth = true;
+                CanFilterByEighth = true;
                 FilterByDeck = false;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
@@ -472,14 +472,14 @@ namespace DragonFrontCompanion.ViewModel
         }
 
         private bool _eigthFilter = true;
-        public bool CanFilterByEigth
+        public bool CanFilterByEighth
         {
             get { return _eigthFilter; }
             set { Set(ref _eigthFilter, value); }
         }
 
-        public bool EigthFactionEnabled => _unfilteredCards != null ? _unfilteredCards.Any(c => (int)c.Faction == 9) : false;
-        public string EigthFactionText => Enum.TryParse("9", out Faction faction) ? faction.ToString() : "";
+        public bool EighthFactionEnabled => _unfilteredCards != null ? _unfilteredCards.Any(c => (int)c.Faction == 9) : false;
+        public string EighthFactionText => Enum.TryParse("9", out Faction faction) ? faction.ToString() : "";
 
         private List<string> _traitFilter;
         public List<string> TraitFilter

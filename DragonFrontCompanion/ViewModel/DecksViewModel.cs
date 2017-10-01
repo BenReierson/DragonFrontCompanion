@@ -97,8 +97,8 @@ namespace DragonFrontCompanion.ViewModel
             set { Set(ref _hasNavigated, value); }
         }
 
-        public bool EigthFactionEnabled => Deck.CardDictionary.Any(c => (int)c.Value.Faction == 9);
-        public string EigthFactionText => Enum.TryParse("9", out Faction faction) ? faction.ToString() : "";
+        public bool EighthFactionEnabled => Deck.CardDictionary.Any(c => (int)c.Value.Faction == 9);
+        public string EighthFactionText => Enum.TryParse("9", out Faction faction) ? faction.ToString() : "";
         public bool NinthFactionEnabled => Deck.CardDictionary.Any(c => (int)c.Value.Faction == 10);
         public string NinthFactionText => Enum.TryParse("10", out Faction faction) ? faction.ToString() : "";
 

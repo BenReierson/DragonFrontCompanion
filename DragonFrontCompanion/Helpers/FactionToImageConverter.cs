@@ -30,6 +30,10 @@ namespace DragonFrontCompanion.Helpers
                     return "IconEssence.png";
                 case Faction.DELIRIUM:
                     return "IconDelirium.png";
+                case Faction.EIGHTH:
+                    return "IconEIGHTH.png";
+                case Faction.NINTH:
+                    return "IconNINTH.png";
                 default:
                     return "";
             }
