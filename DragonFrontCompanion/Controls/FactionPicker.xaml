@@ -181,11 +181,11 @@
             BackgroundColor="White"
             IsVisible="{Binding EigthFactionEnabled}">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="IconAegis.png" />
+            <ffImage:CachedImage Margin="2,15,2,0" Source="IconEigth.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
-                Text="AEGIS"
+                Text="{Binding EigthFactionText}"
                 TextColor="White"
                 VerticalOptions="Start"
                 HorizontalTextAlignment="Center" />
@@ -201,11 +201,11 @@
            BackgroundColor="White"
            IsVisible="{Binding NinthFactionEnabled}">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0"  />
+            <ffImage:CachedImage Margin="2,15,2,0" Source="IconNinth.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
-                Text="NINTH"
+                Text="{Binding NinthFactionText}"
                 TextColor="White"
                 VerticalOptions="Start"
                 HorizontalTextAlignment="Center" />

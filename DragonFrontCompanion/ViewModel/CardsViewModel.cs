@@ -378,7 +378,7 @@ namespace DragonFrontCompanion.ViewModel
                 Set(ref _typeFilter, value);
                 if (App.RuntimePlatform == App.Device.iOS)
                 {
-                    TypeFilterText = _typeFilter == CardType.INVALID ? "Type" : "Type:" + _typeFilter.ToString();
+                    TypeFilterText = _typeFilter == CardType.INVALID ? "ALL" : _typeFilter.ToString();
                 }
             }
         }
@@ -407,7 +407,7 @@ namespace DragonFrontCompanion.ViewModel
 
                 if (App.RuntimePlatform == App.Device.iOS)
                 {
-                    FactionFilterText = _factionFilter == Faction.INVALID ? "Faction" : "Faction:" + _factionFilter.ToString();
+                    FactionFilterText = _factionFilter == Faction.INVALID ? "ALL" : _factionFilter.ToString();
                 }
             }
         }
