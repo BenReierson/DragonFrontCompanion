@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonFrontCompanion", "DragonFrontCompanion\DragonFrontCompanion.csproj", "{071BAD23-FB3C-4173-ABB6-5DB137D326BE}"
 EndProject
@@ -427,6 +427,8 @@ Global
 		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.AppStore|x86.Build.0 = Release|x86
 		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.AppStore|x86.Deploy.0 = Release|x86
 		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.Debug|Any CPU.Build.0 = Debug|x86
+		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.Debug|ARM.ActiveCfg = Debug|ARM
 		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.Debug|ARM.Build.0 = Debug|ARM
 		{5C72AF31-0E94-4EE5-8FAE-2187E60EB25E}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -468,6 +470,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DEAE83D9-22FB-46AC-8941-38FB41E29ED3}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		version = 1.2.0
