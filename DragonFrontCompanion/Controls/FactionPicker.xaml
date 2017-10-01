@@ -3,6 +3,7 @@
     x:Class="DragonFrontCompanion.Controls.FactionPicker"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:c="clr-namespace:DragonFrontDb.Enums;assembly=DragonFrontDb"
     xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
     xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
@@ -155,25 +156,65 @@
                 Command="{Binding ChooseFactionCommand}"
                 CommandParameter="{x:Static c:Faction.ESSENCE}" />
           </Grid>
-              <Grid
-                Grid.Row="3"
-                Grid.Column="1"
-                BackgroundColor="White">
-                <BoxView Margin="1" BackgroundColor="#123338" />
-                <ffImage:CachedImage Margin="2,15,2,0" Source="IconDelirium.png" />
-                <Label
-                    Margin="0,4,0,0"
-                    HorizontalOptions="Center"
-                    Text="DELIRIUM"
-                    TextColor="White"
-                    VerticalOptions="Start"
-                    HorizontalTextAlignment="Center" />
-                <Button
-                    Margin="-4"
-                    BackgroundColor="Transparent"
-                    Command="{Binding ChooseFactionCommand}"
-                    CommandParameter="{x:Static c:Faction.DELIRIUM}" />
-                </Grid>
+          <Grid
+            Grid.Row="3"
+            Grid.Column="0"
+            BackgroundColor="White">
+            <BoxView Margin="1" BackgroundColor="#123338" />
+            <ffImage:CachedImage Margin="2,15,2,0" Source="IconDelirium.png" />
+            <Label
+                Margin="0,4,0,0"
+                HorizontalOptions="Center"
+                Text="DELIRIUM"
+                TextColor="White"
+                VerticalOptions="Start"
+                HorizontalTextAlignment="Center" />
+            <Button
+                Margin="-4"
+                BackgroundColor="Transparent"
+                Command="{Binding ChooseFactionCommand}"
+                CommandParameter="{x:Static c:Faction.DELIRIUM}" />
+            </Grid>
+          <Grid
+            Grid.Row="3"
+            Grid.Column="1"
+            BackgroundColor="White"
+            IsVisible="{Binding EigthFactionEnabled}">
+            <BoxView Margin="1" BackgroundColor="#123338" />
+            <ffImage:CachedImage Margin="2,15,2,0" Source="IconAegis.png" />
+            <Label
+                Margin="0,4,0,0"
+                HorizontalOptions="Center"
+                Text="AEGIS"
+                TextColor="White"
+                VerticalOptions="Start"
+                HorizontalTextAlignment="Center" />
+            <Button
+                Margin="-4"
+                BackgroundColor="Transparent"
+                Command="{Binding ChooseFactionCommand}"
+                CommandParameter="{sys:Int32 9}" />
+          </Grid>
+          <Grid
+           Grid.Row="3"
+           Grid.Column="2"
+           BackgroundColor="White"
+           IsVisible="{Binding NinthFactionEnabled}">
+            <BoxView Margin="1" BackgroundColor="#123338" />
+            <ffImage:CachedImage Margin="2,15,2,0"  />
+            <Label
+                Margin="0,4,0,0"
+                HorizontalOptions="Center"
+                Text="NINTH"
+                TextColor="White"
+                VerticalOptions="Start"
+                HorizontalTextAlignment="Center" />
+            <Button
+                Margin="-4"
+                BackgroundColor="Transparent"
+                Command="{Binding ChooseFactionCommand}"
+                CommandParameter="{sys:Int32 10}" />
+          </Grid>
         </Grid>
     </ScrollView>
 </t:SlideMenuView>

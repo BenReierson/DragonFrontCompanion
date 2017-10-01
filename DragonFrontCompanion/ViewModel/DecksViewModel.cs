@@ -97,6 +97,9 @@ namespace DragonFrontCompanion.ViewModel
             set { Set(ref _hasNavigated, value); }
         }
 
+        public bool EigthFactionEnabled => Deck.CardDictionary.Any(c => (int)c.Value.Faction == 9);
+        public bool NinthFactionEnabled => Deck.CardDictionary.Any(c => (int)c.Value.Faction == 10);
+
         public string Title => Decks != null ? "Decks (" + Decks.Count + ")" : "Decks";
         #endregion
 
