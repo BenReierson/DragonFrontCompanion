@@ -3,6 +3,7 @@
     x:Class="DragonFrontCompanion.Controls.CardTypeFilter"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:c="clr-namespace:DragonFrontDb.Enums;assembly=DragonFrontDb"
     xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
     xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
@@ -289,6 +290,34 @@
                             iOS="80" />
                     </controls:ImageButton.HeightRequest>
                 </controls:ImageButton>
+              <controls:ImageButton
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    AutomationId="FilterEigth"
+                    IsVisible="{Binding EigthFactionEnabled}"
+                    BackgroundColor="#123338"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.EIGTH}}"
+                    BorderWidth="2"
+                    Command="{Binding FilterFactionCommand}"
+                    CommandParameter="{x:Static c:Faction.EIGTH}"
+                    DisabledImageTintColor="Gray"
+                    FontSize="Micro"
+                    ImageHeightRequest="60" 
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.EIGTH}}"
+                    ImageWidthRequest="60"
+                    IsEnabled="{Binding CanFilterByEigth}"
+                    Orientation="ImageOnBottom"
+                    Source="IconEigth.png"
+                    Text="{Binding EigthFactionText}"
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.EIGTH}}">
+                <controls:ImageButton.HeightRequest>
+                  <OnPlatform
+                      x:TypeArguments="x:Double"
+                      Android="100"
+                      WinPhone="100"
+                      iOS="80" />
+                </controls:ImageButton.HeightRequest>
+              </controls:ImageButton>
             </Grid>
 
             <Grid x:Name="TypeGrid" Margin="0,20,0,0">
