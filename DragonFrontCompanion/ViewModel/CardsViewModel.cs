@@ -653,21 +653,21 @@ namespace DragonFrontCompanion.ViewModel
             }
         }
 
-        private RelayCommand<Faction> _toggleFaction;
+        private RelayCommand<object> _toggleFaction;
 
         /// <summary>
         /// Gets the FilterFactionCommand.
         /// </summary>
-        public RelayCommand<Faction> FilterFactionCommand
+        public RelayCommand<object> FilterFactionCommand
         {
             get
             {
                 return _toggleFaction
-                    ?? (_toggleFaction = new RelayCommand<Faction>(
+                    ?? (_toggleFaction = new RelayCommand<object>(
                     p =>
                     {
                         FilteredByFaction = true;
-                        FactionFilter = p;
+                        FactionFilter = (Faction)p;
                         ApplyFilters();
                     },
                     p => true));

@@ -295,20 +295,20 @@
                     AutomationId="FilterEighth"
                     IsVisible="{Binding EighthFactionEnabled}"
                     BackgroundColor="#123338"
-                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.EIGHTH}}"
+                    BorderColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Int32 9}}"
                     BorderWidth="2"
                     Command="{Binding FilterFactionCommand}"
-                    CommandParameter="{x:Static c:Faction.EIGHTH}"
+                    CommandParameter="{x:Int32 9}"
                     DisabledImageTintColor="Gray"
                     FontSize="Micro"
                     ImageHeightRequest="60" 
-                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Static c:Faction.EIGHTH}}"
+                    ImageTintColor="{Binding FactionFilter, Converter={StaticResource SelectedBorderColor}, ConverterParameter={x:Int32 9}}"
                     ImageWidthRequest="60"
                     IsEnabled="{Binding CanFilterByEighth}"
                     Orientation="ImageOnBottom"
-                    Source="IconEIGHTH.png"
+                    Source="IconAegis.png"
                     Text="{Binding EighthFactionText}"
-                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Static c:Faction.EIGHTH}}">
+                    TextColor="{Binding FactionFilter, Converter={StaticResource SelectedColor}, ConverterParameter={x:Int32 9}}">
                 <controls:ImageButton.HeightRequest>
                   <OnPlatform
                       x:TypeArguments="x:Double"

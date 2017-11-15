@@ -51,7 +51,7 @@
                 Grid.Row="2"
                 BackgroundColor="#E1CA35"
                 Command="{Binding NavigateToNewCardsCommand}"
-                CommandParameter="CONQUEST"
+                CommandParameter="AEGIS"
                 FontAttributes="Bold"
                 FontSize="{helpers:NamedSizeOnPlatform Android=Medium,
                                                        iOS=Default,

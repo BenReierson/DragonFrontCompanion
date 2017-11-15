@@ -127,6 +127,7 @@
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="IconAEGIS_1.png" />
     <Content Include="IconAll.png" />
     <Content Include="IconArmor.png" />
     <Content Include="IconAttack.png" />

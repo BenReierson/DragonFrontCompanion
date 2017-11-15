@@ -27,7 +27,7 @@ namespace DragonFrontCompanion.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        private const string NEW_CARDS_DEFAULT_TEXT = "Conquest Champions";
+        private const string NEW_CARDS_DEFAULT_TEXT = "Aegis Set";
 
         private static bool _firstLoad = true;
 

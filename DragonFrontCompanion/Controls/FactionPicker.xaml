@@ -180,7 +180,7 @@
             BackgroundColor="White"
             IsVisible="{Binding EighthFactionEnabled}">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="IconEIGHTH.png" />
+            <ffImage:CachedImage Margin="2,15,2,0" Source="IconAegis.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -192,7 +192,7 @@
                 Margin="-4"
                 BackgroundColor="Transparent"
                 Command="{Binding ChooseFactionCommand}"
-                CommandParameter="{x:Static c:Faction.EIGHTH}" />
+                CommandParameter="{x:Int32 9}" />
           </Grid>
           <Grid
            Grid.Row="3"
@@ -212,7 +212,7 @@
                 Margin="-4"
                 BackgroundColor="Transparent"
                 Command="{Binding ChooseFactionCommand}"
-                CommandParameter="{x:Static c:Faction.NINTH}" />
+                CommandParameter="{x:Int32 10}" />
           </Grid>
         </Grid>
     </ScrollView>
