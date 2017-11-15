@@ -13,10 +13,10 @@
     "Xam.Plugin.DeviceInfo": "2.1.2",
     "Xam.Plugin.FilePicker": "1.1.0",
     "Xam.Plugins.Settings": "2.5.8",
-    "Xamarin.FFImageLoading": "2.2.25",
-    "Xamarin.FFImageLoading.Forms": "2.2.25",
-    "Xamarin.FFImageLoading.Transformations": "2.2.25",
-    "Xamarin.Forms": "2.4.0.74863"
+    "Xamarin.FFImageLoading": "2.2.9",
+    "Xamarin.FFImageLoading.Forms": "2.2.9",
+    "Xamarin.FFImageLoading.Transformations": "2.2.9",
+    "Xamarin.Forms": "2.3.4.270"
   },
   "frameworks": {
     "uap10.0.10240": {}
