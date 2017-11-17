@@ -141,7 +141,10 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
                 {
                     foreach (var card in cardsVM.FilteredCards)
                     {
-                        Assert.AreEqual((Faction)faction, card.Faction, $"Only {(Faction)faction} cards should be included.");
+                        if ((Faction)faction == Faction.UNALIGNED)
+                            Assert.AreEqual((Faction)faction, card.Faction, $"Only {(Faction)faction} cards should be included.");
+                        else
+                            Assert.IsTrue(card.ValidFactions.Contains((Faction)faction), $"Only {(Faction)faction} cards should be included.");
                     }
                 }
             }
