@@ -46,13 +46,14 @@ namespace DragonFrontCompanion.Data
         {
             var latestInfo = await GetLatestCardInfo().ConfigureAwait(false);
             var currentVersion = Settings.ActiveCardDataVersion != null ? Settings.ActiveCardDataVersion : Info.Current.CardDataVersion;
+
             if (latestInfo.CardDataVersion > currentVersion &&
                 latestInfo.CardDataCompatibleVersion <= currentVersion)
             {//remote card data is newer and compatible
                 DataUpdateAvailable?.Invoke(this, latestInfo);
-                return latestInfo;
             }
-            else return Info.Current;
+
+            return latestInfo;
         }
 
         private async Task<Cards> GetActiveCardDataAsync()
@@ -148,13 +149,17 @@ namespace DragonFrontCompanion.Data
 
         private async Task<Info> GetLatestCardInfo()
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
-                var infoJson = await client.GetStringAsync(CardDataInfoUrl);
-                var latestInfo = JsonConvert.DeserializeObject<Info>(infoJson);
-                return latestInfo;
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
+                    var infoJson = await client.GetStringAsync(CardDataInfoUrl);
+                    var latestInfo = JsonConvert.DeserializeObject<Info>(infoJson);
+                    return latestInfo;
+                }
             }
+            catch (Exception) { return Info.Current; } 
         }
 
         private Cards CachedCards

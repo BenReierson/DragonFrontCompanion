@@ -15,6 +15,7 @@ namespace DragonFrontCompanion.Helpers
         {
             if ((value is bool && (bool)value) ||
                 (value is int && (int)value == (int)parameter) ||
+                ((value is Enum && parameter is int) && (int)value == (int)parameter) ||
                 ((value is Enum && parameter is Enum) && ((Enum)value).Equals(parameter))) //enum == comparison wasn't working
             {
                 return Color.FromHex("#E1CA35");
@@ -41,6 +42,7 @@ namespace DragonFrontCompanion.Helpers
 		{
 			if ((value is bool && (bool)value) ||
 				(value is int && (int)value == (int)parameter) ||
+                ((value is Enum && parameter is int) && (int)value == (int)parameter) ||
 				((value is Enum && parameter is Enum) && ((Enum)value).Equals(parameter))) //enum == comparison wasn't working
 			{
 				return Color.FromHex("#E1CA35");

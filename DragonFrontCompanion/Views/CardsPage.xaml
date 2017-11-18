@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <t:MenuContainerPage
     x:Class="DragonFrontCompanion.Views.CardsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -72,7 +72,7 @@
             LineBreakMode="NoWrap"
             Text="{Binding DeckStatus}"
             TextColor="White"
-            XAlign="Center" />
+            HorizontalTextAlignment="Center" />
         <Label
             x:Name="MessageLabel"
             BackgroundColor="Black"
@@ -81,7 +81,7 @@
             LineBreakMode="NoWrap"
             Text="{Binding Message}"
             TextColor="Gray"
-            XAlign="Center" />
+            HorizontalTextAlignment="Center" />
 
         <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 

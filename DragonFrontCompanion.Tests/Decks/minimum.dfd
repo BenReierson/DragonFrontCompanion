@@ -1,0 +1,18 @@
+{
+  "DeckFaction": "THORNS",
+  "Name": "Season 2 Control",
+  "Cards": [
+    {
+      "Card": { "ID": "ThC002" },
+      "Count": 1
+    },
+    {
+      "Card": { "ID": "ThU001" },
+      "Count": 1
+    },
+    {
+      "Card": { "Name": "Hollow Harvesters" },
+      "Count": 1
+    }
+  ]
+}

@@ -79,6 +79,11 @@
                 FontSize="Micro"
                 Opacity=".8"
                 Text="{Binding UpdateAvailableText}" />
+            <Button 
+                Text="View History"
+                HorizontalOptions="Start"
+                Command="{Binding ShowCardChangeHistory}"
+                />
         </StackLayout>
         <StackLayout
             Grid.Row="4"

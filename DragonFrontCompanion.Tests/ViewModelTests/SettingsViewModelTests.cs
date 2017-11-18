@@ -16,6 +16,7 @@ namespace DragonFrontCompanion.Tests
         SettingsViewModel settingsVM;
         Mock<INavigationService> mockNav;
         Mock<ICardsService> mockCardsService;
+        Mock<IDialogService> mockDialogService;
 
         [TestInitialize]
         public void VMSetup()
@@ -25,7 +26,8 @@ namespace DragonFrontCompanion.Tests
             mockCardsService.Setup(c => c.GetAllCardsAsync()).Returns(async () => cardsDb.All);
 
             mockNav = new Mock<INavigationService>();
-            settingsVM = new SettingsViewModel(mockNav.Object, mockCardsService.Object);
+            mockDialogService = new Mock<IDialogService>(MockBehavior.Loose);
+            settingsVM = new SettingsViewModel(mockNav.Object, mockCardsService.Object, mockDialogService.Object);
         }
 
         [TestMethod]
@@ -36,7 +38,7 @@ namespace DragonFrontCompanion.Tests
             Assert.AreEqual(!Settings.DEFAULT_AllowDeckOverload, settingsVM.AllowDeckOverload);
 
             //Check change is persisted across instances
-            settingsVM = new SettingsViewModel(mockNav.Object, mockCardsService.Object);
+            settingsVM = new SettingsViewModel(mockNav.Object, mockCardsService.Object, mockDialogService.Object);
             Assert.AreEqual(!Settings.DEFAULT_AllowDeckOverload, settingsVM.AllowDeckOverload);
         }
 
@@ -48,7 +50,7 @@ namespace DragonFrontCompanion.Tests
             Assert.AreEqual(!Settings.DEFAULT_EnableRandomDeck, settingsVM.EnableRandomDeck);
 
             //Check change is persisted across instances
-            settingsVM = new SettingsViewModel(mockNav.Object, mockCardsService.Object);
+            settingsVM = new SettingsViewModel(mockNav.Object, mockCardsService.Object, mockDialogService.Object);
             Assert.AreEqual(!Settings.DEFAULT_EnableRandomDeck, settingsVM.EnableRandomDeck);
         }
 

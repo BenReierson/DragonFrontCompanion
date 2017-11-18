@@ -15,15 +15,21 @@ namespace DragonFrontCompanion.ViewModel
 {
     public class SettingsViewModel : ViewModelBase
     {
+        void HandleFunc()
+        {
+
+        }
 
         private INavigationService _navigationService;
         private ICardsService _cardsService;
+        private IDialogService _dialogService;
         private Info _latestInfo;
 
-        public SettingsViewModel(INavigationService navigationService, ICardsService cardsService)
+        public SettingsViewModel(INavigationService navigationService, ICardsService cardsService, IDialogService dialogService)
         {
             _navigationService = navigationService;
             _cardsService = cardsService;
+            _dialogService = dialogService;
 
             _cardsService.DataUpdated += (o, e) => CheckForUpdate(false);
         }
@@ -185,5 +191,24 @@ namespace DragonFrontCompanion.ViewModel
                     }));
             }
         }
+
+        private RelayCommand _showCardChangeHistory;
+        public RelayCommand ShowCardChangeHistory =>
+        _showCardChangeHistory ?? (_showCardChangeHistory = new RelayCommand(async () =>
+        {
+            if (_latestInfo != null)
+            {
+                var history = new StringBuilder();
+                foreach (var item in _latestInfo.CardDataChangeLog)
+                {
+                    history.Append(item.Key);
+                    history.Append(" - ");
+                    history.Append(item.Value);
+                    history.Append("\n");
+                }
+                await _dialogService.ShowMessage(history.ToString(), "Card Change History");
+            }
+        }));
+
     }
 }

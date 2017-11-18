@@ -100,6 +100,7 @@ namespace DragonFrontCompanion.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+            //Forms.SetFlags("FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, bundle);
             FFImageLoading.Forms.Droid.CachedImageRenderer.Init();
 

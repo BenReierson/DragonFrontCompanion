@@ -64,6 +64,7 @@ namespace DragonFrontCompanion.ViewModel
             if (_unfilteredCards != freshCards)
             {
                 _unfilteredCards = freshCards;
+                RaisePropertyChanged(nameof(EighthFactionEnabled));
                 AllCards = _unfilteredCards.ToList(); 
             }
 
@@ -107,6 +108,7 @@ namespace DragonFrontCompanion.ViewModel
                 CanFilterBySilence = CurrentDeck.DeckFaction == Faction.SILENCE;
                 CanFilterByEssence = CurrentDeck.DeckFaction == Faction.ESSENCE;
                 CanFilterByDelirium = CurrentDeck.DeckFaction == Faction.DELIRIUM;
+                CanFilterByEighth = (int)CurrentDeck.DeckFaction == 9;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
                 else await ApplyFilters();
@@ -118,6 +120,7 @@ namespace DragonFrontCompanion.ViewModel
                 RaisePropertyChanged(nameof(CanFilterBySilence));
                 RaisePropertyChanged(nameof(CanFilterByEssence));
                 RaisePropertyChanged(nameof(CanFilterByDelirium));
+                RaisePropertyChanged(nameof(CanFilterByEighth));
 
             }
             else
@@ -132,6 +135,7 @@ namespace DragonFrontCompanion.ViewModel
                 CanFilterBySilence = true;
                 CanFilterByEssence = true;
                 CanFilterByDelirium = true;
+                CanFilterByEighth = true;
                 FilterByDeck = false;
 
                 if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
@@ -378,7 +382,7 @@ namespace DragonFrontCompanion.ViewModel
                 Set(ref _typeFilter, value);
                 if (App.RuntimePlatform == App.Device.iOS)
                 {
-                    TypeFilterText = _typeFilter == CardType.INVALID ? "Type" : "Type:" + _typeFilter.ToString();
+                    TypeFilterText = _typeFilter == CardType.INVALID ? "ALL" : _typeFilter.ToString();
                 }
             }
         }
@@ -407,7 +411,7 @@ namespace DragonFrontCompanion.ViewModel
 
                 if (App.RuntimePlatform == App.Device.iOS)
                 {
-                    FactionFilterText = _factionFilter == Faction.INVALID ? "Faction" : "Faction:" + _factionFilter.ToString();
+                    FactionFilterText = _factionFilter == Faction.INVALID ? "ALL" : _factionFilter.ToString();
                 }
             }
         }
@@ -466,6 +470,16 @@ namespace DragonFrontCompanion.ViewModel
             get { return _essenceDelirium; }
             set { Set(ref _essenceDelirium, value); }
         }
+
+        private bool _eigthFilter = true;
+        public bool CanFilterByEighth
+        {
+            get { return _eigthFilter; }
+            set { Set(ref _eigthFilter, value); }
+        }
+
+        public bool EighthFactionEnabled => _unfilteredCards != null ? _unfilteredCards.Any(c => (int)c.Faction == 9) : false;
+        public string EighthFactionText => Enum.TryParse("9", out Faction faction) ? faction.ToString() : "";
 
         private List<string> _traitFilter;
         public List<string> TraitFilter
@@ -639,21 +653,21 @@ namespace DragonFrontCompanion.ViewModel
             }
         }
 
-        private RelayCommand<Faction> _toggleFaction;
+        private RelayCommand<object> _toggleFaction;
 
         /// <summary>
         /// Gets the FilterFactionCommand.
         /// </summary>
-        public RelayCommand<Faction> FilterFactionCommand
+        public RelayCommand<object> FilterFactionCommand
         {
             get
             {
                 return _toggleFaction
-                    ?? (_toggleFaction = new RelayCommand<Faction>(
+                    ?? (_toggleFaction = new RelayCommand<object>(
                     p =>
                     {
                         FilteredByFaction = true;
-                        FactionFilter = p;
+                        FactionFilter = (Faction)p;
                         ApplyFilters();
                     },
                     p => true));

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="DragonFrontCompanion.Views.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -51,7 +51,7 @@
                 Grid.Row="2"
                 BackgroundColor="#E1CA35"
                 Command="{Binding NavigateToNewCardsCommand}"
-                CommandParameter="CONQUEST"
+                CommandParameter="AEGIS"
                 FontAttributes="Bold"
                 FontSize="{helpers:NamedSizeOnPlatform Android=Medium,
                                                        iOS=Default,
@@ -101,6 +101,6 @@
             Text="{Binding VersionDisplay}"
             TextColor="Gray"
             VerticalOptions="End"
-            XAlign="Center" />
+            HorizontalTextAlignment="Center" />
     </Grid>
 </ContentPage>
