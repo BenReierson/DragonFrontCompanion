@@ -37,7 +37,7 @@ namespace DragonFrontCompanion.Views
             _deckToShow = deck;
 
             if (App.RuntimePlatform == App.Device.Android &&
-                CrossDeviceInfo.Current.VersionNumber.Major < 5)
+                int.Parse(CrossDeviceInfo.Current.Version.Substring(0,1)) < 5)
             {SlideMenu = new CardTypeFilterLegacy();}
             else SlideMenu = new CardTypeFilter();
            

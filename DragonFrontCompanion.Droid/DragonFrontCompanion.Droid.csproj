@@ -68,7 +68,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DragonFrontDb, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DragonFrontDb.2.2.1.1\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
+      <HintPath>..\packages\DragonFrontDb.2.2.1.2\lib\portable45-net45+win8+wp8+wpa81\DragonFrontDb.dll</HintPath>
     </Reference>
     <Reference Include="ExifLib">
       <HintPath>..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
@@ -104,6 +104,7 @@
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\monoandroid1\GalaSoft.MvvmLight.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.Azure.Mobile, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Mobile.0.17.1\lib\MonoAndroid403\Microsoft.Azure.Mobile.dll</HintPath>
     </Reference>
@@ -137,17 +138,11 @@
       <HintPath>..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Plugin.CurrentActivity">
-      <HintPath>..\packages\Plugin.CurrentActivity.1.0.1\lib\MonoAndroid10\Plugin.CurrentActivity.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Plugin.CurrentActivity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Plugin.CurrentActivity.2.1.0.2\lib\monoandroid44\Plugin.CurrentActivity.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.DeviceInfo, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xam.Plugin.DeviceInfo.2.1.2\lib\MonoAndroid10\Plugin.DeviceInfo.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Plugin.DeviceInfo.Abstractions, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xam.Plugin.DeviceInfo.2.1.2\lib\MonoAndroid10\Plugin.DeviceInfo.Abstractions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Plugin.DeviceInfo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xam.Plugin.DeviceInfo.4.0.0.13\lib\monoandroid71\Plugin.DeviceInfo.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.FilePicker, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xam.Plugin.FilePicker.1.1.0\lib\MonoAndroid10\Plugin.FilePicker.dll</HintPath>

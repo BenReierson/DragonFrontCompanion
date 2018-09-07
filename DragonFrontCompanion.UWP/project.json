@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "DragonFrontDb": "2.2.1.1",
+    "DragonFrontDb": "2.2.1.2",
     "Microsoft.Azure.Mobile.Analytics": "0.17.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
     "Microsoft.Toolkit.Uwp.Notifications": "2.0.0",
@@ -10,7 +10,7 @@
     "Plugin.Permissions": "1.2.1",
     "Rg.Plugins.Popup": "1.0.4",
     "SlideOverKit": "2.1.5",
-    "Xam.Plugin.DeviceInfo": "2.1.2",
+    "Xam.Plugin.DeviceInfo": "4.0.0.13",
     "Xam.Plugin.FilePicker": "1.1.0",
     "Xam.Plugins.Settings": "2.5.8",
     "Xamarin.FFImageLoading": "2.2.9",
