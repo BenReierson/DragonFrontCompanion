@@ -1,11 +1,12 @@
 ﻿{
   "dependencies": {
+    "CommonServiceLocator": "2.0.4",
     "DragonFrontDb": "2.2.1.2",
     "Microsoft.Azure.Mobile.Analytics": "0.17.1",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
-    "Microsoft.Toolkit.Uwp.Notifications": "2.0.0",
-    "MvvmLightLibs": "5.3.0",
-    "Newtonsoft.Json": "10.0.3",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.7",
+    "Microsoft.Toolkit.Uwp.Notifications": "4.0.0",
+    "MvvmLightLibs": "5.4.1",
+    "Newtonsoft.Json": "11.0.2",
     "PCLStorage": "1.0.2",
     "Plugin.Permissions": "1.2.1",
     "Rg.Plugins.Popup": "1.0.4",
