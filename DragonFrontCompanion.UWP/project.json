@@ -9,15 +9,15 @@
     "Newtonsoft.Json": "11.0.2",
     "PCLStorage": "1.0.2",
     "Plugin.Permissions": "1.2.1",
-    "Rg.Plugins.Popup": "1.0.4",
-    "SlideOverKit": "2.1.5",
+    "Rg.Plugins.Popup": "1.1.4.168",
+    "SlideOverKit": "2.1.6.2",
     "Xam.Plugin.DeviceInfo": "4.0.0.13",
     "Xam.Plugin.FilePicker": "1.1.0",
     "Xam.Plugins.Settings": "2.5.8",
-    "Xamarin.FFImageLoading": "2.2.9",
-    "Xamarin.FFImageLoading.Forms": "2.2.9",
-    "Xamarin.FFImageLoading.Transformations": "2.2.9",
-    "Xamarin.Forms": "2.3.4.270"
+    "Xamarin.FFImageLoading": "2.4.3.840",
+    "Xamarin.FFImageLoading.Forms": "2.4.3.840",
+    "Xamarin.FFImageLoading.Transformations": "2.4.3.840",
+    "Xamarin.Forms": "2.5.1.527436"
   },
   "frameworks": {
     "uap10.0.10240": {}
