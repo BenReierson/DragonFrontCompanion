@@ -18,8 +18,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DragonFrontCompanion.Data;
-using Microsoft.Azure.Mobile;
-using Microsoft.Azure.Mobile.Analytics;
 using Microsoft.Toolkit.Uwp.Notifications;
 using GalaSoft.MvvmLight.Ioc;
 using Windows.UI.Notifications;
@@ -96,11 +94,11 @@ namespace DragonFrontCompanion.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 List<Assembly> assembliesToInclude = new List<Assembly>();
-                assembliesToInclude.AddRange(Rg.Plugins.Popup.Windows.Popup.GetExtraAssemblies());
+                assembliesToInclude.Add(typeof(Rg.Plugins.Popup.Windows.Renderers.PopupPageRenderer).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(SlideOverKit.MenuContainerPage).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(SlideOverKit.UWP.MenuContainerPageUWPRenderer).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(FFImageLoading.Forms.WinUWP.CachedImageRenderer).GetTypeInfo().Assembly);
-                assembliesToInclude.Add(typeof(FFImageLoading.FFImage).GetTypeInfo().Assembly);
+               // assembliesToInclude.Add(typeof(FFImageLoading.FFImage).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(FFImageLoading.Transformations.TransformationBase).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(Plugin.Settings.CrossSettings).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(Plugin.Permissions.CrossPermissions).GetTypeInfo().Assembly);

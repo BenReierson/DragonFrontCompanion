@@ -13,6 +13,9 @@ using DragonFrontCompanion.ViewModel;
 using DragonFrontCompanion.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace DragonFrontCompanion
@@ -151,6 +154,10 @@ namespace DragonFrontCompanion
         protected override void OnStart()
         {
             // Handle when your app starts
+            AppCenter.Start("ios=6f75c0fb-c19f-49a3-b0d1-e7c3fdf49b44;" +
+                            "android=e03dd204-6d05-4ea4-9513-a12385944120;" +
+                            "uwp=6013a5e1-18f0-4e45-95b8-bb7ce1411d6c;" ,
+                            typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()
