@@ -34,8 +34,6 @@ namespace DragonFrontCompanion.Views
             DecksList.ItemSelected += (sender, e) => {
                 ((ListView)sender).SelectedItem = null;
             };
-
-            OpenFileButton.IsVisible = App.RuntimePlatform == App.Device.Android;
         }
 
         private void NewDeckClicked(object sender, EventArgs e )

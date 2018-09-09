@@ -35,7 +35,7 @@
             Command="{Binding EditDeckCardsCommand}"
             Icon="IconEdit.png"
             Text="Edit Deck" />
-        <ToolbarItem
+        <controls:BindableToolbarItem
             x:Name="ShareButton"
             Command="{Binding ShareDeckCommand}"
             Icon="IconShare.png"
