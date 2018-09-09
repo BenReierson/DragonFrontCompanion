@@ -28,9 +28,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.benreierson.dragonfrontcompanion</string>
 	<key>CFBundleVersion</key>
-	<string>1.3.0</string>
+	<string>1.4.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.3.0</string>
+	<string>1.4.0</string>
 	<key>CFBundleName</key>
 	<string>DF Companion</string>
 	<key>CFBundleDocumentTypes</key>
