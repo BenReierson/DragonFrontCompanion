@@ -100,8 +100,10 @@ namespace DragonFrontCompanion.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+            Rg.Plugins.Popup.Popup.Init(this, bundle);
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            FFImageLoading.Forms.Droid.CachedImageRenderer.Init(false);
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(false);
 
             Context context = global::Xamarin.Forms.Forms.Context;
             var version = context.PackageManager.GetPackageInfo(context.PackageName, 0).VersionName;
@@ -133,7 +135,10 @@ namespace DragonFrontCompanion.Droid
                                                             {Toast.MakeText(this.ApplicationContext, message, ToastLength.Short).Show();});
 
         }
-
+        public override void OnBackPressed()
+        {
+            Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed);
+        }
 
         protected override async void OnNewIntent(Intent intent)
         {

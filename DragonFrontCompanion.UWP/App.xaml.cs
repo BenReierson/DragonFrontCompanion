@@ -107,7 +107,9 @@ namespace DragonFrontCompanion.UWP
                 assembliesToInclude.Add(typeof(Newtonsoft.Json.JsonConvert).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(Xamarin.Forms.Forms).GetTypeInfo().Assembly);
 
-                FFImageLoading.Forms.WinUWP.CachedImageRenderer.Init();
+                Rg.Plugins.Popup.Popup.Init();
+
+                FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
 
                 Xamarin.Forms.Forms.Init(args, assembliesToInclude);
 
