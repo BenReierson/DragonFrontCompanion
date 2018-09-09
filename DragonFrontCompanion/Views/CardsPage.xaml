@@ -7,7 +7,7 @@
     xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
     xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
     xmlns:views="clr-namespace:DragonFrontCompanion.Views"
-    x:Name="CardsPage"
+    x:Name="CurrentPage"
     Title="{Binding CardsTitle}"
     BindingContext="{Binding Cards, Source={StaticResource Locator}}">
 
@@ -16,6 +16,7 @@
             <helpers:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
             <views:CardPopup
                 x:Key="SelectedCardPopup"
+                x:Name="CardPopup"
                 Card="{Binding SelectedCard}"
                 NextCommand="{Binding NextCardCommand}"
                 PreviousCommand="{Binding PreviousCardCommand}" />
@@ -72,7 +73,7 @@
             LineBreakMode="NoWrap"
             Text="{Binding DeckStatus}"
             TextColor="White"
-            XAlign="Center" />
+            HorizontalTextAlignment="Center" />
         <Label
             x:Name="MessageLabel"
             BackgroundColor="Black"
@@ -81,7 +82,7 @@
             LineBreakMode="NoWrap"
             Text="{Binding Message}"
             TextColor="Gray"
-            XAlign="Center" />
+            HorizontalTextAlignment="Center" />
 
         <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 
@@ -107,22 +108,22 @@
                             <controls:CardCount
                                 Margin="30"
                                 Card="{Binding .}"
-                                CardGroups="{Binding Vm.CurrentDeck.DistinctView, Source={x:Reference Name=CardsPage}}"
+                                CardGroups="{Binding Vm.CurrentDeck.DistinctDictionary, Source={x:Reference Name=CurrentPage}}"
                                 HeightRequest="40"
                                 HorizontalOptions="Start"
-                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CardsPage}}"
+                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CurrentPage}}"
                                 VerticalOptions="Center"
                                 WidthRequest="40" />
                             <StackLayout
                                 x:Name="EditCardButtons"
                                 Margin="105,0,0,0"
-                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CardsPage}}"
+                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CurrentPage}}"
                                 Orientation="Horizontal"
                                 VerticalOptions="End">
                                 <Button
                                     BackgroundColor="#E1CA35"
                                     BorderColor="#123338"
-                                    Command="{Binding Vm.RemoveCardCommand, Source={x:Reference Name=CardsPage}}"
+                                    Command="{Binding Vm.RemoveCardCommand, Source={x:Reference Name=CurrentPage}}"
                                     CommandParameter="{Binding .}"
                                     FontAttributes="Bold"
                                     FontSize="Medium"
@@ -150,7 +151,7 @@
                                     Margin="-6,0,0,0"
                                     BackgroundColor="#E1CA35"
                                     BorderColor="#123338"
-                                    Command="{Binding Vm.AddOneToDeckCommand, Source={x:Reference Name=CardsPage}}"
+                                    Command="{Binding Vm.AddOneToDeckCommand, Source={x:Reference Name=CurrentPage}}"
                                     CommandParameter="{Binding .}"
                                     FontAttributes="Bold"
                                     FontSize="Medium"

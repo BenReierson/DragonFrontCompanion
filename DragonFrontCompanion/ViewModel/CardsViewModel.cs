@@ -18,9 +18,11 @@ namespace DragonFrontCompanion.ViewModel
     public class CardsViewModel : ViewModelBase
     {
         public const int MAX_COSTS_FILTER = Deck.MAX_DISTRIBUTION_LEVEL + 1;
+        private static int FACTION_COUNT = Enum.GetNames(typeof(Faction)).Count() - 2;
+
+        private static bool _firstLoad = true;
 
         private ReadOnlyCollection<Card> _unfilteredCards = null;
-        private Task<ReadOnlyCollection<Card>> _cardsTask;
 
         private INavigationService _navigationService;
         private ICardsService _cardsService;
@@ -37,52 +39,134 @@ namespace DragonFrontCompanion.ViewModel
             _dialog = dialog;
             _deckService = deckService;
 
-            _cardsService.DataUpdated += async (o, e) =>
+            _cardsService.DataUpdated += (o, e) =>
             {
-                await InitializeAsync();
-                ApplyFilters();
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await InitializeAsync(CurrentDeck);
+                    await ApplyFilters();
+                });
             };
-
-            InitializeAsync();
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(Deck deck = null, string searchText = null)
         {
-            if (_cardsTask != null && !_cardsTask.IsCompleted) return;
+			IsBusy = true;
 
-            IsBusy = true;
-            _cardsTask = _cardsService.GetAllCardsAsync();
-            var freshCards = await _cardsTask;
+			if (_firstLoad)
+            {//Wait longer for the ui to load
+                _firstLoad = false;
+                await Task.Delay(1500);
+            }
+            else await Task.Delay(500);
+                
+            var freshCards = await _cardsService.GetAllCardsAsync();
             if (_unfilteredCards != freshCards)
             {
                 _unfilteredCards = freshCards;
-                AllCards = _unfilteredCards.ToList();
+                RaisePropertyChanged(nameof(EighthFactionEnabled));
+                AllCards = _unfilteredCards.ToList(); 
             }
+
+            _suspendFilters = searchText != null;
+
+            if (deck == null || deck != CurrentDeck) await DeckInitialize(deck);
+
+            if (searchText != null)
+            {
+                IsBusy = true;
+				await Task.Delay(500);//let the ui settle
+                _suspendFilters = false;
+				if (CardSets.Contains(searchText))
+                {
+                    CardSetFilter = searchText;
+                    MessagingCenter.Send<string>($"Card Set: {searchText}", App.MESSAGES.SHOW_TOAST);
+                }
+                else SearchText = searchText;
+            }
+
             IsBusy = false;
         }
 
-        private async void ApplyFilters()
+        private async Task DeckInitialize(Deck deck)
         {
-            if (AllCards != null && !_suspendFilters)
+			CurrentDeck = deck;
+			IsChooser = CurrentDeck != null;
+			if (!IsChooser) ChooserFilterText = "";
+			Message = "";
+
+			if (IsChooser)
+            {
+                //filter cards according to deck
+                AllCards = _unfilteredCards.Where((c) => (c.ValidFactions.Contains(CurrentDeck.DeckFaction) && c.Rarity != Rarity.TOKEN)).ToList();
+
+                ChooserFilterText = "IconDeckFilter.png";
+                CanFilterByEclipse = CurrentDeck.DeckFaction == Faction.ECLIPSE;
+                CanFilterByScales = CurrentDeck.DeckFaction == Faction.SCALES;
+                CanFilterByStrife = CurrentDeck.DeckFaction == Faction.STRIFE;
+                CanFilterByThorns = CurrentDeck.DeckFaction == Faction.THORNS;
+                CanFilterBySilence = CurrentDeck.DeckFaction == Faction.SILENCE;
+                CanFilterByEssence = CurrentDeck.DeckFaction == Faction.ESSENCE;
+                CanFilterByDelirium = CurrentDeck.DeckFaction == Faction.DELIRIUM;
+                CanFilterByEighth = (int)CurrentDeck.DeckFaction == 9;
+
+                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
+                else await ApplyFilters();
+
+                RaisePropertyChanged(nameof(CanFilterByEclipse));
+                RaisePropertyChanged(nameof(CanFilterByScales));
+                RaisePropertyChanged(nameof(CanFilterByStrife));
+                RaisePropertyChanged(nameof(CanFilterByThorns));
+                RaisePropertyChanged(nameof(CanFilterBySilence));
+                RaisePropertyChanged(nameof(CanFilterByEssence));
+                RaisePropertyChanged(nameof(CanFilterByDelirium));
+                RaisePropertyChanged(nameof(CanFilterByEighth));
+
+            }
+            else
+            {
+                AllCards = _unfilteredCards?.ToList();
+                FilteredCards = AllCards;
+
+                CanFilterByEclipse = true;
+                CanFilterByScales = true;
+                CanFilterByStrife = true;
+                CanFilterByThorns = true;
+                CanFilterBySilence = true;
+                CanFilterByEssence = true;
+                CanFilterByDelirium = true;
+                CanFilterByEighth = true;
+                FilterByDeck = false;
+
+                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
+                else await ApplyFilters();
+            }
+        }
+
+        private async Task ApplyFilters()
+        {
+			if (AllCards != null && !_suspendFilters)
             {
                 var filtered =
                 from c in AllCards
-                where (!FilteredByFaction || c.Faction == FactionFilter) &&
+                where (!FilteredByFaction || (FactionFilter != Faction.UNALIGNED && c.ValidFactions.Contains(FactionFilter) && c.ValidFactions.Count() != FACTION_COUNT) || 
+                                             (FactionFilter == Faction.UNALIGNED && c.Faction == Faction.UNALIGNED && c.ValidFactions.Count() == FACTION_COUNT)) &&
                       (!FilteredByType || c.Type == TypeFilter) &&
                       (CostFilter == MAX_COSTS_FILTER || ((CostFilter == MAX_COSTS_FILTER - 1 && c.Cost >= CostFilter) || c.Cost == CostFilter)) &&
                       (RarityFilter == 0 || (int)c.Rarity == RarityFilter) &&
-                      ((TraitFilter == null || TraitFilter.Count() == 0) || TraitFilter.Intersect(c.Traits).Any()) &&
+                      ((TraitFilter == null || !TraitFilter.Any()) || TraitFilter.Intersect(c.Traits).Any()) &&
                       (CurrentDeck == null || !FilterByDeck || CurrentDeck.Contains(c) || CurrentDeck.Champion == c) &&
-                      (string.IsNullOrEmpty(SearchText) || 
-                       c.Text.ToLower().Contains(SearchText.ToLower()) || 
-                       c.Name.ToLower().Contains(SearchText.ToLower()) || 
+                      (string.IsNullOrEmpty(CardSetFilter) || CardSetFilter == _CARD_SET_FILTER_DEFAULT || c.CardSet == (CardSet)Enum.Parse(typeof(CardSet), CardSetFilter)) &&
+                      (string.IsNullOrEmpty(SearchText) ||
+                       c.Text.ToLower().Contains(SearchText.ToLower()) ||
+                       c.Name.ToLower().Contains(SearchText.ToLower()) ||
                        c.Race.ToString().ToLower().Contains(SearchText.ToLower()) ||
                        SearchText.ToUpper().Contains(c.CardSet.ToString()))
-                orderby c.Type == CardType.CHAMPION descending, c.Faction descending, c.Cost, c.Name
+                orderby c.Rarity == Rarity.TOKEN, c.Type == CardType.CHAMPION descending, c.Faction descending, c.Cost, c.Name
                 select c;
 
                 IsBusy = true;
-                var newList = await Task.Run(()=>filtered.ToList());
+                var newList = await Task.Run(() => filtered.ToList());
                 FilteredCards = newList;
                 IsBusy = false;
                 UpdateStatus();
@@ -93,7 +177,7 @@ namespace DragonFrontCompanion.ViewModel
 
         private void UpdateStatus()
         {
-            CardsTitle = "Cards (" + FilteredCards.Count + ")";
+            CardsTitle = $"Cards ({FilteredCards.Count})";
 
             if (IsChooser) DeckStatus = "Deck    " + CurrentDeck.Count + " / 30    " +
                              (CurrentDeck.Champion != null ? "1C | " : "0C | ") +
@@ -104,6 +188,21 @@ namespace DragonFrontCompanion.ViewModel
         }
 
         #region Properties
+        private List<string> _cardSets;
+        public List<string> CardSets
+        {
+            get
+            {
+                if (_cardSets != null) return _cardSets;
+                else
+                {
+                    _cardSets = Enum.GetValues(typeof(CardSet)).Cast<CardSet>().Skip(2).AsQueryable().Select(cs => cs.ToString()).ToList();
+                    _cardSets.Insert(0, _CARD_SET_FILTER_DEFAULT);
+                    CardSetFilter = _CARD_SET_FILTER_DEFAULT;
+                    return _cardSets;
+                }
+            }
+        }
 
         private bool _isBusy = false;
         public bool IsBusy
@@ -124,7 +223,7 @@ namespace DragonFrontCompanion.ViewModel
         public List<Card> AllCards
         {
             get { return _allCards; }
-            set {Set(ref _allCards, value);}
+            set { Set(ref _allCards, value); }
         }
 
         private Card _selectedCard = null;
@@ -134,7 +233,7 @@ namespace DragonFrontCompanion.ViewModel
             set
             {
                 if ((App.RuntimePlatform == App.Device.Windows || App.RuntimePlatform == App.Device.WinPhone)
-                    && _lastActionedCard != null  && value == _lastActionedCard)
+                    && _lastActionedCard != null && value == _lastActionedCard)
                 {
                     _lastActionedCard = null;
                     return;
@@ -143,7 +242,7 @@ namespace DragonFrontCompanion.ViewModel
                 Set(ref _selectedCard, value);
                 PreviousCardCommand.RaiseCanExecuteChanged();
                 NextCardCommand.RaiseCanExecuteChanged();
-                if (value != null)_lastActionedCard = null;
+                if (value != null) _lastActionedCard = null;
             }
         }
 
@@ -162,78 +261,15 @@ namespace DragonFrontCompanion.ViewModel
         public Deck CurrentDeck
         {
             get { return _deck; }
-            set
-            {
-                Message = "";
-                IsChooser = value != null;
-                if (!IsChooser) ChooserFilterText = "";
-
-                bool changed = _deck == null || _deck != value;
-              
-                Set(ref _deck, value);
-
-                if (changed) DeckInitialize();
-            }
-        }
-
-        private async void DeckInitialize()
-        {
-            if (!_cardsTask.IsCompleted) await _cardsTask;
-
-            if (_deck != null)
-            {
-               //filter cards according to deck
-                AllCards = _unfilteredCards.Where((c) => (c.Faction == Faction.UNALIGNED || c.Faction == _deck.DeckFaction)).ToList();
-
-                ChooserFilterText = "IconDeckFilter.png";
-                CanFilterByEclipse = _deck.DeckFaction == Faction.ECLIPSE;
-                CanFilterByScales = _deck.DeckFaction == Faction.SCALES;
-                CanFilterByStrife = _deck.DeckFaction == Faction.STRIFE;
-                CanFilterByThorns = _deck.DeckFaction == Faction.THORNS;
-                CanFilterBySilence = _deck.DeckFaction == Faction.SILENCE;
-                CanFilterByEssence = _deck.DeckFaction == Faction.ESSENCE;
-                CanFilterByDelirium = _deck.DeckFaction == Faction.DELIRIUM;
-
-                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
-                else ApplyFilters();
-
-                RaisePropertyChanged(nameof(CanFilterByEclipse));
-                RaisePropertyChanged(nameof(CanFilterByScales));
-                RaisePropertyChanged(nameof(CanFilterByStrife));
-                RaisePropertyChanged(nameof(CanFilterByThorns));
-                RaisePropertyChanged(nameof(CanFilterBySilence));
-                RaisePropertyChanged(nameof(CanFilterByEssence));
-                RaisePropertyChanged(nameof(CanFilterByDelirium));
-
-            }
-            else
-            {
-                AllCards = _unfilteredCards?.ToList();
-                FilteredCards = AllCards;
-
-                CanFilterByEclipse = true;
-                CanFilterByScales = true;
-                CanFilterByStrife = true;
-                CanFilterByThorns = true;
-                CanFilterBySilence = true;
-                CanFilterByEssence = true;
-                CanFilterByDelirium = true;
-                FilterByDeck = false;
-
-                if (ResetFiltersCommand.CanExecute(null)) ResetFiltersCommand.Execute(null);
-                else ApplyFilters();
-            }
+            set {Set(ref _deck, value);}
         }
 
         private string _cardsTitle = "Cards";
-		public string CardsTitle
-		{
-			get { return _cardsTitle;}
-			set
-			{
-				Set(ref _cardsTitle, value);
-			}
-		}
+        public string CardsTitle
+        {
+            get { return _cardsTitle; }
+            set {Set(ref _cardsTitle, value);}
+        }
 
         private bool _isChooser = false;
         public bool IsChooser
@@ -268,7 +304,8 @@ namespace DragonFrontCompanion.ViewModel
         public string Message
         {
             get { return _msg; }
-            set {
+            set
+            {
                 Set(ref _msg, value);
                 if (App.RuntimePlatform == App.Device.Android &&
                     !string.IsNullOrEmpty(value)) MessagingCenter.Send<string>(value, App.MESSAGES.SHOW_TOAST);
@@ -280,7 +317,8 @@ namespace DragonFrontCompanion.ViewModel
         public int CostFilter
         {
             get { return _costFilter; }
-            set {
+            set
+            {
                 if (_costFilter == value) return;
 
                 Set(ref _costFilter, value);
@@ -344,7 +382,7 @@ namespace DragonFrontCompanion.ViewModel
                 Set(ref _typeFilter, value);
                 if (App.RuntimePlatform == App.Device.iOS)
                 {
-                    TypeFilterText = _typeFilter == CardType.INVALID ? "Type" : "Type:" + _typeFilter.ToString();
+                    TypeFilterText = _typeFilter == CardType.INVALID ? "ALL" : _typeFilter.ToString();
                 }
             }
         }
@@ -373,7 +411,7 @@ namespace DragonFrontCompanion.ViewModel
 
                 if (App.RuntimePlatform == App.Device.iOS)
                 {
-                    FactionFilterText = _factionFilter == Faction.INVALID ? "Faction" : "Faction:" + _factionFilter.ToString();
+                    FactionFilterText = _factionFilter == Faction.INVALID ? "ALL" : _factionFilter.ToString();
                 }
             }
         }
@@ -433,11 +471,22 @@ namespace DragonFrontCompanion.ViewModel
             set { Set(ref _essenceDelirium, value); }
         }
 
-        private Traits[] _traitFilter;
-        public Traits[] TraitFilter
+        private bool _eigthFilter = true;
+        public bool CanFilterByEighth
+        {
+            get { return _eigthFilter; }
+            set { Set(ref _eigthFilter, value); }
+        }
+
+        public bool EighthFactionEnabled => _unfilteredCards != null ? _unfilteredCards.Any(c => (int)c.Faction == 9) : false;
+        public string EighthFactionText => Enum.TryParse("9", out Faction faction) ? faction.ToString() : "";
+
+        private List<string> _traitFilter;
+        public List<string> TraitFilter
         {
             get { return _traitFilter; }
-            private set {
+            private set
+            {
                 Set(ref _traitFilter, value);
                 if (value != null && value.Count() > 0)
                 {
@@ -461,11 +510,24 @@ namespace DragonFrontCompanion.ViewModel
             set { Set(ref _traitFilterDisplay, value); }
         }
 
+        private const string _CARD_SET_FILTER_DEFAULT = "ALL";
+        private string _cardSetFilter;
+        public string CardSetFilter
+        {
+            get { return _cardSetFilter; }
+            set
+            {
+                Set(ref _cardSetFilter, value);
+                ApplyFilters();
+            }
+        }
+
         private string _searchText = "";
         public string SearchText
         {
             get { return _searchText; }
-            set {
+            set
+            {
                 if (_searchText == value) return;
 
                 Set(ref _searchText, value);
@@ -478,7 +540,7 @@ namespace DragonFrontCompanion.ViewModel
                         {
                             await Task.Delay(750);
                             if (_suspendFilters)
-                            { 
+                            {
                                 _suspendFilters = false;
                                 Device.BeginInvokeOnMainThread(() => ApplyFilters());
                             }
@@ -583,29 +645,29 @@ namespace DragonFrontCompanion.ViewModel
                         FilterByDeck = !FilterByDeck;
                         ChooserFilterText = FilterByDeck ? "IconCardsAll.png" : "IconDeckFilter.png";
 
-						if (FilterByDeck) Message = "Showing current deck cards";
-						else Message = "Showing all valid cards";
+                        if (FilterByDeck) Message = "Showing current deck cards";
+                        else Message = "Showing all valid cards";
 
                         ApplyFilters();
                     }));
             }
         }
 
-        private RelayCommand<Faction> _toggleFaction;
+        private RelayCommand<object> _toggleFaction;
 
         /// <summary>
         /// Gets the FilterFactionCommand.
         /// </summary>
-        public RelayCommand<Faction> FilterFactionCommand
+        public RelayCommand<object> FilterFactionCommand
         {
             get
             {
                 return _toggleFaction
-                    ?? (_toggleFaction = new RelayCommand<Faction>(
+                    ?? (_toggleFaction = new RelayCommand<object>(
                     p =>
                     {
                         FilteredByFaction = true;
-                        FactionFilter = p;
+                        FactionFilter = (Faction)p;
                         ApplyFilters();
                     },
                     p => true));
@@ -713,28 +775,30 @@ namespace DragonFrontCompanion.ViewModel
                         CostFilter = MAX_COSTS_FILTER;
                         RarityFilter = 0;
                         SearchText = "";
+                        CardSetFilter = _CARD_SET_FILTER_DEFAULT;
 
                         _suspendFilters = false;
 
                         ApplyFilters();
                         ResetFiltersCommand.RaiseCanExecuteChanged();
                     },
-                    ()=>
+                    () =>
                         {
-                            var canExecute = 
-                                    FilteredByFaction || 
-                                    FilteredByType || 
-                                    CostFilter < MAX_COSTS_FILTER || 
+                            var canExecute =
+                                    FilteredByFaction ||
+                                    FilteredByType ||
+                                    CostFilter < MAX_COSTS_FILTER ||
                                     FilterByDeck ||
-                                    TraitFilter != null || 
-                                    RarityFilter != 0 || 
+                                    TraitFilter != null ||
+                                    RarityFilter != 0 ||
+                                    (CardSetFilter != null && CardSetFilter != _CARD_SET_FILTER_DEFAULT) ||
                                     !string.IsNullOrEmpty(SearchText);
 
                             ResetFilterIcon = canExecute ? "IconFilterReset.png" : "";
                             ResetFilterText = canExecute ? "Reset Filters" : "";
 
                             return canExecute;
-                         }
+                        }
                     ));
             }
         }
@@ -814,7 +878,7 @@ namespace DragonFrontCompanion.ViewModel
                         var selectedIndex = FilteredCards.IndexOf(SelectedCard);
                         if (FilteredCards.Count > selectedIndex + 1) SelectedCard = FilteredCards[selectedIndex + 1];
                     },
-                    ()=>
+                    () =>
                     {
                         if (FilteredCards == null || SelectedCard == null) return false;
                         var selectedIndex = FilteredCards.IndexOf(SelectedCard);

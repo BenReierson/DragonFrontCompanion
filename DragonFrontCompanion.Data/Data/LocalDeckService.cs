@@ -108,16 +108,7 @@ namespace DragonFrontCompanion.Data
                         newDeck.CanUndo = _deckUndoStates.ContainsKey(newDeck.ID);
                         savedDecks.Add(newDeck);
                     }
-                    catch (Exception ex)
-                    {
-                        string version = "NA";
-                        if (fileData?.Length > 0)
-                        {
-                            var index = fileData?.IndexOf("AppVersion");
-                            if (index.HasValue && fileData.Length > index + 19)
-                            { version = fileData.Substring(index.Value + 14, 5); }
-                        }
-                    }
+                    catch (Exception) { } //TODO:Log/Display error
                 }
 
                 //sort by date
@@ -134,7 +125,7 @@ namespace DragonFrontCompanion.Data
             var diceRoll = new Random();
             var faction = (Faction)diceRoll.Next(2, 8);
             var deck = new Deck(faction, AppVersion, DeckType.GENERATED_DECK) { Name = "RANDOM DECK", Description = "I wouldn't recommend actually playing as is. Edit this deck to save it, or share it as a challenge!"};
-            var cards = (await _cardsService.GetAllCardsAsync()).Where((c) => c.Faction == faction || c.Faction == Faction.UNALIGNED).ToList();
+            var cards = (await _cardsService.GetAllCardsAsync()).Where((c) => c.ValidFactions.Contains(faction) && c.Rarity != Rarity.TOKEN).ToList();
             cards.Shuffle();
             deck.Champion = cards.FirstOrDefault((c) => c.Type == CardType.CHAMPION);
             while (!deck.IsValid)
@@ -142,7 +133,7 @@ namespace DragonFrontCompanion.Data
                 try
                 {
                     cards.Shuffle();
-                    deck.Add(cards[0]);
+                    if (cards[0].Type != CardType.CHAMPION && deck.CountCard(cards[0]) < Deck.MAX_CARD_COUNT) deck.Add(cards[0]);
                     if (diceRoll.Next(0, 1) == 1) deck.Add(cards[0]);
                 }
                 catch (Exception) {
@@ -269,6 +260,20 @@ namespace DragonFrontCompanion.Data
             catch (Exception) { }
 
             return null;
+        }
+
+        public string GetDeckVersionFromDeckJson(string deckJson)
+        {
+            string version = null;
+
+            if (deckJson?.Length > 0)
+            {
+                var index = deckJson?.IndexOf(nameof(Deck.AppVersion));
+                if (index.HasValue && deckJson.Length > index + 19)
+                { version = deckJson.Substring(index.Value + 14, 5); }
+            }
+
+            return version;
         }
     }
 }

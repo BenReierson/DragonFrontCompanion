@@ -29,7 +29,8 @@ namespace DragonFrontCompanion.Data
             set
             {
                 _activeDataSource = value;
-                CardDataInfoUrl = string.Format(DefaultCardInfoUrl, value);
+                if (Uri.IsWellFormedUriString(value, UriKind.Absolute)) CardDataInfoUrl = value;
+                else CardDataInfoUrl = string.Format(DefaultCardInfoUrl, value);
             }
         }
 
@@ -45,13 +46,14 @@ namespace DragonFrontCompanion.Data
         {
             var latestInfo = await GetLatestCardInfo().ConfigureAwait(false);
             var currentVersion = Settings.ActiveCardDataVersion != null ? Settings.ActiveCardDataVersion : Info.Current.CardDataVersion;
+
             if (latestInfo.CardDataVersion > currentVersion &&
                 latestInfo.CardDataCompatibleVersion <= currentVersion)
             {//remote card data is newer and compatible
                 DataUpdateAvailable?.Invoke(this, latestInfo);
-                return latestInfo;
             }
-            else return Info.Current;
+
+            return latestInfo;
         }
 
         private async Task<Cards> GetActiveCardDataAsync()
@@ -63,7 +65,16 @@ namespace DragonFrontCompanion.Data
                     var cardDataFolder = await FileSystem.Current.LocalStorage.GetFolderAsync(CardsFolderName).ConfigureAwait(false);
                     var cardsFile = await cardDataFolder.GetFileAsync(Settings.ActiveCardDataVersion.ToString()).ConfigureAwait(false);
                     var cardsJson = await cardsFile.ReadAllTextAsync().ConfigureAwait(false);
-                    return new Cards(cardsJson);
+
+                    var traitsExist = await cardDataFolder.CheckExistsAsync(Settings.ActiveCardDataVersion + "_traits");
+                    string traitsJson = null;
+                    if (traitsExist == ExistenceCheckResult.FileExists)
+                    {
+                        var traitsFile = await cardDataFolder.GetFileAsync(Settings.ActiveCardDataVersion + "_traits").ConfigureAwait(false);
+                        traitsJson = traitsFile != null ? await traitsFile.ReadAllTextAsync().ConfigureAwait(false) : null;
+                    }
+
+                    return new Cards(cardsJson, traitsJson);
                 }
                 else return await Task.Run(() => new Cards()).ConfigureAwait(false);
             }
@@ -73,13 +84,19 @@ namespace DragonFrontCompanion.Data
             }
         }
 
-        private async Task SaveCardDataAsync(Info version, string cardsJson)
+        private async Task SaveCardDataAsync(Info version, string cardsJson, string traitsJson)
         {
             try
             {
                 var cardDataFolder = await FileSystem.Current.LocalStorage.CreateFolderAsync(CardsFolderName, CreationCollisionOption.OpenIfExists);
                 var cardsFile = await cardDataFolder.CreateFileAsync(version.CardDataVersion.ToString(), CreationCollisionOption.ReplaceExisting);
                 await cardsFile.WriteAllTextAsync(cardsJson);
+
+                if (!string.IsNullOrEmpty(traitsJson))
+                {
+                    var traitsFile = await cardDataFolder.CreateFileAsync(version.CardDataVersion + "_traits", CreationCollisionOption.ReplaceExisting);
+                    await traitsFile.WriteAllTextAsync(traitsJson);
+                }
 
                 Settings.ActiveCardDataVersion = version.CardDataVersion;
             }
@@ -101,9 +118,12 @@ namespace DragonFrontCompanion.Data
                 {
                     client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
                     var latestCardInfo = await GetLatestCardInfo();
+
                     var latestCardJson = await client.GetStringAsync(latestCardInfo.CardDataUrl);
-                    CachedCards = new Cards(latestCardJson);
-                    await SaveCardDataAsync(latestCardInfo, latestCardJson);
+                    var latestTraitsJson = string.IsNullOrEmpty(latestCardInfo.CardTraitsUrl) ? null : await client.GetStringAsync(latestCardInfo.CardTraitsUrl);
+
+                    CachedCards = new Cards(latestCardJson, latestTraitsJson);
+                    await SaveCardDataAsync(latestCardInfo, latestCardJson, latestTraitsJson);
 
                     DataUpdated?.Invoke(this, CachedCards);
                     _updating = false;
@@ -129,13 +149,17 @@ namespace DragonFrontCompanion.Data
 
         private async Task<Info> GetLatestCardInfo()
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
-                var infoJson = await client.GetStringAsync(CardDataInfoUrl);
-                var latestInfo = JsonConvert.DeserializeObject<Info>(infoJson);
-                return latestInfo;
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
+                    var infoJson = await client.GetStringAsync(CardDataInfoUrl);
+                    var latestInfo = JsonConvert.DeserializeObject<Info>(infoJson);
+                    return latestInfo;
+                }
             }
+            catch (Exception) { return Info.Current; } 
         }
 
         private Cards CachedCards
@@ -176,7 +200,7 @@ namespace DragonFrontCompanion.Data
             return (await GetCachedCardsAsync()).All;
         }
 
-        public async Task<ReadOnlyDictionary<Traits, string>> GetCardTraitsAsync()
+        public async Task<ReadOnlyDictionary<string, string>> GetCardTraitsAsync()
         {
             return (await GetCachedCardsAsync()).TraitsDictionary;
         }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
     x:Class="DragonFrontCompanion.Controls.DeckControl"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -10,6 +10,7 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:CardImagePlaceholderConverter x:Key="CardPlaceholders" />
             <helpers:InverseBooleanConverter x:Key="InverseBoolean" />
             <helpers:FactionToImageConverter x:Key="FactionImage" />
             <helpers:RelativeTimeConverter x:Key="RelativeTime" />
@@ -62,6 +63,7 @@
                 x:Name="ChampCachedImage"
                 DownsampleToViewSize="True"
                 HeightRequest="100"
+                ErrorPlaceholder="{Binding Champion, Converter={StaticResource Key=CardPlaceholders}}"
                 Source="{Binding Champion, Converter={StaticResource Key=CardImages}, ConverterParameter='Large'}"
                 WidthRequest="100">
                 <ffImage:CachedImage.GestureRecognizers>

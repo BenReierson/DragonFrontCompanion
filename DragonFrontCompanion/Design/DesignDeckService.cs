@@ -24,6 +24,11 @@ namespace DragonFrontCompanion.Design
             return true;
         }
 
+        public string GetDeckVersionFromDeckJson(string deckJson)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Deck> GetSavedDeckAsync(Guid ID)
         {
             return null;

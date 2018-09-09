@@ -17,6 +17,8 @@ namespace DragonFrontCompanion.Views
 
         public DeckViewModel Vm => (DeckViewModel)BindingContext;
 
+        public DeckPage() : this(deck:null) { }
+
         public DeckPage(Deck deck)
         {
             InitializeComponent();
@@ -25,6 +27,9 @@ namespace DragonFrontCompanion.Views
             {
                 Title = "Deck";
             }
+
+            //currently disabled on android due to compatibility issues
+            ShareButton.IsVisible = App.RuntimePlatform != App.Device.Android;
 
             Vm.CurrentDeck = deck;
         }
@@ -74,9 +79,13 @@ namespace DragonFrontCompanion.Views
         //make grid big enough to prevent list scrolling, allowing the whole page to scroll
         private void ResizeCardLists()
         {
-            var rowHeight = FactionList.RowHeight > UnalignedList.RowHeight ? FactionList.RowHeight : UnalignedList.RowHeight;
-            var longestList = Vm.CurrentDeck.DistinctFaction.Count() > Vm.CurrentDeck.DistinctUnaligned.Count() ? Vm.CurrentDeck.DistinctFaction.Count() : Vm.CurrentDeck.DistinctUnaligned.Count();
-            CardLists.HeightRequest = (rowHeight * longestList) + 40;
+            try
+            {
+                var rowHeight = FactionList.RowHeight > UnalignedList.RowHeight ? FactionList.RowHeight : UnalignedList.RowHeight;
+                var longestList = Vm.CurrentDeck.DistinctFaction.Count() > Vm.CurrentDeck.DistinctUnaligned.Count() ? Vm.CurrentDeck.DistinctFaction.Count() : Vm.CurrentDeck.DistinctUnaligned.Count();
+                CardLists.HeightRequest = (rowHeight * longestList) + 40;
+            }
+            catch (Exception) { }
         }
 
         private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)

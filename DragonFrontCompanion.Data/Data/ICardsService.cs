@@ -12,7 +12,7 @@ namespace DragonFrontCompanion.Data
         Task<ReadOnlyCollection<Card>> GetAllCardsAsync();
         Task<ReadOnlyDictionary<string, Card>> GetCardsDictionaryAsync();
 
-        Task<ReadOnlyDictionary<Traits, string>> GetCardTraitsAsync();
+        Task<ReadOnlyDictionary<string, string>> GetCardTraitsAsync();
 
         Task<Info> CheckForUpdatesAsync();
         Task<Cards> UpdateCardDataAsync();

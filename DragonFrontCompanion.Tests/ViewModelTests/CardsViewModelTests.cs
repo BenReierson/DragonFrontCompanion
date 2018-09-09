@@ -30,6 +30,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         public void VMSetup()
         {
             cardsDb = new Cards();
+            Deck.CardDictionary = cardsDb.CardDictionary;
             mockNav = new Mock<INavigationService>();
             mockDialogService = new Mock<IDialogService>(MockBehavior.Loose);
             mockDeckService = new Mock<IDeckService>();
@@ -41,8 +42,9 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         }
 
         [TestMethod]
-        public void TestInitalized()
+        public async Task TestInitalized()
         {
+            await cardsVM.InitializeAsync();
             mockCardsService.Verify(c => c.GetAllCardsAsync());
             Assert.IsFalse(cardsVM.IsBusy);
             Assert.AreEqual(cardsDb.All.Count, cardsVM.AllCards.Count);
@@ -51,9 +53,9 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         }
 
         [TestMethod]
-        public void TestNullDeckInitialize()
+        public async Task TestNullDeckInitialize()
         {
-            cardsVM.CurrentDeck = null;
+            await cardsVM.InitializeAsync();
             Assert.IsFalse(cardsVM.IsChooser);
             Assert.AreEqual(cardsDb.All.Count, cardsVM.AllCards.Count);
 
@@ -63,12 +65,10 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestMethod]
         public async Task TestNewEclipseDeckInitialize()
         {
-            cardsVM.CurrentDeck = new Deck(Faction.ECLIPSE);
-
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(new Deck(Faction.ECLIPSE));
 
             Assert.IsTrue(cardsVM.IsChooser);
-            Assert.AreEqual(cardsDb.All.Count(c => c.Faction == Faction.ECLIPSE || c.Faction == Faction.UNALIGNED), cardsVM.AllCards.Count);
+            Assert.AreEqual(cardsDb.All.Count(c => c.Rarity != Rarity.TOKEN && c.ValidFactions.Contains(Faction.ECLIPSE)), cardsVM.AllCards.Count);
 
             //Check all filters status
             Assert.IsTrue(cardsVM.CanFilterByEclipse);
@@ -87,15 +87,14 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             Assert.AreEqual(null, cardsVM.TraitFilter);
             Assert.AreEqual(Faction.INVALID, cardsVM.FactionFilter);
 
-            Assert.AreEqual(cardsDb.All.Count(c => c.Faction == Faction.ECLIPSE || c.Faction == Faction.UNALIGNED), cardsVM.FilteredCards.Count, "All faction cards should be included by default.");
+            Assert.AreEqual(cardsDb.All.Count(c => c.Rarity != Rarity.TOKEN && c.ValidFactions.Contains(Faction.ECLIPSE)), cardsVM.FilteredCards.Count, "All faction cards should be included by default.");
 
         }
 
         [TestMethod]
         public async Task TestCostFilter()
         {
-            cardsVM.CurrentDeck = new Deck(Faction.ECLIPSE);
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(new Deck(Faction.ECLIPSE));
             var unfilteredCards = cardsVM.FilteredCards;
 
             for (int cost = 0; cost < CardsViewModel.MAX_COSTS_FILTER - 1; cost++)
@@ -127,8 +126,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestMethod]
         public async Task TestFactionFilter()
         {
-            cardsVM.CurrentDeck = new Deck(Faction.ECLIPSE);
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(new Deck(Faction.ECLIPSE));
 
             var unfilteredCards = cardsVM.FilteredCards;
 
@@ -143,7 +141,10 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
                 {
                     foreach (var card in cardsVM.FilteredCards)
                     {
-                        Assert.AreEqual((Faction)faction, card.Faction, $"Only {(Faction)faction} cards should be included.");
+                        if ((Faction)faction == Faction.UNALIGNED)
+                            Assert.AreEqual((Faction)faction, card.Faction, $"Only {(Faction)faction} cards should be included.");
+                        else
+                            Assert.IsTrue(card.ValidFactions.Contains((Faction)faction), $"Only {(Faction)faction} cards should be included.");
                     }
                 }
             }
@@ -158,8 +159,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestMethod]
         public async Task TestTypeFilter()
         {
-            cardsVM.CurrentDeck = new Deck(Faction.ECLIPSE);
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(new Deck(Faction.ECLIPSE));
 
             var unfilteredCards = cardsVM.FilteredCards;
 
@@ -189,8 +189,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestMethod]
         public async Task TestRarityFilter()
         {
-            cardsVM.CurrentDeck = new Deck(Faction.ECLIPSE);
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(new Deck(Faction.ECLIPSE));
 
             var unfilteredCards = cardsVM.FilteredCards;
             var rarities = Enum.GetValues(typeof(Rarity));
@@ -219,8 +218,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestMethod]
         public async Task TestTraitsFilter()
         {
-            cardsVM.CurrentDeck = null;
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync();
 
             var unfilteredCards = cardsVM.FilteredCards;
 
@@ -228,7 +226,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             shuffledCards.Shuffle();
 
             //test on a subset of cards with traits to reduce overall test time
-            foreach (var card in shuffledCards.Where(c=>c.Traits?.Length > 0).Take(20))
+            foreach (var card in shuffledCards.Where(c=>c.Traits?.Count > 0).Take(20))
             {
                 cardsVM.FindSimilarCommand.Execute(card);
                 await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
@@ -250,8 +248,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         [TestMethod]
         public async Task TestTextSearchFilter()
         {
-            cardsVM.CurrentDeck = null;
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync();
 
             var unfilteredCards = cardsVM.FilteredCards;
             var matchCard = unfilteredCards[1];
@@ -290,8 +287,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             deck.Add(cardsDb.All.Where(c => c.Faction == Faction.SCALES).ToList()[10]);
             deck.Add(cardsDb.All.First(c => c.Faction == Faction.UNALIGNED));
 
-            cardsVM.CurrentDeck = deck;
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(deck);
 
             var unfilteredCards = cardsVM.FilteredCards;
 
@@ -319,8 +315,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
         {
             var deck = new Deck(Faction.STRIFE);
 
-            cardsVM.CurrentDeck = deck;
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(deck);
 
             var factionCardToAdd = cardsDb.All.Where(c => c.Faction == Faction.STRIFE).First(c => c.Type != CardType.CHAMPION);
             var unalignedCardToAdd = cardsDb.All.Where(c => c.Faction == Faction.UNALIGNED).First();
@@ -365,8 +360,7 @@ namespace DragonFrontCompanion.Tests.ViewModelTests
             Assert.IsTrue(deck.Contains(unalignedCardToRemove));
             Assert.AreEqual(champToRemove, deck.Champion);
 
-            cardsVM.CurrentDeck = deck;
-            await Task.Delay(FILTER_TIMEOUT); //Allow filters to run
+            await cardsVM.InitializeAsync(deck);
 
             cardsVM.RemoveCardCommand.Execute(factionCardToRemove);
             Assert.IsFalse(deck.Contains(factionCardToRemove));

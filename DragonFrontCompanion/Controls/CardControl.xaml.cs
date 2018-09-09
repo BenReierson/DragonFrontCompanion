@@ -20,8 +20,7 @@ namespace DragonFrontCompanion.Controls
 
             if (App.RuntimePlatform == App.Device.Windows || App.RuntimePlatform == App.Device.WinPhone)
             {
-                TypeLabel.FontSize = 12;
-                FactionLabel.FontSize = 12;
+                SetLabel.FontSize = 12;
             }
             else
             {//Rounded transformation is not working on UWP

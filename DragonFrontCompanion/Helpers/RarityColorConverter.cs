@@ -22,6 +22,7 @@ namespace DragonFrontCompanion.Helpers
                 switch (rarity)
                 {
                     case Rarity.INVALID:
+                    case Rarity.TOKEN:
                     case Rarity.BASIC:
                         return Color.Black;
                     case Rarity.COMMON:

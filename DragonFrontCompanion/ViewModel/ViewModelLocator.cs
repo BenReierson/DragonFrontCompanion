@@ -12,12 +12,12 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using CommonServiceLocator;
 using DragonFrontCompanion.Data;
 using DragonFrontCompanion.Design;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
-using Microsoft.Practices.ServiceLocation;
 
 namespace DragonFrontCompanion.ViewModel
 {
@@ -41,8 +41,6 @@ namespace DragonFrontCompanion.ViewModel
         /// </summary>
         public ViewModelLocator()
         {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
             SimpleIoc.Default.Register<ICardsService, CardsService>();
 
             if (ViewModelBase.IsInDesignModeStatic)
@@ -66,12 +64,12 @@ namespace DragonFrontCompanion.ViewModel
             SimpleIoc.Default.Register<SettingsViewModel>();
         }
 
-        public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
-        public DecksViewModel Decks => ServiceLocator.Current.GetInstance<DecksViewModel>();
-        public DeckViewModel Deck => ServiceLocator.Current.GetInstance<DeckViewModel>();
-        public CardsViewModel Cards => ServiceLocator.Current.GetInstance<CardsViewModel>();
-        public AboutViewModel About => ServiceLocator.Current.GetInstance<AboutViewModel>();
-        public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
+        public MainViewModel Main => SimpleIoc.Default.GetInstance<MainViewModel>();
+        public DecksViewModel Decks => SimpleIoc.Default.GetInstance<DecksViewModel>();
+        public DeckViewModel Deck => SimpleIoc.Default.GetInstance<DeckViewModel>();
+        public CardsViewModel Cards => SimpleIoc.Default.GetInstance<CardsViewModel>();
+        public AboutViewModel About => SimpleIoc.Default.GetInstance<AboutViewModel>();
+        public SettingsViewModel Settings => SimpleIoc.Default.GetInstance<SettingsViewModel>();
 
         public static void Cleanup()
         {

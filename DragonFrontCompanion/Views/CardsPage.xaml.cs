@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 using DragonFrontDb;
 using Plugin.DeviceInfo;
 using Rg.Plugins.Popup.Extensions;
@@ -11,38 +11,36 @@ using System.Threading.Tasks;
 using DragonFrontCompanion.Controls;
 using DragonFrontCompanion.ViewModel;
 using Xamarin.Forms;
+using DragonFrontDb.Enums;
 
 namespace DragonFrontCompanion.Views
 {
     public partial class CardsPage : MenuContainerPage
     {
+        private Deck _deckToShow = null;
+        private string _pendingSearch = null;
+        private bool _initialized = false;
+
         public CardsViewModel Vm => (CardsViewModel)BindingContext;
 
         public CardsPage() : this(deck: null) { }
 
         public CardsPage(string searchText) : this(deck: null)
         {
-            SearchForCards(searchText);
-        }
-
-        private async void SearchForCards(string searchText)
-        {
-            while (Vm.IsBusy) await Task.Delay(100).ConfigureAwait(false);
-            await Task.Delay(100).ConfigureAwait(false); ; //let it settle
-            Device.BeginInvokeOnMainThread(() => Vm.SearchText = searchText);
+            _pendingSearch = searchText;
         }
 
         public CardsPage(Deck deck = null)
         {
             InitializeComponent();
 
+            _deckToShow = deck;
+
             if (App.RuntimePlatform == App.Device.Android &&
-                CrossDeviceInfo.Current.VersionNumber.Major < 5)
+                int.Parse(CrossDeviceInfo.Current.Version.Substring(0,1)) < 5)
             {SlideMenu = new CardTypeFilterLegacy();}
             else SlideMenu = new CardTypeFilter();
-
-
-            Vm.CurrentDeck = deck;
+           
             this.SlideMenu.BindingContext = Vm;
 
             //Android uses toast messages instead of the label
@@ -55,16 +53,13 @@ namespace DragonFrontCompanion.Views
             base.OnAppearing();
             ((CardPopup)Resources["SelectedCardPopup"]).BindingContext = Vm;
 
-            if (App.RuntimePlatform == App.Device.iOS)
-            {//bug in xamarin forms 2.3.3 preventing color from sticking the first time
-                MessageLabel.BackgroundColor = Color.White;
-                DeckStatusLabel.BackgroundColor = Color.White;
-
-                MessageLabel.BackgroundColor = Color.Black;
-                DeckStatusLabel.BackgroundColor = Color.Black;
+            if (!_initialized)
+            {
+				_initialized = true;
+				await Vm.InitializeAsync(_deckToShow, _pendingSearch);
+                _deckToShow = null;
+                _pendingSearch = null;
             }
-
-            await Vm.InitializeAsync();
         }
 
         private void FiltersButton_Clicked(object sender, EventArgs e)

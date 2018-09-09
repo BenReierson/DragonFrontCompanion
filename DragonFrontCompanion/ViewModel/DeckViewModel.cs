@@ -4,7 +4,6 @@ using DragonFrontDb.Enums;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
-using Microsoft.Practices.ServiceLocation;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;

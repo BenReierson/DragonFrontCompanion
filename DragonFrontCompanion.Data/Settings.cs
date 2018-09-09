@@ -39,11 +39,11 @@ namespace DragonFrontCompanion
         {
             get
             {
-                return AppSettings.GetValueOrDefault<bool>(AllowDeckOverloadSettingsKey, DEFAULT_AllowDeckOverload);
+                return AppSettings.GetValueOrDefault(AllowDeckOverloadSettingsKey, DEFAULT_AllowDeckOverload);
             }
             set
             {
-                AppSettings.AddOrUpdateValue<bool>(AllowDeckOverloadSettingsKey, value);
+                AppSettings.AddOrUpdateValue(AllowDeckOverloadSettingsKey, value);
             }
         }
 
@@ -51,11 +51,11 @@ namespace DragonFrontCompanion
         {
             get
             {
-                return AppSettings.GetValueOrDefault<bool>(EnableRandomDeckSettingsKey, DEFAULT_EnableRandomDeck);
+                return AppSettings.GetValueOrDefault(EnableRandomDeckSettingsKey, DEFAULT_EnableRandomDeck);
             }
             set
             {
-                AppSettings.AddOrUpdateValue<bool>(EnableRandomDeckSettingsKey, value);
+                AppSettings.AddOrUpdateValue(EnableRandomDeckSettingsKey, value);
             }
         }
 
@@ -63,13 +63,13 @@ namespace DragonFrontCompanion
         {
             get
             {
-                var setting = Version.Parse(AppSettings.GetValueOrDefault<string>(CardDataVersionSettingsKey, DEFAULT_CardDataVersion));
+                var setting = Version.Parse(AppSettings.GetValueOrDefault(CardDataVersionSettingsKey, DEFAULT_CardDataVersion));
                 if (setting < Info.Current.CardDataVersion) setting = Info.Current.CardDataVersion;
                 return setting;
             }
             set
             {
-                AppSettings.AddOrUpdateValue<string>(CardDataVersionSettingsKey, value != null ? value.ToString() : DEFAULT_CardDataVersion);
+                AppSettings.AddOrUpdateValue(CardDataVersionSettingsKey, value != null ? value.ToString() : DEFAULT_CardDataVersion);
             }
         }
 
@@ -77,11 +77,11 @@ namespace DragonFrontCompanion
         {
             get
             {
-                return Version.Parse(AppSettings.GetValueOrDefault<string>(HighestNotifiedDataSettingsKey, DEFAULT_CardDataVersion));
+                return Version.Parse(AppSettings.GetValueOrDefault(HighestNotifiedDataSettingsKey, DEFAULT_CardDataVersion));
             }
             set
             {
-                AppSettings.AddOrUpdateValue<string>(HighestNotifiedDataSettingsKey, value.ToString());
+                AppSettings.AddOrUpdateValue(HighestNotifiedDataSettingsKey, value.ToString());
             }
         }
 
@@ -89,11 +89,11 @@ namespace DragonFrontCompanion
         {
             get
             {
-                return AppSettings.GetValueOrDefault<bool>(EnableAutoUpdateSettingsKey, true);
+                return AppSettings.GetValueOrDefault(EnableAutoUpdateSettingsKey, true);
             }
             set
             {
-                AppSettings.AddOrUpdateValue<bool>(EnableAutoUpdateSettingsKey, value);
+                AppSettings.AddOrUpdateValue(EnableAutoUpdateSettingsKey, value);
             }
         }
     }

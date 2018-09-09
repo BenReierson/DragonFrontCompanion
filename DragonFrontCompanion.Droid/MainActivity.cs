@@ -15,6 +15,8 @@ using Java.Util.Concurrent.Atomic;
 using System.Collections.Generic;
 using System.Reflection;
 using Xamarin.Forms;
+using System.Net.Http;
+using Java.IO;
 
 namespace DragonFrontCompanion.Droid
 {
@@ -98,8 +100,10 @@ namespace DragonFrontCompanion.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+            Rg.Plugins.Popup.Popup.Init(this, bundle);
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            FFImageLoading.Forms.Droid.CachedImageRenderer.Init();
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(false);
 
             Context context = global::Xamarin.Forms.Forms.Context;
             var version = context.PackageManager.GetPackageInfo(context.PackageName, 0).VersionName;
@@ -131,26 +135,48 @@ namespace DragonFrontCompanion.Droid
                                                             {Toast.MakeText(this.ApplicationContext, message, ToastLength.Short).Show();});
 
         }
-
-
-        protected override void OnNewIntent(Intent intent)
+        public override void OnBackPressed()
         {
-            //base.OnNewIntent(intent);
+            Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed);
+        }
+
+        protected override async void OnNewIntent(Intent intent)
+        {
             if (intent != null && !intent.GetBooleanExtra("handled", false))
             {
                 if (intent.Action == Intent.ActionSend)
                 {
                     intent.PutExtra("handled", true);
                     var data = intent.GetParcelableExtra(Intent.ExtraStream);
-                    var fileStream = new System.IO.StreamReader(ContentResolver.OpenInputStream((Android.Net.Uri)data));
-                    var filetext = fileStream.ReadToEnd();
-                    OpenDeckDataInApp(filetext);
+                    if (data == null)
+                    { //Open from url
+                        data = intent.GetStringExtra(Intent.ExtraText);
+                        using (var client = new HttpClient())
+                        {
+                            var remotedata = await client.GetAsync(data.ToString());
+                            if (remotedata != null && remotedata.IsSuccessStatusCode) OpenDeckDataInApp(await remotedata.Content.ReadAsStringAsync());
+                        }
+                    }
+                    else
+                    {
+                        var fileStream = new System.IO.StreamReader(ContentResolver.OpenInputStream((Android.Net.Uri)data));
+                        var filetext = fileStream.ReadToEnd();
+                        OpenDeckDataInApp(filetext);
+                    }
 
                 }
                 else if (intent.Action == Intent.ActionView)
                 {
                     intent.PutExtra("handled", true);
-                    OpenDeckFileInApp(intent.Data.Path);
+                    if (intent.Data.Scheme == "content")
+                    {
+                        var stream = ContentResolver.OpenInputStream(intent.Data);
+                        var reader = new BufferedReader(new InputStreamReader(stream));
+                        var deckData = new StringBuilder();
+                        while (reader.Ready()) deckData.Append(await reader.ReadLineAsync());
+                        OpenDeckDataInApp(deckData.ToString());
+                    }
+                    else OpenDeckFileInApp(intent.Data.Path);
                 }
             }
 

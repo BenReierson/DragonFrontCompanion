@@ -51,14 +51,15 @@
                 Grid.Row="2"
                 BackgroundColor="#E1CA35"
                 Command="{Binding NavigateToNewCardsCommand}"
-                CommandParameter="CONQUEST"
+                CommandParameter="AEGIS"
                 FontAttributes="Bold"
                 FontSize="{helpers:NamedSizeOnPlatform Android=Medium,
                                                        iOS=Default,
                                                        WinPhone=Default,
                                                        ViewType={x:Type Button}}"
                 HorizontalOptions="Center"
-                Text="Conquest Champions"
+                Text="{Binding NewCardsText}"
+                IsEnabled="{Binding NewCardsEnabled}"
                 TextColor="#123338" />
 
 
@@ -100,6 +101,6 @@
             Text="{Binding VersionDisplay}"
             TextColor="Gray"
             VerticalOptions="End"
-            XAlign="Center" />
+            HorizontalTextAlignment="Center" />
     </Grid>
 </ContentPage>

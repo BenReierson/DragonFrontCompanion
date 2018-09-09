@@ -31,9 +31,11 @@ namespace DragonFrontCompanion.iOS
         {
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
 
+            Rg.Plugins.Popup.Popup.Init();
+
             global::Xamarin.Forms.Forms.Init();
             
-            FFImageLoading.Forms.Touch.CachedImageRenderer.Init();
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             SlideOverKit.iOS.SlideOverKit.Init();
 
             App.VersionName = version.ToString();

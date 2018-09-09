@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="41916BenReierson.DragonFrontCompanion" Publisher="CN=DCF61CC8-152C-4D2A-AD34-B4CB11D41B25" Version="1.1.0.0" />
+  <Identity Name="41916BenReierson.DragonFrontCompanion" Publisher="CN=DCF61CC8-152C-4D2A-AD34-B4CB11D41B25" Version="1.4.0.0" />
   <mp:PhoneIdentity PhoneProductId="c7f4c517-eb40-41a8-9694-eb5e0c44275e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Dragon Front Companion</DisplayName>

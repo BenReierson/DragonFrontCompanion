@@ -21,6 +21,10 @@
             Icon="IconUndo.png"
             IsVisible="{Binding CanUndo}"
             Text="Undo" />
+        <controls:BindableToolbarItem
+           x:Name="OpenFileButton"
+           Command="{Binding OpenFileCommand}"
+           Text="Open" />
         <ToolbarItem
             Clicked="NewDeckClicked"
             Icon="IconNew.png"
