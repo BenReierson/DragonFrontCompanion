@@ -461,6 +461,7 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\iphoneX_Splash_screen.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-1024.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Settings.png" />
