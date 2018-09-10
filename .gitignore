@@ -245,3 +245,5 @@ uitestsMac.sh
 *.bak
 *.orig
 Thumbs.db
+.droidres/.dragonfrontcompanion.droidres.db
+.mfractor/*
