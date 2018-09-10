@@ -140,9 +140,12 @@
     <Compile Include="Controls\ToastMessage.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\iphoneX_Splash_screen.png" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -436,6 +439,7 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-1024.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -460,8 +464,6 @@
     <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Default-568h%402x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\iphoneX_Splash_screen.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-1024.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Settings.png" />
@@ -483,6 +485,27 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\IconAEGIS_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-60%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Default-568h%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Default%402x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
