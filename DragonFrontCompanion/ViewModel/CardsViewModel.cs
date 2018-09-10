@@ -232,7 +232,7 @@ namespace DragonFrontCompanion.ViewModel
             get { return _selectedCard; }
             set
             {
-                if ((App.RuntimePlatform == App.Device.Windows || App.RuntimePlatform == App.Device.WinPhone)
+                if (App.RuntimePlatform == App.Device.UWP
                     && _lastActionedCard != null && value == _lastActionedCard)
                 {
                     _lastActionedCard = null;
@@ -531,7 +531,7 @@ namespace DragonFrontCompanion.ViewModel
                 if (_searchText == value) return;
 
                 Set(ref _searchText, value);
-                if (App.RuntimePlatform == App.Device.Windows)
+                if (App.RuntimePlatform == App.Device.UWP)
                 {//Delay search filter to help with performance on windows
                     if (!_suspendFilters)
                     {

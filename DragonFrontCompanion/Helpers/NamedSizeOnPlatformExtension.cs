@@ -47,8 +47,7 @@ namespace DragonFrontCompanion.Helpers
                 case App.Device.Android:
                     val = Android;
                     break;
-                case App.Device.WinPhone:
-                case App.Device.Windows:
+                case App.Device.UWP:
                     val = WinPhone;
                     break;
                 default:

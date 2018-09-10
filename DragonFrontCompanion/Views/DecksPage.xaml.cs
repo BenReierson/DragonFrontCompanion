@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DragonFrontCompanion.Controls;
 using DragonFrontCompanion.ViewModel;
 using Xamarin.Forms;
-
 namespace DragonFrontCompanion.Views
 {
     public partial class DecksPage : MenuContainerPage
@@ -60,7 +59,11 @@ namespace DragonFrontCompanion.Views
 
         private async void Deck_ContextMenu(object sender, ItemTappedEventArgs e)
         {
-            var result = await DisplayActionSheet(((Deck)e.Group).Name, "Cancel", null, new string[] {"Delete", "Duplicate", "Share" });
+
+            var result = App.RuntimePlatform != App.Device.Android ?
+                await DisplayActionSheet(((Deck)e.Group).Name, "Cancel", null, new string[] { "Delete", "Duplicate", "Share" }) :
+                await Acr.UserDialogs.UserDialogs.Instance.ActionSheetAsync(((Deck)e.Group).Name, "Cancel", "Delete", null, new string[] { "Duplicate" });
+
             if (result == "Delete")
             {
                 Vm.DeleteDeckCommand.Execute(e.Group);
