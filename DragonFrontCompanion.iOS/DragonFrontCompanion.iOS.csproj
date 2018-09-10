@@ -460,6 +460,7 @@
     <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Default-568h%402x.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\iphoneX_Splash_screen.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Settings.png" />
