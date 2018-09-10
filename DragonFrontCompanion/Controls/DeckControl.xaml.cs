@@ -18,7 +18,8 @@ namespace DragonFrontCompanion.Controls
             var instance = bindable as DeckControl;
             if (instance == null || newValue == null) return;
 
-            instance.ContextMenu.IsVisible = (bool)newValue;
+
+            instance.ContextMenu.IsVisible = (bool)newValue;// && App.RuntimePlatform != App.Device.Windows; //tap on this menu isn't working in uwp
             instance.ModifiedLabel.IsVisible = !(bool)newValue;
             instance.PriceLabel.IsVisible = !(bool)newValue;
         }
@@ -59,6 +60,7 @@ namespace DragonFrontCompanion.Controls
         public DeckControl()
         {
             InitializeComponent();
+            ContextImage.IsVisible = App.RuntimePlatform != App.Device.UWP;
         }
 
         public event EventHandler<ItemTappedEventArgs> ChampionTapped;

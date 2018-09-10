@@ -17,6 +17,7 @@ using System.Reflection;
 using Xamarin.Forms;
 using System.Net.Http;
 using Java.IO;
+using Acr.UserDialogs;
 
 namespace DragonFrontCompanion.Droid
 {
@@ -104,9 +105,9 @@ namespace DragonFrontCompanion.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(false);
+            UserDialogs.Init(this);
 
-            Context context = global::Xamarin.Forms.Forms.Context;
-            var version = context.PackageManager.GetPackageInfo(context.PackageName, 0).VersionName;
+            var version = PackageManager.GetPackageInfo(this.PackageName, 0).VersionName;
 
             MethodInfo dynMethod = typeof(MessagingCenter).GetMethod("ClearSubscribers", BindingFlags.NonPublic | BindingFlags.Static);
             dynMethod.Invoke(null, null);

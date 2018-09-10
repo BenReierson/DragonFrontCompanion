@@ -99,7 +99,7 @@ namespace DragonFrontCompanion.ViewModel
 
         public bool EighthFactionEnabled => Deck.CardDictionary != null && Deck.CardDictionary.Any(c => c.Value != null && (int)c.Value.Faction == 9);
         public string EighthFactionText => Enum.TryParse("9", out Faction faction) ? faction.ToString() : "";
-        public bool NinthFactionEnabled => Deck.CardDictionary.Any(c => (int)c.Value.Faction == 10);
+        public bool NinthFactionEnabled => Deck.CardDictionary != null && Deck.CardDictionary.Any(c => c.Value != null && (int)c.Value.Faction == 10);
         public string NinthFactionText => Enum.TryParse("10", out Faction faction) ? faction.ToString() : "";
 
 
@@ -283,7 +283,7 @@ namespace DragonFrontCompanion.ViewModel
                         }
                         if (status == PermissionStatus.Granted)
                         {
-                            if (App.RuntimePlatform == App.Device.Windows)
+                            if (App.RuntimePlatform == App.Device.UWP)
                             {
                                 var share = await _dialogService.ShowMessage("Share deck, or export deck file?", "Share/Export", "Share", "Export", null);
                                 if (share) MessagingCenter.Send<Deck>(p, App.MESSAGES.SHARE_DECK);

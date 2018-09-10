@@ -129,8 +129,11 @@
                     <TapGestureRecognizer Tapped="OnContextMenuTapped" />
                 </Grid.GestureRecognizers>
                 <ffImage:CachedImage
+                    x:Name="ContextImage"
                     HeightRequest="22"
                     HorizontalOptions="Start"
+                    Rotation="90"
+                    Margin="10,0,0,0"
                     Source="IconMenu.png"
                     VerticalOptions="End">
                     <ffImage:CachedImage.GestureRecognizers>

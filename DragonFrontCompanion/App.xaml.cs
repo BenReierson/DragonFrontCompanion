@@ -16,6 +16,8 @@ using Xamarin.Forms.Xaml;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace DragonFrontCompanion
@@ -28,8 +30,7 @@ namespace DragonFrontCompanion
         {
             public const string Android = "Android";
             public const string iOS = "iOS";
-            public const string Windows = "Windows";
-            public const string WinPhone = "WinPhone";
+            public const string UWP = "UWP";
             public const string Test = "Test";
         }
 
@@ -56,7 +57,7 @@ namespace DragonFrontCompanion
 
         public static string RuntimePlatform { get; set; } = Device.Test;
 
-        
+        public bool IsActive { get; set; }
         private NavigationService _navService = null;
         private DialogService _dialog = null;
         public App()
@@ -91,6 +92,22 @@ namespace DragonFrontCompanion
             _navService.Initialize(mainPage);
             _dialog.Initialize(mainPage);
             MainPage = mainPage;
+        }
+
+        public static void LogError(Exception ex, [CallerMemberName]string sourceMethod = "")
+        {
+            try
+            {
+                if (!AppCenter.Configured) return;
+
+                var properties = new Dictionary<string, string> { { "Method", sourceMethod }, { "Message", ex.Message }, };
+
+                Analytics.TrackEvent("ERROR_SILENT", properties);
+                Crashes.TrackError(ex, properties);
+
+                Debug.WriteLine("ERROR_SILENT" + string.Join(";", properties));
+            }
+            catch (Exception) { }
         }
 
         private async void OpenDeckDataAsync(object o, string data)
@@ -153,21 +170,26 @@ namespace DragonFrontCompanion
 
         protected override void OnStart()
         {
+            IsActive = true;
+
             // Handle when your app starts
             AppCenter.Start("ios=6f75c0fb-c19f-49a3-b0d1-e7c3fdf49b44;" +
                             "android=e03dd204-6d05-4ea4-9513-a12385944120;" +
                             "uwp=6013a5e1-18f0-4e45-95b8-bb7ce1411d6c;" ,
                             typeof(Analytics), typeof(Crashes));
+
         }
 
         protected override void OnSleep()
         {
-            // Handle when your app sleeps
+            base.OnSleep();
+            IsActive = false;
         }
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            base.OnResume();
+            IsActive = true;
         }
     }
 }

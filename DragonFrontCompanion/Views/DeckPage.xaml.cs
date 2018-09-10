@@ -23,7 +23,7 @@ namespace DragonFrontCompanion.Views
         {
             InitializeComponent();
 
-            if (App.RuntimePlatform == App.Device.Windows || App.RuntimePlatform == App.Device.WinPhone)
+            if (App.RuntimePlatform == App.Device.UWP)
             {
                 Title = "Deck";
             }

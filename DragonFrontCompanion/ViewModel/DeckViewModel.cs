@@ -211,7 +211,7 @@ namespace DragonFrontCompanion.ViewModel
                         }
                         if (status == PermissionStatus.Granted)
                         {
-                            if (App.RuntimePlatform == App.Device.Windows)
+                            if (App.RuntimePlatform == App.Device.UWP)
                             {
                                 var share = await _dialog.ShowMessage("Share deck, or export deck file?", "Share/Export", "Share", "Export", null);
                                 if (share) MessagingCenter.Send<Deck>(CurrentDeck, App.MESSAGES.SHARE_DECK);
