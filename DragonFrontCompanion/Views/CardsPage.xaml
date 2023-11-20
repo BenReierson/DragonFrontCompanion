@@ -1,56 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<t:MenuContainerPage
-    x:Class="DragonFrontCompanion.Views.CardsPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
-    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
-    xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
-    xmlns:views="clr-namespace:DragonFrontCompanion.Views"
-    x:Name="CurrentPage"
-    Title="{Binding CardsTitle}"
-    BindingContext="{Binding Cards, Source={StaticResource Locator}}">
-
-    <t:MenuContainerPage.Resources>
-        <ResourceDictionary>
-            <helpers:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
-            <views:CardPopup
-                x:Key="SelectedCardPopup"
-                x:Name="CardPopup"
-                Card="{Binding SelectedCard}"
-                NextCommand="{Binding NextCardCommand}"
-                PreviousCommand="{Binding PreviousCardCommand}" />
-        </ResourceDictionary>
-    </t:MenuContainerPage.Resources>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<views:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+                       xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
+                       xmlns:controls="clr-namespace:DragonFrontCompanion.Controls;assembly=DragonFrontCompanion"
+                       xmlns:models="clr-namespace:DragonFrontDb;assembly=DragonFrontDb"
+                       x:Class="DragonFrontCompanion.Views.CardsPage"
+                       x:TypeArguments="vm:CardsViewModel" 
+                       x:DataType="vm:CardsViewModel"
+                       Title="{Binding Title}"
+                       BackgroundColor="#E1CA35"
+                       x:Name="CurrentPage">
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            x:Name="ResetFiltersButton"
-            Clicked="ResetFilters_Clicked"
-            Command="{Binding ResetFiltersCommand}"
-            Icon="{Binding ResetFilterIcon}" />
-        <controls:BindableToolbarItem
             x:Name="DeckFilterButton"
             Command="{Binding DeckFilterCommand}"
-            Icon="{Binding ChooserFilterText}"
-            InsertIndex="1"
-            IsVisible="{Binding IsChooser}" />
+            Text="{Binding ChooserFilterText}" />
+        <ToolbarItem
+            x:Name="ResetFiltersButton"
+            Command="{Binding ResetFiltersCommand}"
+            Text="{Binding ResetFilterText}" />
         <ToolbarItem
             x:Name="FiltersButton"
             AutomationId="FilterButton"
-            Clicked="FiltersButton_Clicked"
-            Icon="IconFilter.png"
-            Text="Filters" />
+            IconImageSource="{OnPlatform Default='iconfilter.png', Android={x:Null}}"
+            Text="Filters"
+            Command="{Binding ToggleFiltersCommand}"/>
     </ContentPage.ToolbarItems>
-    <StackLayout BackgroundColor="#123338" Spacing="0">
-        <StackLayout
+    <Grid BackgroundColor="#123338"
+          RowSpacing="0"
+          RowDefinitions="40,Auto,Auto,*">
+        <StackLayout Grid.Row="0"
             BackgroundColor="#E1CA35"
             HorizontalOptions="FillAndExpand"
             Orientation="Horizontal">
             <Image
-                Margin="5,0,0,0"
+                Margin="5"
                 HeightRequest="20"
                 HorizontalOptions="Start"
-                Source="Search.png"
+                Source="search.png"
                 VerticalOptions="Center"
                 WidthRequest="20" />
             <Entry
@@ -58,23 +46,20 @@
                 BackgroundColor="#E1CA35"
                 HorizontalOptions="FillAndExpand"
                 Placeholder="search"
-                PlaceholderColor="White"
+                PlaceholderColor="#66123338"
                 Text="{Binding SearchText, Mode=TwoWay}"
                 TextColor="#123338" />
         </StackLayout>
-        <Label
+        <Label Grid.Row="1"
             x:Name="DeckStatusLabel"
             BackgroundColor="Black"
-            FontSize="{helpers:NamedSizeOnPlatform Android=Small,
-                                                   iOS=Micro,
-                                                   WinPhone=Default,
-                                                   ViewType={x:Type Label}}"
+            FontSize="12"
             IsVisible="{Binding IsChooser}"
             LineBreakMode="NoWrap"
             Text="{Binding DeckStatus}"
             TextColor="White"
             HorizontalTextAlignment="Center" />
-        <Label
+        <Label Grid.Row="2"
             x:Name="MessageLabel"
             BackgroundColor="Black"
             FontSize="Small"
@@ -84,60 +69,58 @@
             TextColor="Gray"
             HorizontalTextAlignment="Center" />
 
-        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-
-        <ListView
+        <ListView Grid.Row="3"
             x:Name="CardsList"
             BackgroundColor="#123338"
-            CachingStrategy="RecycleElement"
-            ItemTapped="CardsList_ItemTapped"
             ItemsSource="{Binding FilteredCards}"
-            RowHeight="100"
-            SeparatorColor="Black">
+            SelectedItem="{Binding SelectedCard, Mode=TwoWay}"
+            CachingStrategy="RecycleElement"
+            SelectionMode="Single"
+            RowHeight="104">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:Card">
                     <ViewCell>
                         <ViewCell.ContextActions>
                             <MenuItem
-                                Clicked="FindSimilar_Clicked"
+                                Command="{Binding BindingContext.FindSimilarCommand, Source={x:Reference Name=CurrentPage}}"
                                 CommandParameter="{Binding .}"
                                 Text="Find Similar" />
                         </ViewCell.ContextActions>
-                        <Grid>
+                        <Grid HeightRequest="104"
+                              Padding="0,2">
                             <controls:CardControl />
                             <controls:CardCount
                                 Margin="30"
                                 Card="{Binding .}"
-                                CardGroups="{Binding Vm.CurrentDeck.DistinctDictionary, Source={x:Reference Name=CurrentPage}}"
+                                CardGroups="{Binding BindingContext.CurrentDeck.DistinctDictionary, Source={x:Reference Name=CurrentPage}}"
                                 HeightRequest="40"
                                 HorizontalOptions="Start"
-                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CurrentPage}}"
+                                IsVisible="{Binding BindingContext.IsChooser, Source={x:Reference Name=CurrentPage}}"
                                 VerticalOptions="Center"
-                                WidthRequest="40" />
-                            <StackLayout
+                                WidthRequest="40"/>
+                            <Grid
                                 x:Name="EditCardButtons"
                                 Margin="105,0,0,0"
-                                IsVisible="{Binding Vm.IsChooser, Source={x:Reference Name=CurrentPage}}"
-                                Orientation="Horizontal"
+                                IsVisible="{Binding BindingContext.IsChooser, Source={x:Reference Name=CurrentPage}}"
+                                ColumnDefinitions="40,40"
+                                HeightRequest="40"
                                 VerticalOptions="End">
                                 <Button
                                     BackgroundColor="#E1CA35"
-                                    BorderColor="#123338"
-                                    Command="{Binding Vm.RemoveCardCommand, Source={x:Reference Name=CurrentPage}}"
+                                    Command="{Binding BindingContext.RemoveCardCommand, Source={x:Reference Name=CurrentPage}}"
                                     CommandParameter="{Binding .}"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
                                     FontAttributes="Bold"
-                                    FontSize="Medium"
-                                    HeightRequest="40"
+                                    FontSize="26"
+                                    Scale=".8"
                                     Text="-"
                                     TextColor="Red"
-                                    WidthRequest="40">
-                                    <Button.BorderWidth>
-                                        <OnPlatform
-                                            x:TypeArguments="x:Double"
-                                            Android="0"
-                                            WinPhone="0"
-                                            iOS="4" />
-                                    </Button.BorderWidth>
+                                    Margin="4"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    CornerRadius="0"
+                                    Padding="0">
                                     <Button.Triggers>
                                         <Trigger TargetType="Button" Property="IsEnabled" Value="False">
                                             <Setter Property="BackgroundColor" Value="Transparent" />
@@ -147,25 +130,22 @@
                                         </Trigger>
                                     </Button.Triggers>
                                 </Button>
-                                <Button
-                                    Margin="-6,0,0,0"
+                                <Button Grid.Column="1"
                                     BackgroundColor="#E1CA35"
-                                    BorderColor="#123338"
-                                    Command="{Binding Vm.AddOneToDeckCommand, Source={x:Reference Name=CurrentPage}}"
+                                    Command="{Binding BindingContext.AddOneToDeckCommand, Source={x:Reference Name=CurrentPage}}"
                                     CommandParameter="{Binding .}"
+                                    Scale=".8"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
                                     FontAttributes="Bold"
-                                    FontSize="Medium"
-                                    HeightRequest="40"
+                                    FontSize="26"
                                     Text="+"
                                     TextColor="Green"
-                                    WidthRequest="40">
-                                    <Button.BorderWidth>
-                                        <OnPlatform
-                                            x:TypeArguments="x:Double"
-                                            Android="0"
-                                            WinPhone="0"
-                                            iOS="4" />
-                                    </Button.BorderWidth>
+                                    Margin="4"
+                                    HeightRequest="32"
+                                    WidthRequest="32"
+                                    CornerRadius="0"
+                                    Padding="0">
                                     <Button.Triggers>
                                         <Trigger TargetType="Button" Property="IsEnabled" Value="False">
                                             <Setter Property="BackgroundColor" Value="Transparent" />
@@ -175,11 +155,39 @@
                                         </Trigger>
                                     </Button.Triggers>
                                 </Button>
-                            </StackLayout>
+                            </Grid>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </StackLayout>
-</t:MenuContainerPage>
+        
+        <ActivityIndicator Grid.Row="3"
+                           Color="#E1CA35"
+                           HorizontalOptions="Center" VerticalOptions="Center"
+                           IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        
+        <ContentView Grid.RowSpan="4" x:Name="CardDetailLayout"
+                     Margin="0,-60,0,0"
+                     BackgroundColor="#B3000000"
+                     IsVisible="{Binding SelectedCard, Converter={StaticResource VisibleWithValue}}">
+            <ContentView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseCardCommand}" />
+            </ContentView.GestureRecognizers>
+            <controls:CardDetail Card="{Binding SelectedCard}"
+                                 CloseCommand="{Binding CloseCardCommand}"
+                                 NextCommand="{Binding NextCardCommand}"
+                                 PreviousCommand="{Binding PreviousCardCommand}"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 WidthRequest="400"/>
+        </ContentView>
+        
+        <controls:CardTypeFilter Grid.Row="3"
+                                       IsVisible="{Binding IsFiltersVisible}">
+            <ContentView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ToggleFiltersCommand}" />
+            </ContentView.GestureRecognizers>
+        </controls:CardTypeFilter>
+    </Grid>
+</views:BaseContentPage>

@@ -1,48 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<t:MenuContainerPage
-    x:Class="DragonFrontCompanion.Views.DecksPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
-    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
-    xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
-    Title="{Binding Title}"
-    BindingContext="{Binding Decks, Source={StaticResource Locator}}">
+<views:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+                       xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
+                       xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
+                       xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+                       xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                       x:Class="DragonFrontCompanion.Views.DecksPage"
+                       x:TypeArguments="vm:DecksViewModel" 
+                       x:DataType="vm:DecksViewModel"
+                       Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <helpers:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
+            <helpers:CanUndoTextConverter x:Key="UndoText" />
             <helpers:CanUndoIconConverter x:Key="UndoIcon" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <controls:BindableToolbarItem
-            x:Name="UndoButton"
+        <ToolbarItem
             Command="{Binding UndoCommand}"
-            Icon="IconUndo.png"
-            IsVisible="{Binding CanUndo}"
-            Text="Undo" />
-        <controls:BindableToolbarItem
-           x:Name="OpenFileButton"
+            IconImageSource="{Binding CanUndo, Converter={StaticResource UndoIcon}}"
+            Text="{Binding CanUndo, Converter={StaticResource UndoText}}"/>
+        <ToolbarItem
+            Command="{Binding NewDeckCommand}"
+            IconImageSource="{OnPlatform Default='iconnew.png', Android={x:Null}}"
+            Text="New" />
+        <ToolbarItem
            Command="{Binding OpenFileCommand}"
            Text="Open" />
-        <ToolbarItem
-            Clicked="NewDeckClicked"
-            Icon="IconNew.png"
-            Text="New Deck" />
     </ContentPage.ToolbarItems>
 
     <Grid BackgroundColor="#123338">
         <ListView
             x:Name="DecksList"
-            BackgroundColor="Black"
-            IsPullToRefreshEnabled="True"
-            IsRefreshing="{Binding IsBusy}"
+            BackgroundColor="#123338"
+            IsPullToRefreshEnabled="False"
             ItemsSource="{Binding Decks}"
             RefreshCommand="{Binding RefreshDecksCommand}"
-            RowHeight="185"
+            RowHeight="190"
+            SelectionMode="None"
             SeparatorVisibility="None">
             <ListView.Behaviors>
-                <helpers:EventToCommandBehavior
+                <toolkit:EventToCommandBehavior
                     Command="{Binding OpenDeckCommand}"
                     EventArgsConverter="{StaticResource ItemTappedConverter}"
                     EventName="ItemTapped" />
@@ -50,25 +50,36 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <ViewCell.ContextActions>
-                            <MenuItem
-                                Clicked="DeleteDeck_Clicked"
-                                CommandParameter="{Binding .}"
-                                IsDestructive="True"
-                                Text="Delete" />
-                        </ViewCell.ContextActions>
-                        <controls:DeckControl
-                            ChampionTapped="Champion_Tapped"
-                            ContextMenuTapped="Deck_ContextMenu"
-                            EditModeToggleRequest="Deck_Edit" />
+                        <ContentView Padding="4,0,4,1" BackgroundColor="#4D000000">
+                            <controls:DeckControl
+                                BackgroundColor="Transparent"
+                                ChampionTapped="Champion_Tapped"
+                                ContextMenuTapped="Deck_ContextMenu"
+                                EditModeToggleRequest="Deck_Edit" />
+                        </ContentView>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <ActivityIndicator
+            Color="#E1CA35"
+            HeightRequest="40"
+            WidthRequest="40"
             HorizontalOptions="Center"
             IsRunning="{Binding IsBusy}"
             IsVisible="{Binding ShowBusy}"
             VerticalOptions="Center" />
+        
+        <ContentView x:Name="FactionPickerLayout"
+            BackgroundColor="#B3000000"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            IsVisible="{Binding IsFactionPickerVisible}">
+        <ContentView.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding CancelNewDeckCommand}" />
+        </ContentView.GestureRecognizers>
+            <controls:FactionPicker VerticalOptions="Start"
+                                    HorizontalOptions="Center"/>
+        </ContentView>
     </Grid>
-</t:MenuContainerPage>
+</views:BaseContentPage>

@@ -1,19 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="DragonFrontCompanion.Views.MainPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
-    Title="{Binding Title}"
-    BindingContext="{Binding Main, Source={StaticResource Locator}}">
+<views:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+                       xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
+                       x:Class="DragonFrontCompanion.Views.MainPage"
+                       x:TypeArguments="vm:MainViewModel" 
+                       x:DataType="vm:MainViewModel"
+                       Title="{Binding Title}">
     <ContentPage.ToolbarItems>
         <ToolbarItem
             x:Name="SettingsButton"
             Command="{Binding NavigateToSettingsCommand}"
-            Icon="Settings.png"
-            Text="Settings" />
+            IconImageSource="{OnPlatform Default='settings.png', Android={x:Null}}"
+            Text="⚙" />
     </ContentPage.ToolbarItems>
-    <Grid x:Name="MainLayout" BackgroundColor="#123338">
+
+    <Grid x:Name="MainLayout" 
+          BackgroundColor="#123338">
         <Grid
             x:Name="PageButtonLayout"
             Margin="20"
@@ -25,6 +28,7 @@
                 <RowDefinition Height="10" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -40,7 +44,7 @@
                 TextColor="#E1CA35"
                 VerticalOptions="Start" />
             <Grid Grid.Row="1" HorizontalOptions="Center">
-                <Image HorizontalOptions="Center" Source="IconCards.png" />
+                <Image HorizontalOptions="Center" Source="iconcards.png" />
                 <Button
                     AutomationId="CardsPage"
                     BackgroundColor="Transparent"
@@ -53,13 +57,10 @@
                 Command="{Binding NavigateToNewCardsCommand}"
                 CommandParameter="AEGIS"
                 FontAttributes="Bold"
-                FontSize="{helpers:NamedSizeOnPlatform Android=Medium,
-                                                       iOS=Default,
-                                                       WinPhone=Default,
-                                                       ViewType={x:Type Button}}"
+                FontSize="17"
                 HorizontalOptions="Center"
                 Text="{Binding NewCardsText}"
-                IsEnabled="{Binding NewCardsEnabled}"
+                IsVisible="{Binding NewCardsEnabled}"
                 TextColor="#123338" />
 
 
@@ -74,7 +75,7 @@
                 TextColor="#E1CA35"
                 VerticalOptions="Start" />
             <Grid Grid.Row="5" HorizontalOptions="Center">
-                <Image HorizontalOptions="Center" Source="IconDeck.png" />
+                <Image HorizontalOptions="Center" Source="icondeck.png" />
                 <Button
                     AutomationId="DecksPage"
                     BackgroundColor="Transparent"
@@ -92,15 +93,31 @@
                 Text="About"
                 TextColor="#E1CA35"
                 WidthRequest="120" />
+            
+            <Label
+                x:Name="VersionLabel"
+                Grid.Row="7"
+                Margin="0,0,0,16"
+                FontSize="12"
+                HorizontalOptions="Center"
+                Text="{Binding VersionDisplay}"
+                TextColor="LightGray"
+                VerticalOptions="End"
+                HorizontalTextAlignment="Center" />
         </Grid>
-
-        <Label
-            x:Name="VersionLabel"
-            FontSize="Small"
-            HorizontalOptions="Center"
-            Text="{Binding VersionDisplay}"
-            TextColor="Gray"
-            VerticalOptions="End"
-            HorizontalTextAlignment="Center" />
+        
+        
+        <ContentView BackgroundColor="#BF000000"
+                     HorizontalOptions="Fill"
+                     VerticalOptions="Fill"
+                     IsVisible="{Binding IsBusy}">
+            <ActivityIndicator Color="#E1CA35"
+                               Margin="{OnPlatform Default='0,-50,0,0', UWP='0,0,0,0'}"
+                               HorizontalOptions="Center"
+                               IsRunning="True"
+                               IsVisible="True"
+                               VerticalOptions="Center" />
+        </ContentView>
     </Grid>
-</ContentPage>
+
+</views:BaseContentPage>

@@ -1,88 +1,79 @@
-﻿using DragonFrontDb;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace DragonFrontCompanion.Controls;
 
-using Xamarin.Forms;
-
-namespace DragonFrontCompanion.Controls
+public partial class DeckControl : ContentView
 {
-    public partial class DeckControl : ContentView
+    public static readonly BindableProperty ContextMenuEnabledProperty = BindableProperty.Create(nameof(ContextMenuEnabled), typeof(bool), typeof(DeckControl), true, propertyChanged: OnContextMenuEnabledChanged);
+
+    private static void OnContextMenuEnabledChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        public static readonly BindableProperty ContextMenuEnabledProperty = BindableProperty.Create(nameof(ContextMenuEnabled), typeof(bool), typeof(DeckControl), true, propertyChanged: OnContextMenuEnabledChanged);
+        var instance = bindable as DeckControl;
+        if (instance == null || newValue == null) return;
 
-        private static void OnContextMenuEnabledChanged(BindableObject bindable, object oldValue, object newValue)
+
+        instance.ContextMenu.IsVisible = (bool)newValue;// && App.RuntimePlatform != App.Device.Windows; //tap on this menu isn't working in uwp
+        instance.ModifiedLabel.IsVisible = !(bool)newValue;
+        instance.PriceLabel.IsVisible = !(bool)newValue;
+    }
+
+    public bool ContextMenuEnabled
+    {
+        get { return (bool)GetValue(ContextMenuEnabledProperty); }
+        set {SetValue(ContextMenuEnabledProperty, value); }
+    }
+
+    public static readonly BindableProperty EditModeProperty = BindableProperty.Create(nameof(EditMode), typeof(bool), typeof(DeckControl), false, propertyChanged: OnEditModeChanged);
+
+    private static void OnEditModeChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var instance = bindable as DeckControl;
+
+        if (instance == null) return;
+
+        instance.NameLabel.IsVisible = !(bool)newValue;
+        instance.DescriptionLabel.IsVisible = !(bool)newValue;
+        instance.NameEntry.IsVisible = (bool)newValue;
+        instance.DescriptionEntry.IsVisible = (bool)newValue;
+
+        instance.StatsGrid.IsVisible = !(bool)newValue;
+
+        if ((bool)newValue)
         {
-            var instance = bindable as DeckControl;
-            if (instance == null || newValue == null) return;
-
-
-            instance.ContextMenu.IsVisible = (bool)newValue;// && App.RuntimePlatform != App.Device.Windows; //tap on this menu isn't working in uwp
-            instance.ModifiedLabel.IsVisible = !(bool)newValue;
-            instance.PriceLabel.IsVisible = !(bool)newValue;
+            instance.NameEntry.Focus();
         }
+    }
 
-        public bool ContextMenuEnabled
-        {
-            get { return (bool)GetValue(ContextMenuEnabledProperty); }
-            set {SetValue(ContextMenuEnabledProperty, value); }
-        }
+    public bool EditMode
+    {
+        get { return (bool)GetValue(EditModeProperty); }
+        set { SetValue(EditModeProperty, value);}
+    }
 
-        public static readonly BindableProperty EditModeProperty = BindableProperty.Create(nameof(EditMode), typeof(bool), typeof(DeckControl), false, propertyChanged: OnEditModeChanged);
+    public DeckControl()
+    {
+        InitializeComponent();
+        // ContextImage.IsVisible = App.RuntimePlatform != App.Device.UWP;
+    }
 
-        private static void OnEditModeChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var instance = bindable as DeckControl;
+    public event EventHandler<ItemTappedEventArgs> ChampionTapped;
 
-            if (instance == null) return;
+    private void Champion_Tapped(object sender, EventArgs e)
+    {
+        var deck = ((BindableObject)sender).BindingContext as Deck;
+        ChampionTapped?.Invoke(this, new ItemTappedEventArgs(deck, deck?.Champion, 0));
+    }
 
-            instance.NameLabel.IsVisible = !(bool)newValue;
-            instance.DescriptionLabel.IsVisible = !(bool)newValue;
-            instance.NameEntry.IsVisible = (bool)newValue;
-            instance.DescriptionEntry.IsVisible = (bool)newValue;
+    public event EventHandler EditModeToggleRequest;
 
-            instance.StatsGrid.IsVisible = !(bool)newValue;
+    private void EditModeToggle(object sender, EventArgs e)
+    {
+        EditModeToggleRequest?.Invoke(this, e);
+    }
 
-            if ((bool)newValue)
-            {
-                instance.NameEntry.Focus();
-            }
-        }
+    public event EventHandler<ItemTappedEventArgs> ContextMenuTapped;
 
-        public bool EditMode
-        {
-            get { return (bool)GetValue(EditModeProperty); }
-            set { SetValue(EditModeProperty, value);}
-        }
-
-        public DeckControl()
-        {
-            InitializeComponent();
-            ContextImage.IsVisible = App.RuntimePlatform != App.Device.UWP;
-        }
-
-        public event EventHandler<ItemTappedEventArgs> ChampionTapped;
-
-        private void Champion_Tapped(object sender, EventArgs e)
-        {
-            var deck = ((BindableObject)sender).BindingContext as Deck;
-            ChampionTapped?.Invoke(this, new ItemTappedEventArgs(deck, deck?.Champion));
-        }
-
-        public event EventHandler EditModeToggleRequest;
-
-        private void EditModeToggle(object sender, EventArgs e)
-        {
-            EditModeToggleRequest?.Invoke(this, e);
-        }
-
-        public event EventHandler<ItemTappedEventArgs> ContextMenuTapped;
-
-        private void OnContextMenuTapped(object sender, EventArgs e)
-        {
-            ContextMenuTapped?.Invoke(this, new ItemTappedEventArgs(BindingContext, e));
-        }
+    private void OnContextMenuTapped(object sender, EventArgs e)
+    {
+        ContextMenuTapped?.Invoke(this, new ItemTappedEventArgs(BindingContext, e, 0));
     }
 }

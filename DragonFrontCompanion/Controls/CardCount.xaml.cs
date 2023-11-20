@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Xamarin.Forms;
 using static DragonFrontCompanion.Deck;
 
 namespace DragonFrontCompanion.Controls
 {
     public partial class CardCount : ContentView
     {
-        private const string ICON_ONE = "IconOne.png";
-		private const string ICON_TWO = "IconTwo.png";
+        private const string ICON_ONE = "iconone.png";
+		private const string ICON_TWO = "icontwo.png";
 
 		public CardCount()
         {
