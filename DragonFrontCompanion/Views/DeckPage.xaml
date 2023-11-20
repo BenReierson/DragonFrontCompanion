@@ -1,135 +1,173 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<views:BaseContentPage
     x:Class="DragonFrontCompanion.Views.DeckPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
     xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
     xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+    xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
     x:Name="DeckView"
-    Title=""
-    BindingContext="{Binding Deck, Source={StaticResource Locator}}">
+    x:TypeArguments="vm:DeckViewModel"
+    BackgroundColor="#123338">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <helpers:CanUndoIconConverter x:Key="UndoIcon" />
             <helpers:CardCountConverter x:Key="CardCount" />
-            <views:CardPopup
-                x:Key="SelectedCardPopup"
-                Card="{Binding SelectedCard}"
-                NextCommand="{Binding NextCardCommand}"
-                PreviousCommand="{Binding PreviousCardCommand}" />
+            <helpers:CanUndoTextConverter x:Key="UndoText" />
+            <helpers:CanUndoIconConverter x:Key="UndoIcon" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <controls:BindableToolbarItem
-            x:Name="UndoButton"
-            Command="{Binding UndoCommand}"
-            Icon="IconUndo.png"
-            IsVisible="{Binding CurrentDeck.CanUndo}"
-            Text="Undo" />
         <ToolbarItem
-            x:Name="DeckEditButton"
+            Command="{Binding UndoCommand}"
+            IconImageSource="{Binding CurrentDeck.CanUndo, Converter={StaticResource UndoIcon}}"
+            Text="{Binding CurrentDeck.CanUndo, Converter={StaticResource UndoText}}" />
+        <ToolbarItem
             Command="{Binding ToggleEditDeckDetailsCommand}"
             Text="{Binding EditText}" />
         <ToolbarItem
             Command="{Binding EditDeckCardsCommand}"
-            Icon="IconEdit.png"
-            Text="Edit Deck" />
-        <controls:BindableToolbarItem
-            x:Name="ShareButton"
+            Text="✎ Cards" />
+        <ToolbarItem
             Command="{Binding ShareDeckCommand}"
-            Icon="IconShare.png"
+            IconImageSource="{OnPlatform Default='iconshare.png', Android={x:Null}}"
             Text="Share" />
     </ContentPage.ToolbarItems>
     <ScrollView>
-        <StackLayout BackgroundColor="#123338" Orientation="Vertical">
+        <Grid BackgroundColor="#123338"
+              RowSpacing="8"
+              RowDefinitions="Auto,*">
             <controls:DeckControl
                 x:Name="DeckHeader"
+                IsVisible="{Binding BindingContext.IsBusy, Converter={StaticResource InverseBoolean}, Source={Reference DeckView}}"
                 BindingContext="{Binding CurrentDeck}"
                 ChampionTapped="DeckHeader_ChampionTapped"
                 ContextMenuEnabled="False"
-                EditMode="{Binding Vm.EditMode, Source={x:Reference Name=DeckView}}"
+                EditMode="{Binding ViewModel.EditMode, Source={x:Reference Name=DeckView}}"
                 EditModeToggleRequest="DeckHeader_EditModeToggleRequest"
                 HeightRequest="185" />
-            <Grid x:Name="CardLists">
+            <Grid x:Name="CardLists" Grid.Row="1"
+                  Padding="4,0"
+                  IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolean}}"
+                  VerticalOptions="Start"
+                  RowDefinitions="Auto, *"
+                  ColumnSpacing="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
-                <ListView
-                    x:Name="FactionList"
-                    BackgroundColor="#123338"
-                    CachingStrategy="RecycleElement"
-                    ItemTapped="ListView_ItemTapped"
-                    ItemsSource="{Binding CurrentDeck.DistinctFaction}"
-                    RowHeight="25"
-                    SeparatorVisibility="None">
-                    <ListView.Header>
-                        <Label
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            LineBreakMode="NoWrap"
-                            Text="Faction Cards"
-                            TextColor="White"
-                            HorizontalTextAlignment="Center" />
-                    </ListView.Header>
-                    <ListView.ItemTemplate>
+
+                <Label Grid.Column="0"
+                       FontAttributes="Bold"
+                       FontSize="Medium"
+                       LineBreakMode="NoWrap"
+                       Text="Faction Cards"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Grid.Column="1"
+                       FontAttributes="Bold"
+                       FontSize="Medium"
+                       LineBreakMode="NoWrap"
+                       Text="Unaligned Cards"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center" />
+
+                <StackLayout Grid.Column="0" Grid.Row="1" x:Name="FactionList"
+                             BackgroundColor="#123338"
+                             BindableLayout.ItemsSource="{Binding CurrentDeck.DistinctFaction}"
+                             VerticalOptions="Start">
+                    <BindableLayout.EmptyView>
+                        <Button Text="Add"
+                                Command="{Binding EditDeckFactionCardsCommand}"
+                                TextColor="{StaticResource Primary}"
+                                BackgroundColor="{StaticResource Secondary}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Start"
+                                Margin="0,8"/>
+                    </BindableLayout.EmptyView>
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <controls:CardCompactControl BindingContext="{Binding Card}" />
-                                    <Label
-                                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                                               iOS=Small,
-                                                                               WinPhone=Default,
-                                                                               ViewType={x:Type Label}}"
-                                        HorizontalOptions="End"
-                                        Text="{Binding Count, Converter={StaticResource CardCount}}"
-                                        TextColor="White"
-                                        VerticalOptions="Center" />
-                                </Grid>
-                            </ViewCell>
+                            <Grid HeightRequest="25">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.SelectCardCommand, Source={Reference DeckView}}"
+                                                          CommandParameter="{Binding Card}"/>
+                                </Grid.GestureRecognizers>
+                                <controls:CardCompactControl BindingContext="{Binding Card}"
+                                                             HeightRequest="25"
+                                                             InputTransparent="True"/>
+                                <Label Margin="0,0,4,0"
+                                    InputTransparent="True"
+                                    FontSize="12"
+                                    HorizontalOptions="End"
+                                    Text="{Binding Count, Converter={StaticResource CardCount}}"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
+                            </Grid>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <ListView
-                    x:Name="UnalignedList"
-                    Grid.Column="1"
-                    BackgroundColor="#123338"
-                    CachingStrategy="RecycleElement"
-                    ItemTapped="ListView_ItemTapped"
-                    ItemsSource="{Binding CurrentDeck.DistinctUnaligned}"
-                    RowHeight="25"
-                    SeparatorVisibility="None">
-                    <ListView.Header>
-                        <Label
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            LineBreakMode="NoWrap"
-                            Text="Unaligned Cards"
-                            TextColor="White"
-                            HorizontalTextAlignment="Center" />
-                    </ListView.Header>
-                    <ListView.ItemTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Grid.Row="1" x:Name="UnalignedList"
+                             BackgroundColor="#123338"
+                             BindableLayout.ItemsSource="{Binding CurrentDeck.DistinctUnaligned}"
+                             VerticalOptions="Start">
+                    <BindableLayout.EmptyView>
+                        <Button Text="Add"
+                                Command="{Binding EditDeckUnalignedCardsCommand}"
+                                TextColor="{StaticResource Primary}"
+                                BackgroundColor="{StaticResource Secondary}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Start"
+                                Margin="0,8"/>
+                    </BindableLayout.EmptyView>
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <controls:CardCompactControl BindingContext="{Binding Card}" />
-                                    <Label
-                                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                                               iOS=Small,
-                                                                               WinPhone=Default,
-                                                                               ViewType={x:Type Label}}"
-                                        HorizontalOptions="End"
-                                        Text="{Binding Count, Converter={StaticResource CardCount}}"
-                                        TextColor="White"
-                                        VerticalOptions="Center" />
-                                </Grid>
-                            </ViewCell>
+                            <Grid>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.SelectCardCommand, Source={Reference DeckView}}"
+                                                          CommandParameter="{Binding Card}"/>
+                                </Grid.GestureRecognizers>
+                                <controls:CardCompactControl BindingContext="{Binding Card}" 
+                                                             HeightRequest="25"
+                                                             InputTransparent="True"/>
+                                <Label
+                                    InputTransparent="True"
+                                    FontSize="12"
+                                    HorizontalOptions="End"
+                                    Text="{Binding Count, Converter={StaticResource CardCount}}"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
+                            </Grid>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
             </Grid>
-        </StackLayout>
+
+            <ActivityIndicator Grid.Row="1" 
+                               Color="#E1CA35"
+                               HeightRequest="40"
+                               WidthRequest="40"
+                               HorizontalOptions="Center"
+                               IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               VerticalOptions="Center" />
+            
+            <ContentView Grid.RowSpan="2" x:Name="CardDetailLayout"
+                         BackgroundColor="#B3000000"
+                         IsVisible="{Binding SelectedCard, Converter={StaticResource VisibleWithValue}}">
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseCardCommand}" />
+                </ContentView.GestureRecognizers>
+                <controls:CardDetail Card="{Binding SelectedCard}"
+                                     CloseCommand="{Binding CloseCardCommand}"
+                                     NextCommand="{Binding NextCardCommand}"
+                                     PreviousCommand="{Binding PreviousCardCommand}"
+                                     VerticalOptions="Center"
+                                     HorizontalOptions="Center"
+                                     WidthRequest="400"/>
+            </ContentView>
+        </Grid>
     </ScrollView>
-</ContentPage>
+</views:BaseContentPage>

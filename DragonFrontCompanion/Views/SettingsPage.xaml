@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="DragonFrontCompanion.Views.SettingsPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
-    xmlns:local="clr-namespace:DragonFrontCompanion"
-    Title="Settings"
-    BindingContext="{Binding Settings, Source={StaticResource Locator}}">
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<views:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+                       xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
+                       x:Class="DragonFrontCompanion.Views.SettingsPage"
+                       x:TypeArguments="vm:SettingsViewModel" 
+                       x:DataType="vm:SettingsViewModel"
+                       Title="Settings">
   <ScrollView>
     <Grid
         x:Name="MainLayout"
@@ -69,7 +70,7 @@
             Grid.Row="4"
             Grid.Column="0"
             Orientation="Vertical"
-            Spacing="0">
+            Spacing="8">
             <Label FontSize="Small" Text="{Binding ActiveCardDataVersion}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ShowCardDataSourceCommand}" NumberOfTapsRequired="2" />
@@ -82,7 +83,7 @@
             <Button 
                 Text="View History"
                 HorizontalOptions="Start"
-                Command="{Binding ShowCardChangeHistory}"
+                Command="{Binding ShowCardChangeHistoryCommand}"
                 />
         </StackLayout>
         <StackLayout
@@ -101,7 +102,7 @@
         </StackLayout>
 
         <!--  Data Source  -->
-        <controls:SelectOnFocusEntry
+        <Entry x:Name="DataSourceEntry"
             Grid.Row="5"
             Grid.Column="0"
             Grid.ColumnSpan="2"
@@ -109,6 +110,7 @@
             HorizontalTextAlignment="End"
             IsVisible="{Binding DataSourceVisible}"
             Text="{Binding ActiveDataSource, Mode=TwoWay}"
+            Focused="DataSource_Focused"
             Unfocused="DataSource_Unfocused" />
         <Label
             Grid.Row="5"
@@ -118,4 +120,4 @@
             Text="Card data update branch" />
     </Grid>
   </ScrollView>
-</ContentPage>
+</views:BaseContentPage>

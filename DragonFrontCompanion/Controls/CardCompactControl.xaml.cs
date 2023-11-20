@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Xamarin.Forms;
-
 namespace DragonFrontCompanion.Controls
 {
     public partial class CardCompactControl : ContentView

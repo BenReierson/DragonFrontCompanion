@@ -1,1 +1,0 @@
-C:\Dev\DragonFrontDeckBuilder\DragonFrontDeckBuilder\DragonFrontDeckBuilder.UWP\AppPackages\DragonFrontDeckBuilder.UWP_1.0.5.0_UWP\DragonFrontDeckBuilder.UWP_1.0.5.0_x86_x64_arm_UWP.appxbundle

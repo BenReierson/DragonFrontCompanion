@@ -1,31 +1,30 @@
-﻿using DragonFrontDb;
-using DragonFrontDb.Enums;
-using DragonFrontCompanion.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DragonFrontCompanion.Helpers;
+using DragonFrontDb;
 
-using Xamarin.Forms;
-using FFImageLoading.Transformations;
+namespace DragonFrontCompanion.Controls;
 
-namespace DragonFrontCompanion.Controls
+public partial class CardControl 
 {
-    public partial class CardControl : ContentView
-    {
-        public CardControl()
-        {
-            InitializeComponent();
+    CardImageConverter cardImages = new CardImageConverter();
+    ImageSourceConverter imageSourceConverter = new ImageSourceConverter();
 
-            if (App.RuntimePlatform == App.Device.UWP)
-            {
-                SetLabel.FontSize = 12;
-            }
-            else
-            {//Rounded transformation is not working on UWP
-                CardImage.Transformations.Add(new RoundedTransformation(60, 0, 0, 10, "#80000000"));
-            }
-        }
+    public CardControl()
+    {
+        InitializeComponent();
+    }
+
+    protected override void OnBindingContextChanged()
+    {
+        base.OnBindingContextChanged();
+
+        if (BindingContext is Card card)
+            CardCachedImage.Source = imageSourceConverter.ConvertFromString(cardImages.Convert(card, null, null, default) as string) as ImageSource;
+        else
+            CardCachedImage.Source = CardCachedImage.ErrorPlaceholder;
+    }
+
+    void CachedImage_Error(System.Object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
+    {
+        CardCachedImage.Source = CardCachedImage.ErrorPlaceholder;
     }
 }

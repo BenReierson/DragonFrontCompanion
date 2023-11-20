@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
     x:Class="DragonFrontCompanion.Controls.DeckControl"
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
-    xmlns:ffImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    xmlns:ffTransforms="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers">
+    xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+    xmlns:maui="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
+    xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Compat.Transformations">
     <ContentView.Resources>
         <ResourceDictionary>
             <helpers:CardImageConverter x:Key="CardImages" />
@@ -18,7 +17,8 @@
     </ContentView.Resources>
     <Grid
         x:Name="DeckGrid"
-        Margin="4,2,4,2"
+        Padding="6,6,6,2"
+        ColumnSpacing="6"
         BackgroundColor="#123338"
         HeightRequest="185">
         <Grid.ColumnDefinitions>
@@ -26,77 +26,52 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Image
+        <maui:CachedImage
             Grid.Column="1"
-            Margin="10"
-            Aspect="AspectFill"
-            HorizontalOptions="End"
+            Aspect="AspectFit"
+            WidthRequest="150"
             Opacity=".2"
             Source="{Binding DeckFaction, Converter={StaticResource FactionImage}}"
+            HorizontalOptions="End"
             VerticalOptions="Center" />
 
         <StackLayout
             Grid.Column="0"
-            Margin="5,0,5,5"
             Orientation="Vertical"
             Spacing="-2"
             VerticalOptions="Start">
 
-            <!--  Standard image used on windows platform due to bug preventing image display  -->
-            <Image
-                x:Name="ChampImageWin"
-                HeightRequest="100"
-                Source="{Binding Champion, Converter={StaticResource Key=CardImages}}"
-                WidthRequest="100">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Champion_Tapped" />
-                </Image.GestureRecognizers>
-                <Image.IsVisible>
-                    <OnPlatform
-                        x:TypeArguments="x:Boolean"
-                        Android="False"
-                        WinPhone="True"
-                        iOS="False" />
-                </Image.IsVisible>
-            </Image>
-            <ffImage:CachedImage
+            <maui:CachedImage
                 x:Name="ChampCachedImage"
                 DownsampleToViewSize="True"
                 HeightRequest="100"
-                ErrorPlaceholder="{Binding Champion, Converter={StaticResource Key=CardPlaceholders}}"
-                Source="{Binding Champion, Converter={StaticResource Key=CardImages}, ConverterParameter='Large'}"
+                ErrorPlaceholder="{Binding Champion, Converter={StaticResource CardPlaceholders}}"
+                Source="{Binding Champion, Converter={StaticResource CardImages}, ConverterParameter='Large'}"
                 WidthRequest="100">
-                <ffImage:CachedImage.GestureRecognizers>
+                <maui:CachedImage.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Champion_Tapped" />
-                </ffImage:CachedImage.GestureRecognizers>
-                <ffImage:CachedImage.Transformations>
-                    <ffTransforms:RoundedTransformation
+                </maui:CachedImage.GestureRecognizers>
+                <maui:CachedImage.Transformations>
+                    <transformations:RoundedTransformation
                         BorderHexColor="#80000000"
                         BorderSize="10"
                         Radius="60" />
-                </ffImage:CachedImage.Transformations>
-                <ffImage:CachedImage.IsVisible>
-                    <OnPlatform
-                        x:TypeArguments="x:Boolean"
-                        Android="True"
-                        WinPhone="False"
-                        iOS="True" />
-                </ffImage:CachedImage.IsVisible>
-            </ffImage:CachedImage>
+                </maui:CachedImage.Transformations>
+            </maui:CachedImage>
 
-            <Label Text="{Binding DeckFaction}" TextColor="White" />
+            <Label Margin="0,4,0,0"
+                Text="{Binding DeckFaction}" 
+                TextColor="White"
+                FontSize="16"/>
             <Label
-                FontSize="{helpers:NamedSizeOnPlatform Android=Small,
-                                                       iOS=Micro,
-                                                       WinPhone=Micro,
-                                                       ViewType={x:Type Label}}"
+                FontSize="12"
                 Text="{Binding Count, StringFormat='{0} / 30'}"
                 TextColor="White" />
             <Label
                 FontSize="Small"
                 IsVisible="{Binding IsValid}"
                 Text="Ready"
-                TextColor="Green" />
+                TextColor="LightGreen" />
             <Label
                 FontSize="Small"
                 IsVisible="{Binding IsValid, Converter={StaticResource InverseBoolean}}"
@@ -122,24 +97,23 @@
             <Grid
                 x:Name="ContextMenu"
                 AutomationId="DeckContextMenu"
-                BackgroundColor="#123338"
                 HeightRequest="30"
                 HorizontalOptions="FillAndExpand">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnContextMenuTapped" />
                 </Grid.GestureRecognizers>
-                <ffImage:CachedImage
+                <maui:CachedImage
                     x:Name="ContextImage"
                     HeightRequest="22"
                     HorizontalOptions="Start"
                     Rotation="90"
-                    Margin="10,0,0,0"
-                    Source="IconMenu.png"
+                    Margin="{OnPlatform Android='4,0,0,6', iOS='10,0,0,6'}"
+                    Source="iconmenu.png"
                     VerticalOptions="End">
-                    <ffImage:CachedImage.GestureRecognizers>
+                    <maui:CachedImage.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnContextMenuTapped" />
-                    </ffImage:CachedImage.GestureRecognizers>
-                </ffImage:CachedImage>
+                    </maui:CachedImage.GestureRecognizers>
+                </maui:CachedImage>
             </Grid>
         </StackLayout>
         <Grid Grid.Column="1">
@@ -174,11 +148,10 @@
                     <Label
                         Grid.Row="0"
                         Grid.ColumnSpan="8"
-                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                               iOS=Small,
-                                                               WinPhone=Default,
-                                                               ViewType={x:Type Label}}"
+                        FontSize="12"
+                        HeightRequest="40"
                         HorizontalOptions="Center"
+                        VerticalOptions="Start"
                         Text="Cost Distribution"
                         TextColor="#15CEEA" />
                     <BoxView
@@ -294,24 +267,15 @@
                     Spacing="0"
                     VerticalOptions="End">
                     <Label
-                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                               iOS=Small,
-                                                               WinPhone=Default,
-                                                               ViewType={x:Type Label}}"
+                        FontSize="12"
                         Text="{Binding UnitCount, StringFormat='{0} units'}"
                         TextColor="White" />
                     <Label
-                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                               iOS=Small,
-                                                               WinPhone=Default,
-                                                               ViewType={x:Type Label}}"
+                        FontSize="12"
                         Text="{Binding FortCount, StringFormat='{0} forts'}"
                         TextColor="White" />
                     <Label
-                        FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                               iOS=Small,
-                                                               WinPhone=Default,
-                                                               ViewType={x:Type Label}}"
+                        FontSize="12"
                         Text="{Binding SpellCount, StringFormat='{0} spells'}"
                         TextColor="White" />
                 </StackLayout>
@@ -324,33 +288,26 @@
                     <Label
                         x:Name="NameLabel"
                         FontAttributes="Bold"
-                        FontSize="{helpers:NamedSizeOnPlatform Android=Large,
-                                                               iOS=Large,
-                                                               WinPhone=Medium,
-                                                               ViewType={x:Type Editor}}"
+                        FontSize="17"
                         LineBreakMode="TailTruncation"
                         Text="{Binding Name}"
                         TextColor="#E1CA35" />
-                    <controls:SelectOnFocusEntry
+                    <Entry
                         x:Name="NameEntry"
-                        BackgroundColor="White"
-                        FontAttributes="Bold"
-                        FontSize="{helpers:NamedSizeOnPlatform Android=Large,
-                                                               iOS=Large,
-                                                               WinPhone=Default,
-                                                               ViewType={x:Type Editor}}"
+                        Placeholder="(Deck Name)"
+                        PlaceholderColor="DarkGray"
+                        Margin="4"
+                        BackgroundColor="LightGray"
+                        FontSize="17"
                         IsVisible="False"
-                        Text="{Binding Name, Mode=TwoWay}"
-                        TextColor="Black" />
+                        Text="{Binding Name, Mode=TwoWay}" 
+                        TextColor="Black"/>
                 </Grid>
                 <Grid>
                     <ScrollView HeightRequest="80">
                         <Label
                             x:Name="DescriptionLabel"
-                            FontSize="{helpers:NamedSizeOnPlatform Android=Default,
-                                                                   iOS=Small,
-                                                                   WinPhone=Small,
-                                                                   ViewType={x:Type Label}}"
+                            FontSize="14"
                             Text="{Binding Description}"
                             TextColor="White">
                             <Label.GestureRecognizers>
@@ -360,21 +317,17 @@
                     </ScrollView>
                     <Editor
                         x:Name="DescriptionEntry"
-                        BackgroundColor="White"
-                        FontSize="{helpers:NamedSizeOnPlatform Android=Small,
-                                                               iOS=Small,
-                                                               WinPhone=Small,
-                                                               ViewType={x:Type Editor}}"
+                        Placeholder="(Deck Description)"
+                        PlaceholderColor="DarkGray"
+                        Margin="4"
+                        BackgroundColor="LightGray"
+                        FontSize="14"
                         HeightRequest="120"
                         IsVisible="False"
                         Text="{Binding Description, Mode=TwoWay}"
                         TextColor="Black" />
                 </Grid>
             </StackLayout>
-
         </Grid>
-
-
-
     </Grid>
 </ContentView>

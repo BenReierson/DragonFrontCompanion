@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
+             xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels;assembly=DragonFrontCompanion"
+             x:Class="DragonFrontCompanion.Controls.CardDetail"
+             x:Name="CurrentControl">
+    <Grid.Resources>
+        <ResourceDictionary>
+            <helpers:CardImageConverter x:Key="CardImages" />
+            <helpers:CardImagePlaceholderConverter x:Key="CardPlaceholders" />
+            <helpers:RaceDisplayConverter x:Key="RaceDisplayConverter" />
+            <helpers:TraitsTextConverter x:Key="TraitsString" />
+            <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
+            <helpers:BooleanToYesNoConverter x:Key="YesOrNo" />
+            <helpers:RarityImageConverter x:Key="RarityImage" />
+            <helpers:CardSetVisibilityConverter x:Key="CardSetVisibility" />
+            <helpers:FactionsToLabelConverter x:Key="FactionsToLabel"/>
+            
+            <Style x:Key="CardStatLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="Margin" Value="5,0,5,0" />
+                <Setter Property="LineBreakMode" Value="NoWrap" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="IsVisible" Value="{Binding ., Converter={StaticResource VisibleWithValue}}" />
+            </Style>
+        </ResourceDictionary>
+    </Grid.Resources>
+    
+    <Frame  BindingContext="{Binding Card, Source={Reference CurrentControl}}"
+            BorderColor="Transparent"
+            Margin="20"
+            Padding="0"
+            BackgroundColor="#123338"
+            HasShadow="False"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
+            <StackLayout>
+                <Grid x:Name="CardImageGrid">
+
+                    <ffimage:CachedImage
+                        x:Name="CardImage"
+                        Aspect="AspectFill"
+                        DownsampleHeight="400"
+                        HeightRequest="400"
+                        WidthRequest="400"
+                        ErrorPlaceholder="{Binding ., Converter={StaticResource Key=CardPlaceholders}}"
+                        Source="{Binding ., Converter={StaticResource CardImages}, ConverterParameter='Large'}"
+                        VerticalOptions="Start">
+                        <ffimage:CachedImage.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CloseCommand, Source={Reference CurrentControl}}" />
+                            <SwipeGestureRecognizer Direction="Left" Command="{Binding NextCommand, Source={Reference CurrentControl}}" />
+                            <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousCommand, Source={Reference CurrentControl}}" />
+                        </ffimage:CachedImage.GestureRecognizers>
+                    </ffimage:CachedImage>
+
+                    <StackLayout Spacing="2" VerticalOptions="Start">
+                        <Label Padding="0,4"
+                            BackgroundColor="#80000000"
+                            FontSize="Large"
+                            HorizontalOptions="Fill"
+                            LineBreakMode="WordWrap"
+                            Text="{Binding Name}"
+                            TextColor="#E1CA35"
+                            HorizontalTextAlignment="Center" />
+                        <Grid ColumnSpacing="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Column="0"
+                                FontSize="14"
+                                HorizontalOptions="Center"
+                                Text="{Binding ValidFactions, Converter={StaticResource FactionsToLabel}}"
+                                TextColor="White"
+                                HorizontalTextAlignment="Center" />
+                            <Label
+                                Grid.Column="1"
+                                FontSize="14"
+                                HorizontalOptions="Center"
+                                IsVisible="{Binding Race, Converter={StaticResource VisibleWithValue}}"
+                                Text="{Binding Race}"
+                                TextColor="White"
+                                HorizontalTextAlignment="Center" />
+                            <Label
+                                Grid.Column="2"
+                                FontSize="14"
+                                HorizontalOptions="Center"
+                                Text="{Binding Type}"
+                                TextColor="White"
+                                HorizontalTextAlignment="Center" />
+                        </Grid>
+                    </StackLayout>
+
+                    <Grid
+                        x:Name="StatsGrid"
+                        BackgroundColor="#80000000"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="End">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Cost  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Cost" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding Cost}"
+                            TextColor="#15CEEA"
+                            HorizontalTextAlignment="End" />
+
+                        <!--  Rarity  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Rarity" />
+                        <StackLayout
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            HorizontalOptions="End"
+                            Orientation="Horizontal"
+                            Spacing="0">
+                            <Label
+                                Margin="-10,0,0,0"
+                                FontAttributes="None"
+                                FontSize="Micro"
+                                HorizontalOptions="End"
+                                Style="{StaticResource CardStatLabelStyle}"
+                                Text="{Binding Rarity}"
+                                VerticalOptions="Center"
+                                VerticalTextAlignment="Center" />
+
+                            <Image
+                                Margin="2,0,2,0"
+                                HeightRequest="20"
+                                HorizontalOptions="End"
+                                Source="{Binding Rarity, Converter={StaticResource RarityImage}}"
+                                VerticalOptions="Center"
+                                WidthRequest="20" />
+                        </StackLayout>
+
+                        <!--  Power  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            IsVisible="{Binding Power, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Power" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding Power, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding Power}"
+                            TextColor="Yellow"
+                            HorizontalTextAlignment="End" />
+
+                        <!--  Health  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            IsVisible="{Binding Health, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Health" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding Type, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding Health}"
+                            TextColor="Red"
+                            HorizontalTextAlignment="End"/>
+
+                        <!--  Mana Fragments  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            IsVisible="{Binding ManaFragments, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Fragments" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding ManaFragments, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding ManaFragments}"
+                            TextColor="#15CEEA"
+                            HorizontalTextAlignment="End" />
+
+                        <!--  Giant  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            IsVisible="{Binding Type, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="Giant?" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding Type, Converter={StaticResource VisibleWithValue}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding IsGiant, Converter={StaticResource YesOrNo}}"
+                            HorizontalTextAlignment="End" />
+                        
+                        <!--  Card Set  -->
+                        <Label
+                            Grid.Row="3"
+                            Grid.ColumnSpan="4"
+                            Padding="0,4,0,0"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding CardSet, Converter={StaticResource CardSetVisibility}}"
+                            Style="{StaticResource CardStatLabelStyle}"
+                            Text="{Binding CardSet, StringFormat='Card Set: {0}'}" />
+
+                    </Grid>
+
+                    <Button
+                        x:Name="NextCardButton"
+                        Command="{Binding NextCommand, Source={Reference CurrentControl}}"
+                        Margin="0,0,-15,0"
+                        BackgroundColor="Transparent"
+                        HeightRequest="150"
+                        WidthRequest="80"
+                        HorizontalOptions="End"
+                        ImageSource="iconnext.png"
+                        VerticalOptions="Center">
+                        <Button.Triggers>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="True">
+                                <Setter Property="IsVisible" Value="True" />
+                            </Trigger>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                                <Setter Property="IsVisible" Value="False" />
+                            </Trigger>
+                        </Button.Triggers>
+                    </Button>
+                    <Button
+                        x:Name="PreviousCardButton"
+                        Command="{Binding PreviousCommand, Source={Reference CurrentControl}}"
+                        Margin="-15,0,0,0"
+                        BackgroundColor="Transparent"
+                        HeightRequest="150"
+                        WidthRequest="80"
+                        HorizontalOptions="Start"
+                        ImageSource="iconprevious.png"
+                        VerticalOptions="Center">
+                        <Button.Triggers>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="True">
+                                <Setter Property="IsVisible" Value="True" />
+                            </Trigger>
+                            <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                                <Setter Property="IsVisible" Value="False" />
+                            </Trigger>
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+
+                <Label
+                    Margin="10,8,10,0"
+                    FontSize="17"
+                    Text="{Binding Text}"
+                    HorizontalOptions="Center"
+                    TextColor="White" />
+
+                <Label LineBreakMode="WordWrap"
+                       Padding="4"
+                    Margin="6,8,6,0"
+                    AutomationId="TraitsButton"
+                    BackgroundColor="#48000000"
+                    FontSize="14"
+                    HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                    IsVisible="{Binding Traits, Converter={StaticResource VisibleWithValue}}"
+                    Text="{Binding Traits, Converter={StaticResource TraitsString}}"
+                    TextColor="#D0D6D7" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnShowTraits"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                
+                <Label
+                    Margin="10,8,10,10"
+                    FontAttributes="Italic"
+                    FontSize="14"
+                    Text="{Binding FlavorText}"
+                    TextColor="#D0D6D7" />
+
+            </StackLayout>
+        </Frame>
+    
+    <ContentView 
+        BackgroundColor="#B3000000"
+        IsVisible="{Binding Traits, Source={Reference CurrentControl}, Converter={StaticResource VisibleWithValue}}">
+        <ContentView.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnCloseTraits" />
+        </ContentView.GestureRecognizers>
+        <StackLayout InputTransparent="True"
+            VerticalOptions="Center"
+            BackgroundColor="Transparent"
+            BindableLayout.ItemsSource="{Binding Traits, Source={Reference CurrentControl}}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                        <StackLayout
+                            Margin="8"
+                            BackgroundColor="#123338"
+                            Spacing="1">
+                            <Label
+                                Margin="4,4,4,0"
+                                FontSize="16"
+                                Text="{Binding Trait}"
+                                TextColor="#E1CA35" />
+                            <Label
+                                Margin="4,0,4,4"
+                                BackgroundColor="#123338"
+                                FontSize="14"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding Description}"
+                                TextColor="White" />
+                        </StackLayout>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </StackLayout>
+    </ContentView>
+</Grid>

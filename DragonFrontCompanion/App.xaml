@@ -1,18 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Application x:Class="DragonFrontCompanion.App" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers" xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModel" d1p1:Ignorable="d">
-  <Application.Resources>
-    <!--  Application resource dictionary  -->
-    <ResourceDictionary>
-      <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
-      <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
-      <Style x:Key="CardStatLabelStyle" TargetType="Label">
-        <Setter Property="FontSize" Value="Medium" />
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="Margin" Value="5,0,5,0" />
-        <Setter Property="LineBreakMode" Value="NoWrap" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="IsVisible" Value="{Binding ., Converter={StaticResource VisibleWithValue}}" />
-      </Style>
-    </ResourceDictionary>
-  </Application.Resources>
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:DragonFrontCompanion"
+             xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+             x:Class="DragonFrontCompanion.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <helpers:ValueToVisibilityConverter x:Key="VisibleWithValue" />
+            <helpers:InverseBooleanConverter x:Key="InverseBoolean" />
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

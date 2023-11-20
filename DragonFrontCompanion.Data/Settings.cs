@@ -1,100 +1,66 @@
-// Helpers/Settings.cs
 using DragonFrontDb;
-using Plugin.Settings;
-using Plugin.Settings.Abstractions;
-using System;
+namespace DragonFrontCompanion;
 
-namespace DragonFrontCompanion
+public interface IPreferences
 {
-    /// <summary>
-    /// This is the Settings static class that can be used in your Core solution or in any
-    /// of your client applications. All settings are laid out the same exact way with getters
-    /// and setters. 
-    /// </summary>
-    public static class Settings
+    string Get(string key, string defaultValue);
+    bool Get(string key, bool defaultValue);
+    void Set(string key, string value);
+    void Set(string key, bool value);
+    bool ContainsKey(string key);
+    
+    string AppDataDirectory { get; }
+}
+
+public class MauiPreferences : IPreferences
+{
+    public string Get(string key, string defaultValue) => Preferences.Get(key, defaultValue);
+    public bool Get(string key, bool defaultValue) => Preferences.Get(key, defaultValue);
+
+    public void Set(string key, string value) => Preferences.Set(key, value);
+    public void Set(string key, bool value) => Preferences.Set(key, value);
+    public bool ContainsKey(string key) => Preferences.ContainsKey(key);
+
+    public string AppDataDirectory => FileSystem.AppDataDirectory;
+}
+
+public static class Settings
+{
+    public static IPreferences Preferences { get; set; } = new MauiPreferences();
+    
+    public static string AppDataDirectory => Preferences.AppDataDirectory;
+    
+    public static bool AllowDeckOverload
     {
-        private static ISettings AppSettings
+        get => Preferences.Get(nameof(AllowDeckOverload), false);
+        set => Preferences.Set(nameof(AllowDeckOverload), value);
+    }
+    
+    public static Version ActiveCardDataVersion
+    {
+        get
         {
-            get
-            {
-                return CrossSettings.Current;
-            }
+            var setting = Version.Parse(Preferences.Get(nameof(ActiveCardDataVersion), Info.Current.CardDataVersion.ToString()));
+            if (setting < Info.Current.CardDataVersion) setting = Info.Current.CardDataVersion;
+            return setting;
         }
-
-        #region Setting Constants
-
-        private const string AllowDeckOverloadSettingsKey = "deck_overload";
-        private const string EnableRandomDeckSettingsKey = "random_decks";
-        private const string CardDataVersionSettingsKey = "card_data_version";
-        private const string EnableAutoUpdateSettingsKey = "auto_update";
-        private const string HighestNotifiedDataSettingsKey = "data_notify";
-
-        public const bool DEFAULT_AllowDeckOverload = false;
-        public const bool DEFAULT_EnableRandomDeck = true;
-        public static string DEFAULT_CardDataVersion = Info.Current.CardDataVersion.ToString();
-        #endregion
-
-
-        public static bool AllowDeckOverload
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(AllowDeckOverloadSettingsKey, DEFAULT_AllowDeckOverload);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(AllowDeckOverloadSettingsKey, value);
-            }
-        }
-
-        public static bool EnableRandomDeck
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(EnableRandomDeckSettingsKey, DEFAULT_EnableRandomDeck);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(EnableRandomDeckSettingsKey, value);
-            }
-        }
-
-        public static Version ActiveCardDataVersion
-        {
-            get
-            {
-                var setting = Version.Parse(AppSettings.GetValueOrDefault(CardDataVersionSettingsKey, DEFAULT_CardDataVersion));
-                if (setting < Info.Current.CardDataVersion) setting = Info.Current.CardDataVersion;
-                return setting;
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(CardDataVersionSettingsKey, value != null ? value.ToString() : DEFAULT_CardDataVersion);
-            }
-        }
-
-        public static Version HighestNotifiedCardDataVersion
-        {
-            get
-            {
-                return Version.Parse(AppSettings.GetValueOrDefault(HighestNotifiedDataSettingsKey, DEFAULT_CardDataVersion));
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(HighestNotifiedDataSettingsKey, value.ToString());
-            }
-        }
-
-        public static bool EnableAutoUpdate
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(EnableAutoUpdateSettingsKey, true);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(EnableAutoUpdateSettingsKey, value);
-            }
-        }
+        set => Preferences.Set(nameof(ActiveCardDataVersion), value?.ToString());
+    }
+    
+    public static Version HighestNotifiedCardDataVersion
+    {
+        get => Version.Parse(Preferences.Get(nameof(HighestNotifiedCardDataVersion), Info.Current.CardDataVersion.ToString()));
+        set => Preferences.Set(nameof(HighestNotifiedCardDataVersion), value?.ToString());
+    }
+    
+    public static bool EnableRandomDeck
+    {
+        get => Preferences.Get(nameof(EnableRandomDeck), false);
+        set => Preferences.Set(nameof(EnableRandomDeck), value);
+    }
+    public static bool EnableAutoUpdate
+    {
+        get => Preferences.Get(nameof(EnableAutoUpdate), true);
+        set => Preferences.Set(nameof(EnableAutoUpdate), value);
     }
 }

@@ -1,11 +1,13 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="DragonFrontCompanion.Views.AboutPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="About"
-    BackgroundColor="White"
-    BindingContext="{Binding About, Source={StaticResource Locator}}">
+<?xml version="1.0" encoding="utf-8"?>
+
+<views:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:DragonFrontCompanion.Views"
+                       xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
+                       x:Class="DragonFrontCompanion.Views.AboutPage"
+                       x:TypeArguments="vm:AboutViewModel" 
+                       x:DataType="vm:AboutViewModel"
+                       Title="About">
     <ScrollView>
         <StackLayout
             x:Name="MainStack"
@@ -17,27 +19,23 @@
                 FontSize="Large"
                 HorizontalOptions="Center"
                 Text="{Binding AppName}"
-                TextColor="Black"
                 HorizontalTextAlignment="Center" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Large"
                 HorizontalOptions="Center"
                 Text="{Binding Version}"
-                TextColor="Black"
                 HorizontalTextAlignment="Center" />
             <Label
                 HorizontalOptions="Center"
                 Text="{Binding License}"
-                TextColor="Black"
                 HorizontalTextAlignment="Center" />
             <Label
                 Margin="0,20,0,0"
                 FontSize="Small"
                 HorizontalOptions="Center"
                 Text="{Binding HvsText}"
-                TextColor="Black"
                 HorizontalTextAlignment="Center" />
         </StackLayout>
     </ScrollView>
-</ContentPage>
+</views:BaseContentPage>
