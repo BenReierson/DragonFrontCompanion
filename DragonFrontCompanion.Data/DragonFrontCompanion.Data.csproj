@@ -21,6 +21,11 @@
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
       <CreatePackage>false</CreatePackage>
     </PropertyGroup>
+  
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
+  
     <ItemGroup>
         <PackageReference Include="CommonServiceLocator" Version="2.0.7" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />

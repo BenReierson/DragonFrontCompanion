@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DragonFrontCompanion.Data;
@@ -6,6 +7,8 @@ using DragonFrontCompanion.Helpers;
 using DragonFrontDb;
 using DragonFrontDb.Enums;
 using Microsoft.AppCenter.Analytics;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace DragonFrontCompanion.ViewModels;
 
@@ -31,7 +34,9 @@ public partial class DeckViewModel : BaseViewModel, IRequiresInitialize
     public override async Task OnAppearing()
     {
         await base.OnAppearing();
-        
+
+        _deckService.DeckChanged += DeckService_DeckChanged;
+
         if (_initDeck != null && CurrentDeck is null)
         {
             IsBusy = true;
@@ -47,23 +52,49 @@ public partial class DeckViewModel : BaseViewModel, IRequiresInitialize
         {//this deck was just created, automatically start in edit mode
             await ToggleEditDeckDetails();
         }
+
+        SetDeckCode();
     }
 
     public override async Task OnDisappearing()
     {
+        _deckService.DeckChanged -= DeckService_DeckChanged;
+
         if (EditMode) await ToggleEditDeckDetails();
         else await SaveDeck();
         
         await base.OnDisappearing();
     }
 
+    void SetDeckCode()
+        => MainThread.BeginInvokeOnMainThread(()=>
+            QrDeckCode = CurrentDeck?.IsValid ?? false ? App.GetApplinkFromDeckCode(_deckService.SerializeToDeckString(CurrentDeck)) : null);
+
+    void DeckService_DeckChanged(object sender, Deck changedDeck)
+    {
+        if (changedDeck == CurrentDeck)
+            SetDeckCode();
+    }
+
     #region Properties
     public bool IsInitialized { get; private set; }
 
-    [ObservableProperty] private Deck _currentDeck;
     [ObservableProperty] private string _editText;
     [ObservableProperty] private bool _editMode;
-    
+    [ObservableProperty] private string _qrDeckCode;
+    [ObservableProperty] private string _largeQrDeckCode;
+
+    private Deck _currentDeck;
+    public Deck CurrentDeck
+    {
+        get => _currentDeck;
+        set
+        {
+            SetProperty(ref _currentDeck, value);
+            SetDeckCode();
+        }
+    }
+
     private Card _selectedCard = null;
     public Card SelectedCard
     {
@@ -182,14 +213,14 @@ public partial class DeckViewModel : BaseViewModel, IRequiresInitialize
             }
 
             var copy = "Share Deck Code";
+            var qrCode = "QR Code";
             var file = "Share as file (retains Name/Description)";
-            var choice = await _dialogService.DisplayActionSheet("Choose Format", "Cancel", null, copy, file);
+            var choice = await _dialogService.DisplayActionSheet("Choose Format", "Cancel", null, copy, qrCode, file);
 
             if (choice == copy)
             {
                 var deckstring = _deckService.SerializeToDeckString(deck);
                 await Share.RequestAsync(deckstring);
-
                 Analytics.TrackEvent("ShareDeckString", new Dictionary<string, string> {
                     { "Faction", deck.DeckFaction.ToString()},
                     { "DeckString", deckstring }});
@@ -197,13 +228,22 @@ public partial class DeckViewModel : BaseViewModel, IRequiresInitialize
                 return;
             }
 
+            if (choice == qrCode)
+                ShowLargeQrDeckCode();
+
             if (choice == file)
             {
-                await Share.RequestAsync(new ShareFileRequest
+                if (DeviceInfo.Platform == DevicePlatform.WinUI)
                 {
-                    Title = "Share " + deck.Name,
-                    File = new ShareFile(deck.FilePath, "application/dfd")
-                });
+                    var deckJson = JsonConvert.SerializeObject(deck, Formatting.Indented);
+                    await FileSaver.SaveAsync(deck.Name + ".dfd", new MemoryStream(Encoding.UTF8.GetBytes(deckJson)));
+                }
+                else
+                    await Share.RequestAsync(new ShareFileRequest
+                    {
+                        Title = "Share " + deck.Name,
+                        File = new ShareFile(deck.FilePath, "application/dfd")
+                    });
 
                 Analytics.TrackEvent("ShareDeckFile", new Dictionary<string, string> {
                     { "Faction", deck.DeckFaction.ToString()}});
@@ -214,6 +254,21 @@ public partial class DeckViewModel : BaseViewModel, IRequiresInitialize
             await _dialogService.ShowError(ex, "Error", "OK");
         }
     }
+
+    [RelayCommand]
+    private void ShowLargeQrDeckCode()
+    {
+        var deckCode = _deckService.SerializeToDeckString(CurrentDeck);
+        LargeQrDeckCode = App.GetApplinkFromDeckCode(deckCode);
+
+        Analytics.TrackEvent("ShareDeckQrCode", new Dictionary<string, string> {
+                    { "Faction", CurrentDeck.DeckFaction.ToString()},
+                    { "DeckString", deckCode }});
+    }
+
+    [RelayCommand]
+    private void CloseQrDeckCode()
+        => LargeQrDeckCode = null;
 
     [RelayCommand]
     private void SelectCard(Card card)

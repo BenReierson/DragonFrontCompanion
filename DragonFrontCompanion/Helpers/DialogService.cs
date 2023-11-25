@@ -60,10 +60,12 @@ public class DialogService : IDialogService
             _ = LogError(message, title, supressed: true);
             return;
         }
-        await _dialogPage.DisplayAlert(
-            title,
-            message,
-            buttonText);
+
+        await MainThread.InvokeOnMainThreadAsync(async ()=>
+            await _dialogPage.DisplayAlert(
+                title,
+                message,
+                buttonText));
         
         _ = LogError(message, title);
 
@@ -74,10 +76,11 @@ public class DialogService : IDialogService
         string title,
         string buttonText)
     {
-        await _dialogPage.DisplayAlert(
-            title,
-            error.Message,
-            buttonText);
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+            await _dialogPage.DisplayAlert(
+                title,
+                error.Message,
+                buttonText));
         
         _ = LogError(error.Message, title, error);
     }
@@ -86,10 +89,11 @@ public class DialogService : IDialogService
         string message,
         string title)
     {
+        await MainThread.InvokeOnMainThreadAsync(async () =>
         await _dialogPage.DisplayAlert(
             title,
             message,
-            "OK");
+            "OK"));
     }
 
     public async Task ShowMessage(
@@ -97,10 +101,11 @@ public class DialogService : IDialogService
         string title,
         string buttonText)
     {
-        await _dialogPage.DisplayAlert(
-            title,
-            message,
-            buttonText);
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+            await _dialogPage.DisplayAlert(
+                title,
+                message,
+                buttonText));
     }
 
     public async Task<bool> ShowMessage(
@@ -109,23 +114,19 @@ public class DialogService : IDialogService
         string buttonConfirmText,
         string buttonCancelText)
     {
-        var result = await _dialogPage.DisplayAlert(
-            title,
-            message,
-            buttonConfirmText,
-            buttonCancelText);
-
-        return result;
+        return await MainThread.InvokeOnMainThreadAsync(async () =>
+            await _dialogPage.DisplayAlert(title, message, buttonConfirmText, buttonCancelText));
     }
 
     public async Task ShowMessageBox(
         string message,
         string title)
     {
-        await _dialogPage.DisplayAlert(
-            title,
-            message,
-            "OK");
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+            await _dialogPage.DisplayAlert(
+                title,
+                message,
+                "OK"));
     }
     public Task<string> DisplayActionSheet(string title, string cancel, string destruction, params string[] buttons)
         => _dialogPage.DisplayActionSheet(title, cancel, destruction, buttons);

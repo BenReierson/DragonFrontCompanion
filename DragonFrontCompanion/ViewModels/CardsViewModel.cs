@@ -64,6 +64,7 @@ public partial class CardsViewModel : BaseViewModel, IRequiresInitialize
         {
             _unfilteredCards = freshCards;
             OnPropertyChanged(nameof(CardSets));
+            OnPropertyChanged(nameof(CardSetFilter));
             OnPropertyChanged(nameof(AegisFactionEnabled));
             OnPropertyChanged(nameof(NinthFactionEnabled));
             OnPropertyChanged(nameof(NinthFactionText));
@@ -543,13 +544,6 @@ public partial class CardsViewModel : BaseViewModel, IRequiresInitialize
         get => _selectedCard;
         set
         {
-            // if (App.RuntimePlatform == App.Device.UWP
-            //     && _lastActionedCard != null && value == _lastActionedCard)
-            // {
-            //     _lastActionedCard = null;
-            //     return;
-            // }
-
             SetProperty(ref _selectedCard, value);
             PreviousCardCommand.NotifyCanExecuteChanged();
             NextCardCommand.NotifyCanExecuteChanged();
@@ -675,10 +669,10 @@ public partial class CardsViewModel : BaseViewModel, IRequiresInitialize
     }
     
     private const string _CARD_SET_FILTER_DEFAULT = "ALL";
-    private string _cardSetFilter;
+    private string _cardSetFilter = _CARD_SET_FILTER_DEFAULT;
     public string CardSetFilter
     {
-        get => _cardSetFilter;
+        get => _cardSetFilter ?? _CARD_SET_FILTER_DEFAULT;
         set
         {
             SetProperty(ref _cardSetFilter, value);

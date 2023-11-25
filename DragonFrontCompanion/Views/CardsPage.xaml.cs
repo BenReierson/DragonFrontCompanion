@@ -21,4 +21,9 @@ public partial class CardsPage
 
     }
 
+    void CardsList_SelectionChanged(System.Object sender, Microsoft.Maui.Controls.SelectionChangedEventArgs e)
+    {
+        if (ViewModel?.SelectedCard is not null)
+            CardsList.ScrollTo(ViewModel.SelectedCard);
+    }
 }

@@ -9,13 +9,25 @@
     xmlns:views="clr-namespace:DragonFrontCompanion.Views"
     xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
     x:Name="DeckView"
-    x:TypeArguments="vm:DeckViewModel"
-    BackgroundColor="#123338">
+    x:TypeArguments="vm:DeckViewModel">
+    <ContentPage.Background>
+        <RadialGradientBrush>
+            <GradientStop Color="#123338"
+                            Offset=".1"/>
+            <GradientStop Color="#0b2227"
+                            Offset="1"/>
+        </RadialGradientBrush>
+    </ContentPage.Background>
     <ContentPage.Resources>
         <ResourceDictionary>
             <helpers:CardCountConverter x:Key="CardCount" />
             <helpers:CanUndoTextConverter x:Key="UndoText" />
             <helpers:CanUndoIconConverter x:Key="UndoIcon" />
+            <helpers:StringToQrCodeImageConverter x:Key="StringToQrcode"/>
+            <helpers:StringToQrCodeImageConverter x:Key="StringToBlackAndWhiteQrcode"
+                                                  DarkColor="Black"
+                                                  LightColor="White"
+                                                  DrawQuietZones="True"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -35,8 +47,7 @@
             Text="Share" />
     </ContentPage.ToolbarItems>
     <ScrollView>
-        <Grid BackgroundColor="#123338"
-              RowSpacing="8"
+        <Grid RowSpacing="8"
               RowDefinitions="Auto,*">
             <controls:DeckControl
                 x:Name="DeckHeader"
@@ -47,6 +58,21 @@
                 EditMode="{Binding ViewModel.EditMode, Source={x:Reference Name=DeckView}}"
                 EditModeToggleRequest="DeckHeader_EditModeToggleRequest"
                 HeightRequest="185" />
+
+            <ContentView Grid.Row="0"
+                         IsVisible="{Binding QrDeckCode, Converter={StaticResource VisibleWithValue}}"
+                         VerticalOptions="End"
+                         HorizontalOptions="End"
+                         Margin="-4,0,6,-4"
+                         HeightRequest="80"
+                         WidthRequest="80">
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ShowLargeQrDeckCodeCommand}" />
+                </ContentView.GestureRecognizers>
+                <Image Source="{Binding QrDeckCode, Converter={StaticResource StringToQrcode}}"
+                       IsVisible="{Binding ViewModel.EditMode, Source={x:Reference Name=DeckView}, Converter={StaticResource InverseBoolean}}"/>
+            </ContentView>
+
             <Grid x:Name="CardLists" Grid.Row="1"
                   Padding="4,0"
                   IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolean}}"
@@ -97,13 +123,14 @@
                                 <controls:CardCompactControl BindingContext="{Binding Card}"
                                                              HeightRequest="25"
                                                              InputTransparent="True"/>
-                                <Label Margin="0,0,4,0"
-                                    InputTransparent="True"
-                                    FontSize="12"
-                                    HorizontalOptions="End"
-                                    Text="{Binding Count, Converter={StaticResource CardCount}}"
-                                    TextColor="White"
-                                    VerticalOptions="Center" />
+                                <Label BackgroundColor="#40000000"
+                                       InputTransparent="True"
+                                       FontSize="12"
+                                       HorizontalOptions="End"
+                                       Text="{Binding Count, Converter={StaticResource CardCount}}"
+                                       TextColor="White"
+                                       VerticalTextAlignment="Center"
+                                       VerticalOptions="Fill" />
                             </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
@@ -132,13 +159,14 @@
                                 <controls:CardCompactControl BindingContext="{Binding Card}" 
                                                              HeightRequest="25"
                                                              InputTransparent="True"/>
-                                <Label
-                                    InputTransparent="True"
-                                    FontSize="12"
-                                    HorizontalOptions="End"
-                                    Text="{Binding Count, Converter={StaticResource CardCount}}"
-                                    TextColor="White"
-                                    VerticalOptions="Center" />
+                                <Label BackgroundColor="#40000000"
+                                       InputTransparent="True"
+                                       FontSize="12"
+                                       HorizontalOptions="End"
+                                       Text="{Binding Count, Converter={StaticResource CardCount}}"
+                                       TextColor="White"
+                                       VerticalTextAlignment="Center"
+                                       VerticalOptions="Fill" />
                             </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
@@ -167,6 +195,18 @@
                                      VerticalOptions="Center"
                                      HorizontalOptions="Center"
                                      WidthRequest="400"/>
+            </ContentView>
+            
+            <ContentView Grid.RowSpan="2" 
+                         BackgroundColor="#B3000000"
+                         Padding="100"
+                         IsVisible="{Binding LargeQrDeckCode, Converter={StaticResource VisibleWithValue}}">
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseQrDeckCodeCommand}" />
+                </ContentView.GestureRecognizers>
+                <Image VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       Source="{Binding LargeQrDeckCode, Converter={StaticResource StringToBlackAndWhiteQrcode}}"/>
             </ContentView>
         </Grid>
     </ScrollView>

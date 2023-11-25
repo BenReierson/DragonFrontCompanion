@@ -1,4 +1,8 @@
 ﻿
+using FFImageLoading.Maui;
+using FFImageLoading.Transformations;
+using FFImageLoading.Work;
+
 namespace DragonFrontCompanion.Controls;
 
 public partial class DeckControl : ContentView
@@ -11,9 +15,10 @@ public partial class DeckControl : ContentView
         if (instance == null || newValue == null) return;
 
 
-        instance.ContextMenu.IsVisible = (bool)newValue;// && App.RuntimePlatform != App.Device.Windows; //tap on this menu isn't working in uwp
+        instance.ContextMenu.IsVisible = (bool)newValue;
         instance.ModifiedLabel.IsVisible = !(bool)newValue;
         instance.PriceLabel.IsVisible = !(bool)newValue;
+        instance.StatsThirdColumn.Width = (bool)newValue ? GridLength.Auto : 80;
     }
 
     public bool ContextMenuEnabled
@@ -52,7 +57,11 @@ public partial class DeckControl : ContentView
     public DeckControl()
     {
         InitializeComponent();
-        // ContextImage.IsVisible = App.RuntimePlatform != App.Device.UWP;
+
+#if !WINDOWS
+        ChampCachedImage.Transformations.Add(new RoundedTransformation { BorderHexColor= "#80000000", BorderSize=10, Radius=60 });
+        ChampCachedImage.DownsampleToViewSize = true;
+#endif
     }
 
     public event EventHandler<ItemTappedEventArgs> ChampionTapped;

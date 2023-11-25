@@ -4,8 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
-    xmlns:maui="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
-    xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Compat.Transformations">
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls">
     <ContentView.Resources>
         <ResourceDictionary>
             <helpers:CardImageConverter x:Key="CardImages" />
@@ -19,21 +18,20 @@
         x:Name="DeckGrid"
         Padding="6,6,6,2"
         ColumnSpacing="6"
-        BackgroundColor="#123338"
         HeightRequest="185">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <maui:CachedImage
+        <controls:CustomCachedImage
             Grid.Column="1"
             Aspect="AspectFit"
-            WidthRequest="150"
+            Margin="-8,-4"
             Opacity=".2"
             Source="{Binding DeckFaction, Converter={StaticResource FactionImage}}"
             HorizontalOptions="End"
-            VerticalOptions="Center" />
+            VerticalOptions="Start" />
 
         <StackLayout
             Grid.Column="0"
@@ -41,23 +39,16 @@
             Spacing="-2"
             VerticalOptions="Start">
 
-            <maui:CachedImage
+            <controls:CustomCachedImage
                 x:Name="ChampCachedImage"
-                DownsampleToViewSize="True"
                 HeightRequest="100"
                 ErrorPlaceholder="{Binding Champion, Converter={StaticResource CardPlaceholders}}"
                 Source="{Binding Champion, Converter={StaticResource CardImages}, ConverterParameter='Large'}"
                 WidthRequest="100">
-                <maui:CachedImage.GestureRecognizers>
+                <controls:CustomCachedImage.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Champion_Tapped" />
-                </maui:CachedImage.GestureRecognizers>
-                <maui:CachedImage.Transformations>
-                    <transformations:RoundedTransformation
-                        BorderHexColor="#80000000"
-                        BorderSize="10"
-                        Radius="60" />
-                </maui:CachedImage.Transformations>
-            </maui:CachedImage>
+                </controls:CustomCachedImage.GestureRecognizers>
+            </controls:CustomCachedImage>
 
             <Label Margin="0,4,0,0"
                 Text="{Binding DeckFaction}" 
@@ -80,41 +71,32 @@
             <Label
                 x:Name="PriceLabel"
                 Margin="0,2,0,0"
-                BackgroundColor="#123338"
                 FontSize="10"
                 IsVisible="False"
                 Text="{Binding TotalScrapPrice, StringFormat='{0} SCRAP'}"
                 TextColor="#D0D6D7" />
             <Label
                 x:Name="ModifiedLabel"
-                Margin="0,2,0,0"
-                BackgroundColor="#123338"
+                Margin="0,2,-80,0"
                 FontSize="10"
                 IsVisible="False"
                 Text="{Binding LastModified, Converter={StaticResource RelativeTime}, StringFormat='saved {0}'}"
                 TextColor="Gray" />
 
-            <Grid
-                x:Name="ContextMenu"
-                AutomationId="DeckContextMenu"
-                HeightRequest="30"
-                HorizontalOptions="FillAndExpand">
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnContextMenuTapped" />
-                </Grid.GestureRecognizers>
-                <maui:CachedImage
-                    x:Name="ContextImage"
+            <ImageButton
+                    x:Name="ContextMenu"
                     HeightRequest="22"
+                    BackgroundColor="Transparent"
+                    Padding="0"
                     HorizontalOptions="Start"
+                    Aspect="AspectFit"
                     Rotation="90"
-                    Margin="{OnPlatform Android='4,0,0,6', iOS='10,0,0,6'}"
+                    Scale="{OnPlatform .6, Android=1.1}"
+                    Margin="{OnPlatform Android='-10,0,0,0', iOS='-8,-8,0,0', WinUI='-8,-14,0,0'}"
                     Source="iconmenu.png"
-                    VerticalOptions="End">
-                    <maui:CachedImage.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnContextMenuTapped" />
-                    </maui:CachedImage.GestureRecognizers>
-                </maui:CachedImage>
-            </Grid>
+                    VerticalOptions="End"
+                    Clicked="OnContextMenuTapped">
+            </ImageButton>
         </StackLayout>
         <Grid Grid.Column="1">
             <Grid
@@ -124,6 +106,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" x:Name="StatsThirdColumn" />
                 </Grid.ColumnDefinitions>
                 <Grid
                     x:Name="CostChart"
@@ -260,22 +243,24 @@
                         TextColor="#15CEEA" />
                 </Grid>
 
-                <StackLayout
-                    Grid.Column="1"
+                <StackLayout Grid.Column="1"
                     HorizontalOptions="Center"
                     Orientation="Vertical"
                     Spacing="0"
                     VerticalOptions="End">
                     <Label
                         FontSize="12"
+                        LineBreakMode="NoWrap"
                         Text="{Binding UnitCount, StringFormat='{0} units'}"
                         TextColor="White" />
                     <Label
                         FontSize="12"
+                        LineBreakMode="NoWrap"
                         Text="{Binding FortCount, StringFormat='{0} forts'}"
                         TextColor="White" />
                     <Label
                         FontSize="12"
+                        LineBreakMode="NoWrap"
                         Text="{Binding SpellCount, StringFormat='{0} spells'}"
                         TextColor="White" />
                 </StackLayout>

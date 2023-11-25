@@ -43,7 +43,10 @@ public partial class MainViewModel : BaseViewModel
                 await Task.Delay(500);
                 var toast = Toast.Make("Checking for updates...", ToastDuration.Long);
                 toast.Show();
-                await _cardsService.CheckForUpdatesAsync();
+
+                if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
+                    await _cardsService.CheckForUpdatesAsync();
+
                 var newCards = await CheckForNewCardsAsync();
                 NewCardsEnabled = newCards;
                 toast.Dismiss();

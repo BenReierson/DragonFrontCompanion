@@ -1,4 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
+using Microsoft.Windows.AppLifecycle;
+using System.Security.Policy;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -18,6 +20,22 @@ public partial class App : MauiWinUIApplication
     {
         this.InitializeComponent();
     }
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    {
+        base.OnLaunched(args);
 
+        var goodArgs = AppInstance.GetCurrent().GetActivatedEventArgs();
+
+        switch (goodArgs.Kind)
+        {
+            case ExtendedActivationKind.File:
+                var data = goodArgs.Data as Windows.ApplicationModel.Activation.IFileActivatedEventArgs;
+                var paths = data.Files.Select(file => file.Path).ToArray();
+                if (paths?.FirstOrDefault() is { } deckPath)
+                    Microsoft.Maui.Controls.Application.Current.SendOnAppLinkRequestReceived(new Uri(deckPath));
+                break;
+        }
+
+    }
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }

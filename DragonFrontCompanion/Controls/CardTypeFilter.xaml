@@ -386,7 +386,11 @@
                     WidthRequest="{OnPlatform Default=35, UWP=42}"/>
             </Grid>
             <StackLayout Spacing="8" Orientation="Horizontal" Margin="0,10,0,10">
-                <Label WidthRequest="80"
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer /> <!--no-op to eat tap events and prevent parent from getting them when trying to use picker-->
+                    </StackLayout.GestureRecognizers>
+                <Label HorizontalOptions="Start"
+                       LineBreakMode="NoWrap"
                     FontSize="Medium"
                     Text="Card Set "
                     VerticalOptions="Center"

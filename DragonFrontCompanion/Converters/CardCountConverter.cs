@@ -15,7 +15,7 @@ namespace DragonFrontCompanion.Helpers
             if (value == null || !(value is int)) return null;
 
             if ((int)value == 1) return null;
-            else return $"({value})";
+            else return $" ({value}) ";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

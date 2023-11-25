@@ -49,6 +49,8 @@ public partial class DecksViewModel : BaseViewModel
     [ObservableProperty] private bool _canUndo;
     [ObservableProperty] private bool _isFactionPickerVisible;
     [ObservableProperty] private ObservableCollection<Deck> _decks = new ObservableCollection<Deck>();
+    [ObservableProperty] private string _qrDeckCode;
+    [ObservableProperty] private bool _isScanningForQrCode;
 
     public bool AegisFactionEnabled => Deck.CardDictionary != null && Deck.CardDictionary.Any(c => c.Value != null && c.Value.Faction == Faction.AEGIS);
     public bool NinthFactionEnabled => Deck.CardDictionary != null && Deck.CardDictionary.Any(c => c.Value != null && (int)c.Value.Faction == 10);
@@ -65,12 +67,15 @@ public partial class DecksViewModel : BaseViewModel
         {
             var fromFile = "From (dfd) file";
             var fromClipboard = "From clipboard";
+            var fromQrCode = "Scan QR Code";
 
             var clipboardContents = await Clipboard.GetTextAsync();
-            var mightBeDeck = !string.IsNullOrWhiteSpace(clipboardContents) && Convert.TryFromBase64String(clipboardContents, new Span<byte>(new byte[clipboardContents.Length]), out _);
+            var mightBeDeck = !string.IsNullOrWhiteSpace(clipboardContents)
+                && (clipboardContents.StartsWith(App.AppDataScheme) || Convert.TryFromBase64String(clipboardContents, new Span<byte>(new byte[clipboardContents.Length]), out _));
 
-            var choice = !mightBeDeck ? fromFile :
-                await _dialogService.DisplayActionSheet("Choose Deck Source", "Cancel", null, fromFile, fromClipboard);
+            var options = new List<string> { fromFile, fromQrCode };
+            if (mightBeDeck) options.Add(fromClipboard);
+            var choice = await _dialogService.DisplayActionSheet("Choose Deck Source", "Cancel", null, options.ToArray());
 
             if (choice == fromFile)
             {
@@ -84,23 +89,53 @@ public partial class DecksViewModel : BaseViewModel
                     Analytics.TrackEvent("OpenDeckFile", new Dictionary<string, string> {
                     { "Faction", deck.DeckFaction.ToString()}});
 
+                    if (DeviceInfo.Platform == DevicePlatform.Android)
+                    {//Android seems to need a moment to recover from file picker
+                        _=Toast.Make("Opening Deck...").Show();
+                        await Task.Delay(1000);
+                    }
+
                     await _navigationService.Push<DeckViewModel>(vm => vm.Initialize(deck));
                 }
             }
             else if (choice == fromClipboard)
             {
-                var deck = _deckService.DeserializeDeckString(clipboardContents);
-
-                Analytics.TrackEvent("OpenDeckString", new Dictionary<string, string> {
-                    { "Faction", deck.DeckFaction.ToString()},
-                    { "DeckString", clipboardContents }});
-
-                await _navigationService.Push<DeckViewModel>(vm => vm.Initialize(deck));
+                await OpenDeckUrl(clipboardContents);
+            }
+            else if (choice == fromQrCode)
+            {
+                IsScanningForQrCode = true;
             }
         }
         catch (ArgumentException ex)
         {
             await _dialogService.ShowError(ex.Message, "Error", "OK");
+        }
+        catch (Exception)
+        {
+            await _dialogService.ShowMessage("Could not open deck. Data may be invalid or corrupt.", "Error");
+        }
+    }
+
+    public async Task OpenDeckUrl(string url)
+    {
+        try
+        {
+            if (url.StartsWith(App.AppDataScheme) && url.Contains(App.AppDeckCodeHost))
+                url = new Uri(url).Segments?.LastOrDefault();
+
+            var deck = _deckService.DeserializeDeckString(url);
+
+            Analytics.TrackEvent("OpenDeckString", new Dictionary<string, string> {
+                    { "Faction", deck.DeckFaction.ToString()},
+                    { "DeckString", url }});
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                _ = Toast.Make("Opening Deck...").Show();
+                await _navigationService.Push<DeckViewModel>(vm => vm.Initialize(deck));
+
+            });
         }
         catch (Exception)
         {
@@ -235,19 +270,29 @@ public partial class DecksViewModel : BaseViewModel
         try
         {
             var copy = "Share Deck Code";
+            var qrCode = "QR Code";
             var file = "Share as file (retains Name/Description)";
-            var choice = await _dialogService.DisplayActionSheet("Choose Format", "Cancel", null, copy, file);
+            var choice = await _dialogService.DisplayActionSheet("Choose Format", "Cancel", null, copy, qrCode, file);
 
             if (choice == copy)
             {
                 var deckstring = _deckService.SerializeToDeckString(deck);
                 await Share.RequestAsync(deckstring);
-
                 Analytics.TrackEvent("ShareDeckString", new Dictionary<string, string> {
                     { "Faction", deck.DeckFaction.ToString()},
                     { "DeckString", deckstring }});
 
                 return;
+            }
+
+            if (choice == qrCode)
+            {
+                var deckCode = _deckService.SerializeToDeckString(deck);
+                QrDeckCode = App.GetApplinkFromDeckCode(deckCode);
+
+                Analytics.TrackEvent("ShareDeckQrCode", new Dictionary<string, string> {
+                    { "Faction", deck.DeckFaction.ToString()},
+                    { "DeckString", deckCode }});
             }
 
             if (choice == file)
@@ -268,6 +313,10 @@ public partial class DecksViewModel : BaseViewModel
             await _dialogService.ShowError(ex, "Error", "OK");
         }
     }
+
+    [RelayCommand]
+    private void CloseQrDeckCode()
+        => QrDeckCode = null;
 
     [RelayCommand]
     private async Task DuplicateDeck(Deck p)
