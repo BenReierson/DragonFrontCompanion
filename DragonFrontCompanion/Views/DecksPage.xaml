@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:l="clr-namespace:DragonFrontCompanion"
                        xmlns:views="clr-namespace:DragonFrontCompanion.Views"
                        xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels"
                        xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
                        xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
+                       xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
                        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                        x:Class="DragonFrontCompanion.Views.DecksPage"
                        x:TypeArguments="vm:DecksViewModel" 
@@ -15,6 +17,7 @@
             <helpers:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
             <helpers:CanUndoTextConverter x:Key="UndoText" />
             <helpers:CanUndoIconConverter x:Key="UndoIcon" />
+            <helpers:StringToQrCodeImageConverter x:Key="StringToQrcode"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -31,16 +34,25 @@
            Text="Open" />
     </ContentPage.ToolbarItems>
 
-    <Grid BackgroundColor="#123338">
+    <Grid x:Name="MainLayout">
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#123338"
+                              Offset=".1"/>
+                <GradientStop Color="#0b2227"
+                              Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
         <ListView
             x:Name="DecksList"
-            BackgroundColor="#123338"
+            BackgroundColor="Transparent"
             IsPullToRefreshEnabled="False"
             ItemsSource="{Binding Decks}"
             RefreshCommand="{Binding RefreshDecksCommand}"
             RowHeight="190"
             SelectionMode="None"
-            SeparatorVisibility="None">
+            SeparatorColor="Black"
+            Margin="{OnPlatform iOS='0,0,0,-35'}">
             <ListView.Behaviors>
                 <toolkit:EventToCommandBehavior
                     Command="{Binding OpenDeckCommand}"
@@ -50,12 +62,13 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <ContentView Padding="4,0,4,1" BackgroundColor="#4D000000">
+                        <ContentView Padding="4,0,4,1" BackgroundColor="Transparent">
                             <controls:DeckControl
-                                BackgroundColor="Transparent"
+                                ContextMenuEnabled="True"
                                 ChampionTapped="Champion_Tapped"
-                                ContextMenuTapped="Deck_ContextMenu"
-                                EditModeToggleRequest="Deck_Edit" />
+                                EditModeToggleRequest="Deck_Edit" 
+                                BackgroundColor="Transparent"
+                                ContextMenuTapped="Deck_ContextMenu" />
                         </ContentView>
                     </ViewCell>
                 </DataTemplate>
@@ -80,6 +93,19 @@
         </ContentView.GestureRecognizers>
             <controls:FactionPicker VerticalOptions="Start"
                                     HorizontalOptions="Center"/>
+        </ContentView>
+
+        <ContentView x:Name="QrCodeLayout"
+                     Margin="{OnPlatform iOS='0,0,0,-35'}"
+                         BackgroundColor="#B3000000"
+                         Padding="100"
+                         IsVisible="{Binding QrDeckCode, Converter={StaticResource VisibleWithValue}}">
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseQrDeckCodeCommand}" />
+                </ContentView.GestureRecognizers>
+                <Image VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       Source="{Binding QrDeckCode, Converter={StaticResource StringToQrcode}, ConverterParameter={x:Static l:App.AppDataScheme}}"/>
         </ContentView>
     </Grid>
 </views:BaseContentPage>

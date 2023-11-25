@@ -27,9 +27,16 @@
             Text="Filters"
             Command="{Binding ToggleFiltersCommand}"/>
     </ContentPage.ToolbarItems>
-    <Grid BackgroundColor="#123338"
-          RowSpacing="0"
+    <Grid RowSpacing="0"
           RowDefinitions="40,Auto,Auto,*">
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#123338"
+                              Offset=".1"/>
+                <GradientStop Color="#0b2227"
+                              Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
         <StackLayout Grid.Row="0"
             BackgroundColor="#E1CA35"
             HorizontalOptions="FillAndExpand"
@@ -69,26 +76,36 @@
             TextColor="Gray"
             HorizontalTextAlignment="Center" />
 
-        <ListView Grid.Row="3"
+        <CollectionView Grid.Row="3"
             x:Name="CardsList"
-            BackgroundColor="#123338"
             ItemsSource="{Binding FilteredCards}"
             SelectedItem="{Binding SelectedCard, Mode=TwoWay}"
-            CachingStrategy="RecycleElement"
             SelectionMode="Single"
-            RowHeight="104">
-            <ListView.ItemTemplate>
+            ItemSizingStrategy="{OnPlatform MeasureFirstItem, Android=MeasureAllItems}"
+            Margin="{OnPlatform iOS='0,0,0,-35'}"
+            SelectionChanged="CardsList_SelectionChanged">
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Card">
-                    <ViewCell>
-                        <ViewCell.ContextActions>
-                            <MenuItem
-                                Command="{Binding BindingContext.FindSimilarCommand, Source={x:Reference Name=CurrentPage}}"
-                                CommandParameter="{Binding .}"
-                                Text="Find Similar" />
-                        </ViewCell.ContextActions>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Find Similar"
+                                   BackgroundColor="LightGray"
+                                    Command="{Binding BindingContext.FindSimilarCommand, Source={x:Reference Name=CurrentPage}}"
+                                    CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
                         <Grid HeightRequest="104"
                               Padding="0,2">
-                            <controls:CardControl />
+                        <FlyoutBase.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Find Similar"
+                                                Command="{Binding BindingContext.FindSimilarCommand, Source={x:Reference Name=CurrentPage}}"
+                                                CommandParameter="{Binding .}" />
+                            </MenuFlyout>
+                        </FlyoutBase.ContextFlyout>
+                        
+                            <controls:CardControl InputTransparent="True"/>
                             <controls:CardCount
                                 Margin="30"
                                 Card="{Binding .}"
@@ -116,7 +133,7 @@
                                     Scale=".8"
                                     Text="-"
                                     TextColor="Red"
-                                    Margin="4"
+                                    Margin="{OnPlatform 4, WinUI=0}"
                                     WidthRequest="32"
                                     HeightRequest="32"
                                     CornerRadius="0"
@@ -141,7 +158,7 @@
                                     FontSize="26"
                                     Text="+"
                                     TextColor="Green"
-                                    Margin="4"
+                                    Margin="{OnPlatform 4, WinUI=0}"
                                     HeightRequest="32"
                                     WidthRequest="32"
                                     CornerRadius="0"
@@ -156,11 +173,16 @@
                                     </Button.Triggers>
                                 </Button>
                             </Grid>
-                        </Grid>
-                    </ViewCell>
+                            <BoxView HeightRequest=".5"
+                                     BackgroundColor="#4D000000"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="End"
+                                     Margin="0,-2"/>
+                    </Grid>
+                    </SwipeView>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         
         <ActivityIndicator Grid.Row="3"
                            Color="#E1CA35"
@@ -168,7 +190,7 @@
                            IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
         
         <ContentView Grid.RowSpan="4" x:Name="CardDetailLayout"
-                     Margin="0,-60,0,0"
+                     Margin="{OnPlatform '0,-60,0,0', iOS='0,-90,0,-35'}"
                      BackgroundColor="#B3000000"
                      IsVisible="{Binding SelectedCard, Converter={StaticResource VisibleWithValue}}">
             <ContentView.GestureRecognizers>
@@ -184,7 +206,7 @@
         </ContentView>
         
         <controls:CardTypeFilter Grid.Row="3"
-                                       IsVisible="{Binding IsFiltersVisible}">
+                                 IsVisible="{Binding IsFiltersVisible}">
             <ContentView.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding ToggleFiltersCommand}" />
             </ContentView.GestureRecognizers>

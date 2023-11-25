@@ -4,8 +4,7 @@
     x:Class="DragonFrontCompanion.Controls.FactionPicker"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:c="clr-namespace:DragonFrontDb.Enums;assembly=DragonFrontDb"
-    xmlns:ffImage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui">
+    xmlns:c="clr-namespace:DragonFrontDb.Enums;assembly=DragonFrontDb">
     <Grid
         Padding="20"
         ColumnSpacing="10"
@@ -37,7 +36,7 @@
             Grid.Column="0"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconeclipse.png" />
+            <Image Margin="2,15,2,0" Source="iconeclipse.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -56,7 +55,7 @@
             Grid.Column="1"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconscales.png" />
+            <Image Margin="2,15,2,0" Source="iconscales.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -75,7 +74,7 @@
             Grid.Column="2"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconstrife.png" />
+            <Image Margin="2,15,2,0" Source="iconstrife.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -94,7 +93,7 @@
             Grid.Column="0"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconthorns.png" />
+            <Image Margin="2,15,2,0" Source="iconthorns.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -113,7 +112,7 @@
             Grid.Column="1"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconsilence.png" />
+            <Image Margin="2,15,2,0" Source="iconsilence.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -132,7 +131,7 @@
             Grid.Column="2"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconessence.png" />
+            <Image Margin="2,15,2,0" Source="iconessence.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -151,7 +150,7 @@
             Grid.Column="0"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="icondelirium.png" />
+            <Image Margin="2,15,2,0" Source="icondelirium.png" WidthRequest="{OnPlatform WinUI=110}" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -171,7 +170,7 @@
             IsVisible="{Binding AegisFactionEnabled}"
             BackgroundColor="White">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconaegis.png" />
+            <Image Margin="2,15,2,0" Source="iconaegis.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"
@@ -191,7 +190,7 @@
             BackgroundColor="White"
             IsVisible="{Binding NinthFactionEnabled}">
             <BoxView Margin="1" BackgroundColor="#123338" />
-            <ffImage:CachedImage Margin="2,15,2,0" Source="iconninth.png" />
+            <Image Margin="2,15,2,0" Source="iconninth.png" />
             <Label
                 Margin="0,4,0,0"
                 HorizontalOptions="Center"

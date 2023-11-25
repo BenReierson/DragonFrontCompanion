@@ -1,5 +1,9 @@
-﻿using DragonFrontCompanion.Helpers;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using DragonFrontCompanion.Data;
+using DragonFrontCompanion.Helpers;
 using DragonFrontCompanion.Ioc;
+using DragonFrontCompanion.ViewModels;
 using DragonFrontCompanion.Views;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
@@ -8,8 +12,17 @@ namespace DragonFrontCompanion;
 
 public partial class App : Application
 {
-    public const string APP_NAME = "Dragon Front Companion";
+    public const string APP_NAME = "DF Companion";
+
+    public const string AppDataScheme = "dfdeck";
+    public const string AppDeckCodeHost = "code";
+
     public static string VersionName = "NA";
+
+    public static string GetApplinkFromDeckCode(string deckCode)
+        => $"{App.AppDataScheme}://{App.AppDeckCodeHost}/{deckCode}";
+
+    IDialogService _dialogService;
     
     public bool IsActive { get; private set; }
 
@@ -20,6 +33,7 @@ public partial class App : Application
         MainPage = DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.Android
             ? InitializeMainPage() 
             : new ContentPage();//placeholder to speed startup, it will be swapped out in OnStart()
+
     }
 
     private Page InitializeMainPage()
@@ -52,6 +66,7 @@ public partial class App : Application
         
         var dialog = SimpleIoc.Default.GetInstance<IDialogService>() as DialogService;
         dialog?.Initialize(mainPage);
+        _dialogService = dialog;
         
         MainPage = mainPage;
     }
@@ -67,4 +82,72 @@ public partial class App : Application
         base.OnResume();
         IsActive = true;
     }
+
+    protected override async void OnAppLinkRequestReceived(Uri uri)
+    {
+        base.OnAppLinkRequestReceived(uri);
+
+        try
+        {
+            var deckService = SimpleIoc.Default.GetInstance<IDeckService>();
+            var navService = SimpleIoc.Default.GetInstance<INavigationService>();
+
+            if (deckService is null || navService is null) return;
+
+            _=Toast.Make("Opening Deck...", ToastDuration.Long).Show();
+
+            if (uri.Host == AppDeckCodeHost && uri.Segments?.LastOrDefault() is { } deckCode)
+            {//process path as deck code
+                await OpenDeckCodeInApp(deckCode);
+            }
+            else
+            {
+                //open the file
+                var deck = await deckService?.OpenDeckFileAsync(uri.LocalPath);
+
+                if (deck != null)
+                {
+                    await navService.Push<DeckViewModel>(vm => vm.Initialize(deck));
+                }
+                else _dialogService?.ShowError("The data may be invalid or corrupt.", "Failed to open deck", "OK");
+            }
+        }
+        catch (Exception e)
+        {
+            _dialogService?.ShowError(e.Message, "Failed to open deck", "OK");
+        }
+    }
+
+    private async Task OpenDeckCodeInApp(string deckCode)
+    {
+        var deckService = SimpleIoc.Default.GetInstance<IDeckService>();
+        var navService = SimpleIoc.Default.GetInstance<INavigationService>();
+
+        if (deckService is null || navService is null) return;
+
+        _=Toast.Make("Opening Deck...", ToastDuration.Long).Show();
+
+        //open the file
+        var deck = deckService?.DeserializeDeckString(deckCode);
+
+        if (deck != null)
+            await navService.Push<DeckViewModel>(vm => vm.Initialize(deck));
+        else
+            _=Toast.Make("Failed to open deck. The data may be invalid or corrupt.", ToastDuration.Long).Show();
+    }
+
+#if WINDOWS
+    protected override Window CreateWindow(IActivationState activationState)
+    {
+        var window = base.CreateWindow(activationState);
+
+        const int newWidth = 600;
+        const int newHeight = 800;
+
+        window.Width = newWidth;
+        window.Height = newHeight;
+
+        return window;
+    }
+#endif
 }

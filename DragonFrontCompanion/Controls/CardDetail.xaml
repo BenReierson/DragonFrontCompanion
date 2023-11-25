@@ -3,7 +3,7 @@
 <Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
-             xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
+             xmlns:controls="clr-namespace:DragonFrontCompanion.Controls"
              xmlns:vm="clr-namespace:DragonFrontCompanion.ViewModels;assembly=DragonFrontCompanion"
              x:Class="DragonFrontCompanion.Controls.CardDetail"
              x:Name="CurrentControl">
@@ -42,24 +42,24 @@
             <StackLayout>
                 <Grid x:Name="CardImageGrid">
 
-                    <ffimage:CachedImage
+                    <controls:CustomCachedImage
                         x:Name="CardImage"
                         Aspect="AspectFill"
-                        DownsampleHeight="400"
                         HeightRequest="400"
                         WidthRequest="400"
                         ErrorPlaceholder="{Binding ., Converter={StaticResource Key=CardPlaceholders}}"
                         Source="{Binding ., Converter={StaticResource CardImages}, ConverterParameter='Large'}"
                         VerticalOptions="Start">
-                        <ffimage:CachedImage.GestureRecognizers>
+                        <controls:CustomCachedImage.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding CloseCommand, Source={Reference CurrentControl}}" />
                             <SwipeGestureRecognizer Direction="Left" Command="{Binding NextCommand, Source={Reference CurrentControl}}" />
                             <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousCommand, Source={Reference CurrentControl}}" />
-                        </ffimage:CachedImage.GestureRecognizers>
-                    </ffimage:CachedImage>
+                        </controls:CustomCachedImage.GestureRecognizers>
+                    </controls:CustomCachedImage>
 
                     <StackLayout Spacing="2" VerticalOptions="Start">
                         <Label Padding="0,4"
+                               Margin="-1"
                             BackgroundColor="#80000000"
                             FontSize="Large"
                             HorizontalOptions="Fill"
@@ -100,6 +100,7 @@
 
                     <Grid
                         x:Name="StatsGrid"
+                        Margin="-1"
                         BackgroundColor="#80000000"
                         HorizontalOptions="Fill"
                         VerticalOptions="End">

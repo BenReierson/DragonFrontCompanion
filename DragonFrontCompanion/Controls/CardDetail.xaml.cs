@@ -2,6 +2,7 @@ using System.Windows.Input;
 using DragonFrontCompanion.Data.Services;
 using DragonFrontCompanion.Ioc;
 using DragonFrontDb;
+using FFImageLoading.Maui;
 
 namespace DragonFrontCompanion.Controls;
 

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
     x:Class="DragonFrontCompanion.Controls.CardCompactControl"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:helpers="clr-namespace:DragonFrontCompanion.Helpers"
-    xmlns:maui="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui">
+    xmlns:controls="clr-namespace:DragonFrontCompanion.Controls">
     <ContentView.Resources>
         <ResourceDictionary>
             <helpers:RarityColorConverter x:Key="RarityColor" />
@@ -15,16 +15,22 @@
     </ContentView.Resources>
     <ContentView.Content>
         <Grid Margin="0,1,0,1" 
-              BackgroundColor="{Binding Rarity, Converter={StaticResource RarityColor}}"
+              ColumnDefinitions="20,*"
+              ColumnSpacing="0"
               IsClippedToBounds="True">
-            <maui:CachedImage HeightRequest="25" 
-                Margin="20,0,0,0"
+            <controls:CustomCachedImage Grid.Column="1"
+                HeightRequest="25" 
                 Aspect="AspectFill"
                 VerticalOptions="Center"
                 HorizontalOptions="Fill"
                 ErrorPlaceholder="{Binding ., Converter={StaticResource Key=CardPlaceholders}}"
                 Source="{Binding ., Converter={StaticResource Key=CardImages}, ConverterParameter='Large'}" />
-            <ContentView Margin="20,0,0,0">
+            
+            <BoxView BackgroundColor="{Binding Rarity, Converter={StaticResource RarityColor}}"
+                     VerticalOptions="Fill" HorizontalOptions="Fill"/>
+            
+            <ContentView Grid.Column="1"
+                     VerticalOptions="Fill" HorizontalOptions="Fill">
                 <ContentView.Background>
                     <LinearGradientBrush EndPoint="1,0">
                         <GradientStop Color="#E6000000"
@@ -34,27 +40,25 @@
                     </LinearGradientBrush>
                 </ContentView.Background>
             </ContentView>
-            <StackLayout
-                Margin="0,0,20,0"
-                Orientation="Horizontal"
-                Spacing="10"
-                VerticalOptions="CenterAndExpand">
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="14"
-                    Text="{Binding Cost}"
-                    TextColor="White"
-                    VerticalOptions="Fill"
-                    VerticalTextAlignment="Center"
-                    WidthRequest="20"
-                    HorizontalTextAlignment="Center" />
-                <Label
+            
+            <Label
+                FontAttributes="Bold"
+                FontSize="14"
+                Text="{Binding Cost}"
+                TextColor="White"
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center"
+                WidthRequest="20"
+                HorizontalTextAlignment="Center"/>
+
+            <Label Grid.Column="1"
+                   Margin="5,0,18,0"
                     FontSize="14"
                     LineBreakMode="TailTruncation"
                     Text="{Binding Name}"
                     TextColor="White"
+                    VerticalOptions="Center"
                     VerticalTextAlignment="Center" />
-            </StackLayout>
         </Grid>
     </ContentView.Content>
 </ContentView>

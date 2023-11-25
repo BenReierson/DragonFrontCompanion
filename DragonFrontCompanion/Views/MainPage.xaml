@@ -12,11 +12,19 @@
             x:Name="SettingsButton"
             Command="{Binding NavigateToSettingsCommand}"
             IconImageSource="{OnPlatform Default='settings.png', Android={x:Null}}"
-            Text="⚙" />
+            Text="{OnPlatform ⚙, WinUI=''}"/>
     </ContentPage.ToolbarItems>
 
-    <Grid x:Name="MainLayout" 
-          BackgroundColor="#123338">
+    <Grid x:Name="MainLayout" >
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#123338"
+                              Offset=".1"/>
+                <GradientStop Color="#091a1d"
+                              Offset="1"/>
+            </RadialGradientBrush>
+
+        </Grid.Background>
         <Grid
             x:Name="PageButtonLayout"
             Margin="20"
@@ -108,11 +116,12 @@
         
         
         <ContentView BackgroundColor="#BF000000"
+                     Margin="0,0,0,-35"
                      HorizontalOptions="Fill"
                      VerticalOptions="Fill"
                      IsVisible="{Binding IsBusy}">
             <ActivityIndicator Color="#E1CA35"
-                               Margin="{OnPlatform Default='0,-50,0,0', UWP='0,0,0,0'}"
+                               Margin="{OnPlatform Default='0,-80,0,0', UWP='0,0,0,0'}"
                                HorizontalOptions="Center"
                                IsRunning="True"
                                IsVisible="True"
