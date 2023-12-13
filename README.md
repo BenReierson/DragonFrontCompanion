@@ -4,9 +4,9 @@
 Now updated to dotnet Maui for the Dragon Front Rising re-release!
 
 ## Download from App Store
-* [iOS: App Store](https://itunes.apple.com/us/app/df-companion/id1181274447) (v2.x)
-* [Android: Google Play](https://play.google.com/store/apps/details?id=com.benreierson.dragonfrontcompanion) (v2.x)
-* [Microsoft Store](https://apps.microsoft.com/detail/9P9LFR99BFG7) (v1.4 now, v2.x pending)
+* [iOS: App Store](https://itunes.apple.com/us/app/df-companion/id1181274447)
+* [Android: Google Play](https://play.google.com/store/apps/details?id=com.benreierson.dragonfrontcompanion) 
+* [Microsoft Store](https://apps.microsoft.com/detail/9P9LFR99BFG7) 
 
 **This is not an official app. Dragon Front is a trademark or registered trademark of High Voltage Software, Inc. in the U.S. and/or other countries.**
 
